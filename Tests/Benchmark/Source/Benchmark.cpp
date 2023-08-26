@@ -9,7 +9,6 @@ BENCHMARK_MAIN();
 /*
 --------------------------- Last Results ----------------------------
 2023-08-20T18:29:38+01:00
-Running C:\Users\User\Documents\Projects\QtDataManager\build\Modules\Tests\Benchmark\Release\Benchmark.exe
 Run on (12 X 4700 MHz CPU s)
 CPU Caches:
   L1 Data 32 KiB (x6)
