@@ -4,6 +4,7 @@
 
 #include "ConfigurationModule.h"
 #include <memory>
+#include <string_view>
 #include <boost/json/value.hpp>
 #include <boost/json/value_from.hpp>
 #include <boost/json/array.hpp>

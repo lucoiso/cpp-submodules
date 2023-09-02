@@ -2,148 +2,112 @@
 
 #pragma once
 
-#include <catch2/catch_test_macros.hpp>
+#define BOOST_TEST_MODULE CONFIGURATION_TEST_MODULE
+#include <boost/test/included/unit_test.hpp>
+
 #include <Configuration/Manager.h>
 #include <filesystem>
 
-TEST_CASE("Insertion", "[Configuration]")
+BOOST_AUTO_TEST_CASE(InsertData)
 {
     const auto TestManager = Configuration::Manager::GetInstance();
-    REQUIRE(TestManager != nullptr);
+    BOOST_TEST(TestManager != nullptr);
 
-    SECTION("Signed")
-    {
-        TestManager->SetValue("Signed", 1);
-        REQUIRE(TestManager->Contains("Signed"));
-        REQUIRE(TestManager->GetValue("Signed") == 1);
-    }
+    TestManager->SetValue("Signed", 1);
+    BOOST_TEST(TestManager->Contains("Signed"));
+    BOOST_TEST(TestManager->GetValue("Signed") == 1);
 
-    SECTION("Unsigned")
-    {
-        TestManager->SetValue("Unsigned", 2u);
-        REQUIRE(TestManager->Contains("Unsigned"));
-        REQUIRE(TestManager->GetValue("Unsigned") == 2u);
-    }
+    TestManager->SetValue("Unsigned", 2u);
+    BOOST_TEST(TestManager->Contains("Unsigned"));
+    BOOST_TEST(TestManager->GetValue("Unsigned") == 2u);
 
-    SECTION("Float")
-    {
-        TestManager->SetValue("Float", 3.f);
-        REQUIRE(TestManager->Contains("Float"));
-        REQUIRE(TestManager->GetValue("Float") == 3.f);
-    }
+    TestManager->SetValue("Float", 3.f);
+    BOOST_TEST(TestManager->Contains("Float"));
+    BOOST_TEST(TestManager->GetValue("Float") == 3.f);
 
-    SECTION("Double")
-    {
-        TestManager->SetValue("Double", 4.0);
-        REQUIRE(TestManager->Contains("Double"));
-        REQUIRE(TestManager->GetValue("Double") == 4.0);
-    }
+    TestManager->SetValue("Double", 4.0);
+    BOOST_TEST(TestManager->Contains("Double"));
+    BOOST_TEST(TestManager->GetValue("Double") == 4.0);
 
-    SECTION("String")
-    {
-        TestManager->SetValue("String", std::string("Five"));
-        REQUIRE(TestManager->Contains("String"));
-        REQUIRE(TestManager->GetValue("String") == "Five");
-    }
+    TestManager->SetValue("String", std::string("Five"));
+    BOOST_TEST(TestManager->Contains("String"));
+    BOOST_TEST(TestManager->GetValue("String") == "Five");
 
-    SECTION("Null")
-    {
-        TestManager->SetValue("Null", nullptr);
-        REQUIRE_FALSE(TestManager->Contains("Null"));
-        REQUIRE_THROWS_AS(TestManager->GetValue("Null") == nullptr, std::exception);
-    }
+    TestManager->SetValue("Null", nullptr);
+    BOOST_TEST(!TestManager->Contains("Null"));
+    BOOST_CHECK_THROW(TestManager->GetValue("Null") == nullptr, std::exception);
 }
 
-TEST_CASE("Removal", "[Configuration]")
+BOOST_AUTO_TEST_CASE(RemoveData)
 {
     const auto TestManager = Configuration::Manager::GetInstance();
-    REQUIRE(TestManager != nullptr);
+    BOOST_TEST(TestManager != nullptr);
 
-    SECTION("Insert")
-    {
-        TestManager->SetValue("Testing", 1);
-        REQUIRE(TestManager->Contains("Testing"));
-    }
+    TestManager->SetValue("Testing", 1);
+    BOOST_TEST(TestManager->Contains("Testing"));
 
-    SECTION("Remove")
-    {
-        TestManager->RemoveValue("Testing");
-        REQUIRE_FALSE(TestManager->Contains("Testing"));
-    }
+    TestManager->RemoveValue("Testing");
+    BOOST_TEST(!TestManager->Contains("Testing"));
 }
 
-TEST_CASE("Dump", "[Configuration]")
+BOOST_AUTO_TEST_CASE(DumpConfiguration)
 {
     const auto TestManager = Configuration::Manager::GetInstance();
-    REQUIRE(TestManager != nullptr);
+    BOOST_TEST(TestManager != nullptr);
 
-    SECTION("Insert Signed")
-    {
-        TestManager->SetValue("Signed", 1);
-        REQUIRE(TestManager->Contains("Signed"));
-        REQUIRE(TestManager->GetValue("Signed") == 1);
-    }
+    TestManager->SetValue("Signed", 1);
+    BOOST_TEST(TestManager->Contains("Signed"));
+    BOOST_TEST(TestManager->GetValue("Signed") == 1);
 
-    SECTION("Insert Float")
-    {
-        TestManager->SetValue("Float", 2.f);
-        REQUIRE(TestManager->Contains("Float"));
-        REQUIRE(TestManager->GetValue("Float") == 2.f);
-    }
+    TestManager->SetValue("Float", 2.f);
+    BOOST_TEST(TestManager->Contains("Float"));
+    BOOST_TEST(TestManager->GetValue("Float") == 2.f);
 
-    SECTION("Insert Array")
-    {
-        const boost::json::array Value { "Item1", "Item2", "Item3" };
-        TestManager->SetValue("Array", Value);
-        REQUIRE(TestManager->Contains("Array"));
-        REQUIRE(TestManager->GetValue("Array").as_array() == Value);
-    }
+    const boost::json::array Value{ "Item1", "Item2", "Item3" };
+    TestManager->SetValue("Array", Value);
+    BOOST_TEST(TestManager->Contains("Array"));
+    BOOST_TEST(TestManager->GetValue("Array").as_array() == Value);
 
-    SECTION("Check Dump Content")
-    {
-        const std::string DumpContent = TestManager->Dump();
-        constexpr std::string_view TestContentRequirement = R"({"Signed":1,"Unsigned":2,"Float":2E0,"Double":4E0,"String":"Five","Array":["Item1","Item2","Item3"]})";
-        REQUIRE(DumpContent == TestContentRequirement);
-    }
+    const std::string DumpContent = TestManager->Dump();
+    constexpr std::string_view TestContent = R"({"Signed":1,"Unsigned":2,"Float":2E0,"Double":4E0,"String":"Five","Array":["Item1","Item2","Item3"]})";
+    BOOST_TEST(DumpContent == TestContent);
 }
 
-TEST_CASE("Save and Load Data", "[Configuration]")
+BOOST_AUTO_TEST_CASE(SaveAndLoadData)
 {
-    SECTION("Save and Load Valid Data")
-    {
-        auto TestManager = Configuration::Manager::GetInstance();
-        REQUIRE(TestManager != nullptr);
+    auto TestManager = Configuration::Manager::GetInstance();
+    BOOST_TEST(TestManager != nullptr);
 
-        TestManager->SetValue("Value1", 123);
-        TestManager->SetValue("Value2", "TestString");
-        TestManager->SetValue("Value3", 3.14);
+    TestManager->SetValue("Value1", 123);
+    TestManager->SetValue("Value2", "TestString");
+    TestManager->SetValue("Value3", 3.14);
 
-        const std::string FilePath = ".\\test_data.json";
-        TestManager->SaveData(FilePath);
+    const std::string FilePath = R"(.\test_data.json)";
+    TestManager->SaveData(FilePath);
 
-        TestManager.reset();
-        REQUIRE(TestManager == nullptr);
+    TestManager.reset();
+    BOOST_TEST(TestManager == nullptr);
 
-        const auto NewManager = Configuration::Manager::GetInstance();
-        REQUIRE(NewManager != nullptr);
+    const auto NewManager = Configuration::Manager::GetInstance();
+    BOOST_TEST(NewManager != nullptr);
 
-        NewManager->LoadData(FilePath);
+    NewManager->LoadData(FilePath);
 
-        REQUIRE(NewManager->Contains("Value1"));
-        REQUIRE(NewManager->Contains("Value2"));
-        REQUIRE(NewManager->Contains("Value3"));
+    BOOST_TEST(NewManager->Contains("Value1"));
+    BOOST_TEST(NewManager->Contains("Value2"));
+    BOOST_TEST(NewManager->Contains("Value3"));
 
-        REQUIRE(NewManager->GetValue("Value1") == 123);
-        REQUIRE(NewManager->GetValue("Value2") == "TestString");
-        REQUIRE(NewManager->GetValue("Value3") == 3.14);
-    }
-
-    SECTION("Load Invalid File")
-    {
-        const auto TestManager = Configuration::Manager::GetInstance();
-        REQUIRE(TestManager != nullptr);
-
-        const std::string FilePath = ".\\non_existent_file.json";
-        REQUIRE_THROWS_AS(TestManager->LoadData(FilePath), std::filesystem::filesystem_error);
-    }
+    BOOST_TEST(NewManager->GetValue("Value1") == 123);
+    BOOST_TEST(NewManager->GetValue("Value2") == "TestString");
+    BOOST_TEST(NewManager->GetValue("Value3") == 3.14);
 }
+
+BOOST_AUTO_TEST_CASE(LoadInvalidData)
+{
+    const auto TestManager = Configuration::Manager::GetInstance();
+    BOOST_TEST(TestManager != nullptr);
+
+    const std::string FilePath = R"(.\non_existent_file.json)";
+    BOOST_CHECK_THROW(TestManager->LoadData(FilePath), std::filesystem::filesystem_error);
+}
+#undef BOOST_TEST_MODULE

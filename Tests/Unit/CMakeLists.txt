@@ -14,10 +14,11 @@ set(INCLUDE_FILES
 
 add_executable(${LIBRARY_NAME} ${SOURCE_FILES} ${INCLUDE_FILES})
 target_include_directories(${LIBRARY_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Include/Unit)
+add_test(NAME ${LIBRARY_NAME} COMMAND ${LIBRARY_NAME})
 
-find_package(Catch2 REQUIRED CONFIG COMPONENTS Catch2WithMain)
+find_package(Boost REQUIRED CONFIG COMPONENTS test)
 
-target_link_libraries(${LIBRARY_NAME} PUBLIC
-    Catch2::Catch2WithMain
+target_link_libraries(${LIBRARY_NAME} PRIVATE
+    Boost::test
     Configuration
 )
