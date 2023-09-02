@@ -1,10 +1,8 @@
 # Copyright Notices: [...]
 
 # ------------ Module Settings -------------
-include(CTest)
+enable_testing()
 
 # -------------- Directories ---------------
-if (BUILD_TESTING)
-    add_subdirectory(Benchmark)
-    add_subdirectory(Unit)
-endif()
+add_subdirectory(Benchmark)
+add_subdirectory(Unit)

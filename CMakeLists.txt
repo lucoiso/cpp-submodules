@@ -2,5 +2,7 @@
 
 # -------------- Directories ---------------
 add_subdirectory(Configuration)
-add_subdirectory(Tests)
 
+if (BUILD_TESTING)
+    add_subdirectory(Tests)
+endif()
