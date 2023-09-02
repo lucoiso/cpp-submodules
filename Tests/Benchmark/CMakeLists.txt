@@ -23,4 +23,3 @@ target_link_libraries(${LIBRARY_NAME} PRIVATE
     benchmark::benchmark_main
     Configuration
 )
-
