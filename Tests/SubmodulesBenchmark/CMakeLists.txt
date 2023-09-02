@@ -1,20 +1,19 @@
 # Copyright Notices: [...]
 
 # ----------- Global Definitions -----------
-set(LIBRARY_NAME Benchmark)
+set(LIBRARY_NAME SubmodulesBenchmark)
 
 # ------------- Library Setup --------------
 set(SOURCE_FILES
-    ${CMAKE_CURRENT_SOURCE_DIR}/Source/Benchmark.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Source/SubmodulesBenchmark.cpp
 )
 
 set(INCLUDE_FILES
-    ${CMAKE_CURRENT_SOURCE_DIR}/Include/Benchmark/Containers.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/Include/Benchmark/Configuration.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/Include/${LIBRARY_NAME}/Configuration.h
 )
 
 add_executable(${LIBRARY_NAME} ${SOURCE_FILES} ${INCLUDE_FILES})
-target_include_directories(${LIBRARY_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Include/Benchmark)
+target_include_directories(${LIBRARY_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Include/${LIBRARY_NAME})
 
 find_package(benchmark REQUIRED CONFIG COMPONENTS benchmark_main)
 
