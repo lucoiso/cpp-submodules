@@ -25,7 +25,7 @@ std::shared_ptr<Manager> Manager::GetInstance()
     return m_Instance;
 }
 
-const boost::json::value& Manager::GetValue(const std::string_view Key) const
+const boost::json::value &Manager::GetValue(const std::string_view Key) const
 {
     return m_Data.at(Key);
 }
@@ -82,7 +82,7 @@ void Manager::LoadData(const std::string_view Path)
     FileStream.close();
 
     const boost::json::value JsonContent = boost::json::parse(FileContent);
-    for (const auto& [Key, Value] : JsonContent.get_object())
+    for (const auto &[Key, Value] : JsonContent.get_object())
     {
         m_Data.insert_or_assign(Key, Value);
     }

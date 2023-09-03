@@ -13,7 +13,7 @@
 #include <concepts>
 
 template <typename T>
-concept SerializableToJson = requires(const T& value) { { boost::json::value_from(value) }; };
+concept SerializableToJson = requires(const T &value) { { boost::json::value_from(value) }; };
 
 namespace Configuration
 {
@@ -25,10 +25,11 @@ namespace Configuration
 
         [[nodiscard]] static std::shared_ptr<Manager> GetInstance();
 
-        [[nodiscard]] const boost::json::value& GetValue(const std::string_view Key) const;
+        [[nodiscard]] const boost::json::value &GetValue(const std::string_view Key) const;
 
-        template<typename T> requires SerializableToJson<T>
-        constexpr inline void SetValue(const std::string_view Key, const T& Value)
+        template <typename T>
+            requires SerializableToJson<T>
+        constexpr inline void SetValue(const std::string_view Key, const T &Value)
         {
             if constexpr (std::is_pointer<T>::value || std::is_null_pointer<T>::value)
             {
