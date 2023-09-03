@@ -1,4 +1,6 @@
-// Copyright Notice: [...]
+// Author: Lucas Vilas-Boas
+// Year : 2023
+// Repo : https://github.com/lucoiso/cpp-submodules
 
 #ifndef CONFIGURATIONMODULE_H
 #define CONFIGURATIONMODULE_H
