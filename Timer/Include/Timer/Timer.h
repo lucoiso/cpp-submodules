@@ -12,20 +12,32 @@
 
 namespace Timer
 {
+    struct TIMERMODULE_API SingleTimeTimerMode
+    {
+    };
+    constexpr inline SingleTimeTimerMode TAG_SingleTime{};
+
+    struct TIMERMODULE_API RepeatingTimerMode
+    {
+    };
+    constexpr inline RepeatingTimerMode TAG_Repeating{};
+
     class TIMERMODULE_API TimerObject
     {
     public:
-        TimerObject(const std::uint8_t FrameRate);
+        TimerObject(const std::uint8_t Delay, SingleTimeTimerMode);
+        TimerObject(const std::uint8_t Rate, RepeatingTimerMode);
         ~TimerObject();
 
         void Start(const std::function<void()> &Functor);
         void Stop();
 
     private:
+        void SingleTime();
         void TimerLoop();
 
-        std::uint8_t m_FrameRate;
-        std::chrono::milliseconds m_FrameInterval;
+        bool m_IsSingleTime;
+        std::chrono::milliseconds m_Interval;
         bool m_IsRunning;
         std::thread m_Thread;
         std::function<void()> m_Functor;
