@@ -4,6 +4,7 @@
 
 # -------------- Directories ---------------
 add_subdirectory(Configuration)
+add_subdirectory(Timer)
 
 if (BUILD_TESTING)
     add_subdirectory(Tests)
