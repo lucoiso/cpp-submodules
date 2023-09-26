@@ -6,6 +6,36 @@
 
 using namespace Timer;
 
+TimerObject::TimerObject(const TimerObject &Other)
+    : m_ID(Other.m_ID),
+      m_IsSingleTime(Other.m_IsSingleTime),
+      m_Interval(Other.m_Interval),
+      m_IsRunning(Other.m_IsRunning),
+      m_EventID(Other.m_EventID),
+      m_EventIDQueue(Other.m_EventIDQueue),
+      m_OnFinished(Other.m_OnFinished),
+      m_RepeatCount(Other.m_RepeatCount),
+      m_CurrentRepeatCount(Other.m_CurrentRepeatCount),
+      m_ElapsedTime(Other.m_ElapsedTime)
+{
+}
+
+TimerObject &TimerObject::operator=(const TimerObject &Other)
+{
+    m_ID = Other.m_ID;
+    m_IsSingleTime = Other.m_IsSingleTime;
+    m_Interval = Other.m_Interval;
+    m_IsRunning = Other.m_IsRunning;
+    m_EventID = Other.m_EventID;
+    m_EventIDQueue = Other.m_EventIDQueue;
+    m_OnFinished = Other.m_OnFinished;
+    m_RepeatCount = Other.m_RepeatCount;
+    m_CurrentRepeatCount = Other.m_CurrentRepeatCount;
+    m_ElapsedTime = Other.m_ElapsedTime;
+
+    return *this;
+}
+
 TimerObject::TimerObject(Tags::SingleTimeTimerMode, const std::uint32_t ID, const std::uint32_t DelayMs, const std::uint8_t EventID, std::queue<std::uint8_t> &EventIDQueue, const std::function<void(std::uint32_t)> &OnFinished)
     : m_ID(ID)
     , m_IsSingleTime(true)
@@ -111,6 +141,11 @@ void TimerObject::SingleTime()
 
 void TimerObject::TimerLoop()
 {
+    if (!m_IsRunning)
+    {
+        return;
+    }
+    
     m_EventIDQueue.push(m_EventID);
 
     ++m_CurrentRepeatCount;

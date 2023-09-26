@@ -12,11 +12,8 @@ set(SOURCE_FILES
 )
 
 set(INCLUDE_FILES
-    # Public Headers
     ${CMAKE_CURRENT_SOURCE_DIR}/Include/${LIBRARY_NAME}/TimerManager.h
-    
-    # Private Headers
-    ${CMAKE_CURRENT_SOURCE_DIR}/Source/TimerObject.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/Include/${LIBRARY_NAME}/TimerObject.h
 )
 
 add_library(${LIBRARY_NAME} SHARED ${SOURCE_FILES} ${INCLUDE_FILES})

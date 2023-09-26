@@ -18,6 +18,9 @@ namespace Timer
         friend class TimerManager;
 
     public:
+        TimerObject(const TimerObject &Other);
+        TimerObject &operator=(const TimerObject &Other);
+
         TimerObject(Tags::SingleTimeTimerMode, const std::uint32_t ID, const std::uint32_t DelayMs, const std::uint8_t EventID, std::queue<std::uint8_t> &EventIDQueue, const std::function<void(std::uint32_t)> &OnFinished);
 
         TimerObject(Tags::RepeatingTimerMode, const std::uint32_t ID, const std::uint32_t IntervalMs, const std::uint32_t RepeatCount, const std::uint8_t EventID, std::queue<std::uint8_t> &EventIDQueue, const std::function<void(std::uint32_t)> &OnFinished);

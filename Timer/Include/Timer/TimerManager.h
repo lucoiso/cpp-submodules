@@ -5,8 +5,10 @@
 #pragma once
 
 #include "TimerModule.h"
+#include "TimerObject.h"
 #include "TimerTags.h"
 #include <atomic>
+#include <chrono>
 #include <queue>
 #include <thread>
 #include <mutex>
@@ -30,6 +32,8 @@ namespace Timer
 
         void StopTimer(const std::uint32_t TimerID);
 
+        void SetTickInterval(const std::chrono::milliseconds IntervalMs);
+
     private:
         void TimerFinished(const std::uint32_t TimerID);
 
@@ -38,9 +42,9 @@ namespace Timer
         static TimerManager m_Instance;
 
         std::atomic<std::uint32_t> m_TimerIDCounter;
-        std::vector<std::unique_ptr<TimerObject>> m_TimerObjects;
+        std::vector<TimerObject> m_TimerObjects;
 
-        std::uint32_t m_TickIntervalMs;
+        std::chrono::milliseconds m_TickIntervalMs;
 
         std::thread m_TickThread;
         std::recursive_mutex m_Mutex;
