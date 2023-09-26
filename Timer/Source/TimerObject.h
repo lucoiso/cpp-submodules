@@ -4,16 +4,15 @@
 
 #pragma once
 
-#include "TimerModule.h"
-#include "TimerTags.h"
 #include <chrono>
 #include <cstdint>
 #include <queue>
 #include <functional>
+#include <optional>
 
 namespace Timer
 {
-    class TIMERMODULE_API TimerObject
+    class TimerObject
     {
         friend class TimerManager;
 
@@ -21,18 +20,19 @@ namespace Timer
         TimerObject(const TimerObject &Other);
         TimerObject &operator=(const TimerObject &Other);
 
-        TimerObject(Tags::SingleTimeTimerMode, const std::uint32_t ID, const std::uint32_t DelayMs, const std::uint8_t EventID, std::queue<std::uint8_t> &EventIDQueue, const std::function<void(std::uint32_t)> &OnFinished);
-
-        TimerObject(Tags::RepeatingTimerMode, const std::uint32_t ID, const std::uint32_t IntervalMs, const std::uint32_t RepeatCount, const std::uint8_t EventID, std::queue<std::uint8_t> &EventIDQueue, const std::function<void(std::uint32_t)> &OnFinished);
+        TimerObject(const std::uint64_t ID, const std::uint32_t IntervalMs, const std::optional<std::uint32_t> &RepeatCount, const std::uint8_t EventID, std::queue<std::uint8_t> &EventIDQueue, const std::function<void(std::uint32_t)> &OnFinished);
 
         ~TimerObject();
-
-        std::uint32_t GetID() const;
 
         void Start();
         void Stop();
 
+        std::uint64_t GetID() const;
         bool IsRunning() const;
+        std::uint8_t GetEventID() const;
+        std::optional<std::uint32_t> GetRepeatCount() const;
+        std::uint32_t GetCurrentRepeatCount() const;
+        std::chrono::milliseconds GetElapsedTime() const;
 
         inline bool operator==(const TimerObject &Other) const
         {
@@ -50,14 +50,14 @@ namespace Timer
         void SingleTime();
         void TimerLoop();
 
-        std::uint32_t m_ID;
+        std::uint64_t m_ID;
         bool m_IsSingleTime;
         std::chrono::milliseconds m_Interval;
         bool m_IsRunning;
         std::uint8_t m_EventID;
         std::queue<std::uint8_t> &m_EventIDQueue;
         std::function<void(std::uint32_t)> m_OnFinished;
-        std::uint32_t m_RepeatCount;
+        std::optional<std::uint32_t> m_RepeatCount;
         std::uint32_t m_CurrentRepeatCount;
         std::chrono::milliseconds m_ElapsedTime;
     };

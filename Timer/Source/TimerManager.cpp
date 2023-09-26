@@ -3,6 +3,7 @@
 // Repo : https://github.com/lucoiso/cpp-submodules
 
 #include "TimerManager.h"
+#include "TimerObject.h"
 
 using namespace Timer;
 
@@ -32,21 +33,14 @@ TimerManager &TimerManager::Get()
     return m_Instance;
 }
 
-std::uint32_t TimerManager::StartTimer(Tags::SingleTimeTimerMode, const std::uint8_t EventID, const std::uint32_t DelayMs, std::queue<std::uint8_t> &EventIDQueue)
+std::uint64_t TimerManager::StartTimer(const std::uint8_t EventID, const std::uint32_t Interval, const std::optional<std::uint32_t> &RepeatCount, std::queue<std::uint8_t> &EventIDQueue)
 {
-    std::lock_guard<std::recursive_mutex> Lock(m_Mutex);
+    if (m_TimerObjects.empty())
+    {
+        m_TimerIDCounter = 0u;
+    }
 
-    m_TimerObjects.emplace_back(Tags::SingleTime, m_TimerIDCounter.fetch_add(1u), DelayMs, EventID, EventIDQueue, std::bind(&TimerManager::TimerFinished, this, std::placeholders::_1));
-
-    m_TimerObjects.back().Start();
-    return m_TimerObjects.back().GetID();
-}
-
-std::uint32_t TimerManager::StartTimer(Tags::RepeatingTimerMode, const std::uint8_t EventID, const std::uint32_t Interval, const std::uint32_t RepeatCount, std::queue<std::uint8_t> &EventIDQueue)
-{
-    std::lock_guard<std::recursive_mutex> Lock(m_Mutex);
-
-    m_TimerObjects.emplace_back(Tags::Repeating, m_TimerIDCounter.fetch_add(1u), Interval, RepeatCount, EventID, EventIDQueue, std::bind(&TimerManager::TimerFinished, this, std::placeholders::_1));
+    m_TimerObjects.emplace_back(m_TimerIDCounter.fetch_add(1u), Interval, RepeatCount, EventID, EventIDQueue, std::bind(&TimerManager::TimerFinished, this, std::placeholders::_1));
 
     m_TimerObjects.back().Start();
     return m_TimerObjects.back().GetID();
@@ -71,11 +65,12 @@ void TimerManager::SetTickInterval(const std::chrono::milliseconds IntervalMs)
     m_TickIntervalMs = IntervalMs;
 }
 
-void TimerManager::TimerFinished(const std::uint32_t TimerID)
+void TimerManager::TimerFinished(const std::uint64_t TimerID)
 {
     std::lock_guard<std::recursive_mutex> Lock(m_Mutex);
 
-    std::erase_if(m_TimerObjects, [TimerID](const TimerObject &Timer) { return Timer.GetID() == TimerID; });
+    std::erase_if(m_TimerObjects, [TimerID](const TimerObject &Timer)
+                  { return Timer.GetID() == TimerID; });
 }
 
 void TimerManager::Tick()

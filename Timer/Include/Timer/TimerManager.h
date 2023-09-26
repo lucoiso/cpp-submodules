@@ -5,8 +5,6 @@
 #pragma once
 
 #include "TimerModule.h"
-#include "TimerObject.h"
-#include "TimerTags.h"
 #include <atomic>
 #include <chrono>
 #include <queue>
@@ -26,22 +24,20 @@ namespace Timer
 
         static TimerManager &Get();
 
-        std::uint32_t StartTimer(Tags::SingleTimeTimerMode, const std::uint8_t EventID, const std::uint32_t DelayMs, std::queue<std::uint8_t> &EventIDQueue);
-
-        std::uint32_t StartTimer(Tags::RepeatingTimerMode, const std::uint8_t EventID, const std::uint32_t Interval, const std::uint32_t RepeatCount, std::queue<std::uint8_t> &EventIDQueue);
+        std::uint64_t StartTimer(const std::uint8_t EventID, const std::uint32_t Interval, const std::optional<std::uint32_t> &RepeatCount, std::queue<std::uint8_t> &EventIDQueue);
 
         void StopTimer(const std::uint32_t TimerID);
 
         void SetTickInterval(const std::chrono::milliseconds IntervalMs);
 
     private:
-        void TimerFinished(const std::uint32_t TimerID);
+        void TimerFinished(const std::uint64_t TimerID);
 
         void Tick();
 
         static TimerManager m_Instance;
 
-        std::atomic<std::uint32_t> m_TimerIDCounter;
+        std::atomic<std::uint64_t> m_TimerIDCounter;
         std::vector<TimerObject> m_TimerObjects;
 
         std::chrono::milliseconds m_TickIntervalMs;
