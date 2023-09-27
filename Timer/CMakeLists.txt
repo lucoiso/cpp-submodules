@@ -14,6 +14,7 @@ set(SOURCE_FILES
 set(INCLUDE_FILES
     # Public Headers
     ${CMAKE_CURRENT_SOURCE_DIR}/Include/${LIBRARY_NAME}/TimerManager.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/Include/${LIBRARY_NAME}/TimerParameters.h
     
     # Private Headers
     ${CMAKE_CURRENT_SOURCE_DIR}/Source/TimerObject.h

@@ -5,6 +5,7 @@
 #pragma once
 
 #include "TimerModule.h"
+#include "TimerParameters.h"
 #include <atomic>
 #include <chrono>
 #include <queue>
@@ -24,7 +25,7 @@ namespace Timer
 
         static TimerManager &Get();
 
-        std::uint64_t StartTimer(const std::uint8_t EventID, const std::uint32_t Interval, const std::optional<std::uint32_t> &RepeatCount, std::queue<std::uint8_t> &EventIDQueue);
+        std::uint64_t StartTimer(const TimerParameters &Parameters, std::queue<std::uint8_t> &EventIDQueue);
 
         void StopTimer(const std::uint32_t TimerID);
 

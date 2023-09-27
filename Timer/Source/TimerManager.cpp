@@ -33,14 +33,14 @@ TimerManager &TimerManager::Get()
     return m_Instance;
 }
 
-std::uint64_t TimerManager::StartTimer(const std::uint8_t EventID, const std::uint32_t Interval, const std::optional<std::uint32_t> &RepeatCount, std::queue<std::uint8_t> &EventIDQueue)
+std::uint64_t TimerManager::StartTimer(const TimerParameters &Parameters, std::queue<std::uint8_t> &EventIDQueue)
 {
     if (m_TimerObjects.empty())
     {
         m_TimerIDCounter = 0u;
     }
 
-    m_TimerObjects.emplace_back(m_TimerIDCounter.fetch_add(1u), Interval, RepeatCount, EventID, EventIDQueue, std::bind(&TimerManager::TimerFinished, this, std::placeholders::_1));
+    m_TimerObjects.emplace_back(m_TimerIDCounter.fetch_add(1u), Parameters.Interval, Parameters.RepeatCount, Parameters.EventID, EventIDQueue, std::bind(&TimerManager::TimerFinished, this, std::placeholders::_1));
 
     m_TimerObjects.back().Start();
     return m_TimerObjects.back().GetID();
