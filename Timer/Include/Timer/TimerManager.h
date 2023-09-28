@@ -39,7 +39,7 @@ namespace Timer
         static TimerManager m_Instance;
 
         std::atomic<std::uint64_t> m_TimerIDCounter;
-        std::vector<TimerObject> m_TimerObjects;
+        std::vector<std::unique_ptr<TimerObject>> m_TimerObjects;
 
         std::chrono::milliseconds m_TickIntervalMs;
 

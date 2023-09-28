@@ -52,7 +52,6 @@ TimerObject::TimerObject(const std::uint64_t ID, const std::uint32_t IntervalMs,
 
 TimerObject::~TimerObject()
 {
-    Stop();
 }
 
 void TimerObject::Start()
