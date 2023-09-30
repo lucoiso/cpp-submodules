@@ -7,67 +7,67 @@
 #include <benchmark/benchmark.h>
 #include <Configuration/Manager.h>
 
-static void ConfigurationInsertion(benchmark::State& state)
+static void ConfigurationInsertion(benchmark::State& State)
 {
-    const auto TestManager = Configuration::Manager::GetInstance();
-    for (const auto& _ : state)
+    auto TestManager = Configuration::Manager::Get();
+    for (const auto& _ : State)
     {
-        TestManager->SetValue("BenchmarkValue", 42);
+        TestManager.SetValue("BenchmarkValue", 42);
     }
 }
 
 BENCHMARK(ConfigurationInsertion);
 
-static void ConfigurationRemoval(benchmark::State& state)
+static void ConfigurationRemoval(benchmark::State& State)
 {
-    const auto TestManager = Configuration::Manager::GetInstance();
-    for (const auto& _ : state)
+    auto TestManager = Configuration::Manager::Get();
+    for (const auto& _ : State)
     {
-        TestManager->RemoveValue("BenchmarkValue");
+        TestManager.RemoveValue("BenchmarkValue");
     }
 }
 
 BENCHMARK(ConfigurationRemoval);
 
-static void ConfigurationContains(benchmark::State& state)
+static void ConfigurationContains(benchmark::State& State)
 {
-    const auto TestManager = Configuration::Manager::GetInstance();
-    TestManager->SetValue("BenchmarkValue", 42);
+    auto TestManager = Configuration::Manager::Get();
+    TestManager.SetValue("BenchmarkValue", 42);
 
-    for (const auto& _ : state)
+    for (const auto& _ : State)
     {
-        bool Contains = TestManager->Contains("BenchmarkValue");
+        bool Contains = TestManager.Contains("BenchmarkValue");
         benchmark::DoNotOptimize(Contains);
     }
 }
 
 BENCHMARK(ConfigurationContains);
 
-static void ConfigurationSaveData(benchmark::State& state)
+static void ConfigurationSaveData(benchmark::State& State)
 {
-    const auto TestManager = Configuration::Manager::GetInstance();
-    TestManager->SetValue("Value1", 123);
-    TestManager->SetValue("Value2", "TestString");
-    TestManager->SetValue("Value3", 3.14);
+    auto TestManager = Configuration::Manager::Get();
+    TestManager.SetValue("Value1", 123);
+    TestManager.SetValue("Value2", "TestString");
+    TestManager.SetValue("Value3", 3.14);
 
     const std::string Path = ".\\benchmark_test_data.json";
-    for (const auto& _ : state)
+    for (const auto& _ : State)
     {
-        TestManager->SaveData(Path);
+        TestManager.SaveData(Path);
         benchmark::DoNotOptimize(Path);
     }
 }
 
 BENCHMARK(ConfigurationSaveData);
 
-static void ConfigurationLoadData(benchmark::State& state)
+static void ConfigurationLoadData(benchmark::State& State)
 {
-    const auto        TestManager = Configuration::Manager::GetInstance();
+    auto              TestManager = Configuration::Manager::Get();
     const std::string Path        = ".\\benchmark_test_data.json";
 
-    for (const auto& _ : state)
+    for (const auto& _ : State)
     {
-        TestManager->LoadData(Path);
+        TestManager.LoadData(Path);
         benchmark::DoNotOptimize(Path);
     }
 }
