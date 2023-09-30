@@ -16,4 +16,4 @@ namespace Timer
         std::uint32_t                Interval;
         std::optional<std::uint32_t> RepeatCount;
     };
-};
+}

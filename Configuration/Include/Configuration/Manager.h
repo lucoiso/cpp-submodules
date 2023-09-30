@@ -41,8 +41,7 @@ namespace Configuration
 
         bool Contains(std::string_view Key) const;
 
-        [[nodiscard]] boost::json::value GetData() const;
-        [[nodiscard]] std::string        Dump() const;
+        [[nodiscard]] std::string Dump() const;
 
         void SaveData(std::string_view Path) const;
         void LoadData(std::string_view Path);

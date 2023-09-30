@@ -48,4 +48,4 @@ namespace Timer
 
         bool m_IsActive;
     };
-};
+}

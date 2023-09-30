@@ -59,12 +59,11 @@ void TimerManager::StopTimer(const std::uint32_t TimerID)
 {
     std::lock_guard Lock(m_Mutex);
 
-    if (const auto MatchingTimer = std::find_if(m_TimerObjects.begin(),
-                                                m_TimerObjects.end(),
-                                                [TimerID](const std::unique_ptr<TimerObject>& Timer)
-                                                {
-                                                    return Timer->GetID() == TimerID;
-                                                });
+    if (const auto                                        MatchingTimer = std::ranges::find_if(m_TimerObjects,
+            [TimerID](const std::unique_ptr<TimerObject>& Timer)
+            {
+                return Timer->GetID() == TimerID;
+            });
         MatchingTimer != m_TimerObjects.end())
     {
         (*MatchingTimer)->Stop();

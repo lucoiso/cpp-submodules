@@ -66,4 +66,4 @@ namespace Timer
         std::uint32_t                      m_CurrentRepeatCount;
         std::chrono::milliseconds          m_ElapsedTime;
     };
-};
+}
