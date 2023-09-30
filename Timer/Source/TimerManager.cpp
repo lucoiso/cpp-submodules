@@ -7,7 +7,7 @@
 
 using namespace Timer;
 
-TimerManager TimerManager::m_Instance;
+TimerManager TimerManager::g_Instance;
 
 TimerManager::TimerManager()
     : m_TimerIDCounter(0u)
@@ -32,7 +32,7 @@ TimerManager::~TimerManager()
 
 TimerManager& TimerManager::Get()
 {
-    return m_Instance;
+    return g_Instance;
 }
 
 std::uint64_t TimerManager::StartTimer(const TimerParameters& Parameters, std::queue<std::uint8_t>& EventIDQueue)

@@ -36,7 +36,7 @@ namespace Timer
 
         void Tick();
 
-        static TimerManager m_Instance;
+        static TimerManager g_Instance;
 
         std::atomic<std::uint64_t>                m_TimerIDCounter;
         std::vector<std::unique_ptr<TimerObject>> m_TimerObjects;
