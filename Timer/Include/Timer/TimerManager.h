@@ -23,27 +23,27 @@ namespace Timer
         TimerManager();
         ~TimerManager();
 
-        static TimerManager &Get();
+        static TimerManager& Get();
 
-        std::uint64_t StartTimer(const TimerParameters &Parameters, std::queue<std::uint8_t> &EventIDQueue);
+        std::uint64_t StartTimer(const TimerParameters& Parameters, std::queue<std::uint8_t>& EventIDQueue);
 
-        void StopTimer(const std::uint32_t TimerID);
+        void StopTimer(std::uint32_t TimerID);
 
-        void SetTickInterval(const std::chrono::milliseconds IntervalMs);
+        void SetTickInterval(std::chrono::milliseconds IntervalMs);
 
     private:
-        void TimerFinished(const std::uint64_t TimerID);
+        void TimerFinished(std::uint64_t TimerID);
 
         void Tick();
 
         static TimerManager m_Instance;
 
-        std::atomic<std::uint64_t> m_TimerIDCounter;
+        std::atomic<std::uint64_t>                m_TimerIDCounter;
         std::vector<std::unique_ptr<TimerObject>> m_TimerObjects;
 
         std::chrono::milliseconds m_TickIntervalMs;
 
-        std::thread m_TickThread;
+        std::thread          m_TickThread;
         std::recursive_mutex m_Mutex;
 
         bool m_IsActive;

@@ -10,22 +10,17 @@
 
 using namespace Configuration;
 
-std::shared_ptr<Manager> Manager::m_Instance(nullptr);
+Manager Manager::g_Instance;
 
-Manager::Manager() = default;
+Manager::Manager()  = default;
 Manager::~Manager() = default;
 
-std::shared_ptr<Manager> Manager::GetInstance()
+Manager& Manager::Get()
 {
-    if (!m_Instance)
-    {
-        m_Instance = std::make_shared<Manager>();
-    }
-
-    return m_Instance;
+    return g_Instance;
 }
 
-const boost::json::value &Manager::GetValue(const std::string_view Key) const
+const boost::json::value& Manager::GetValue(const std::string_view Key) const
 {
     return m_Data.at(Key);
 }
@@ -42,13 +37,13 @@ bool Manager::Contains(const std::string_view Key) const
 
 std::string Manager::Dump() const
 {
-    return boost::json::serialize(m_Data);
+    return serialize(m_Data);
 }
 
 void Manager::SaveData(const std::string_view Path) const
 {
     const std::filesystem::path Destination(Path);
-    if (!std::filesystem::is_directory(Destination.parent_path()))
+    if (!is_directory(Destination.parent_path()))
     {
         throw std::filesystem::filesystem_error("Directory not found", std::filesystem::path(Path), std::make_error_code(std::errc::no_such_file_or_directory));
     }
@@ -66,7 +61,7 @@ void Manager::SaveData(const std::string_view Path) const
 void Manager::LoadData(const std::string_view Path)
 {
     const std::filesystem::path Destination(Path);
-    if (!std::filesystem::exists(Destination))
+    if (!exists(Destination))
     {
         throw std::filesystem::filesystem_error("File not found", std::filesystem::path(Path), std::make_error_code(std::errc::no_such_file_or_directory));
     }
@@ -82,7 +77,7 @@ void Manager::LoadData(const std::string_view Path)
     FileStream.close();
 
     const boost::json::value JsonContent = boost::json::parse(FileContent);
-    for (const auto &[Key, Value] : JsonContent.get_object())
+    for (const auto& [Key, Value] : JsonContent.get_object())
     {
         m_Data.insert_or_assign(Key, Value);
     }

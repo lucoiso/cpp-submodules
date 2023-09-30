@@ -70,7 +70,7 @@ BOOST_AUTO_TEST_CASE(DumpConfiguration)
     BOOST_TEST(TestManager->Contains("Array"));
     BOOST_TEST(TestManager->GetValue("Array").as_array() == Value);
 
-    const std::string DumpContent = TestManager->Dump();
+    const std::string          DumpContent = TestManager->Dump();
     constexpr std::string_view TestContent = R"({"Signed":1,"Unsigned":2,"Float":2E0,"Double":4E0,"String":"Five","Array":["Item1","Item2","Item3"]})";
     BOOST_TEST(DumpContent == TestContent);
 }

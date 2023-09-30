@@ -6,47 +6,52 @@
 
 using namespace Timer;
 
-TimerObject::TimerObject(const TimerObject &Other)
+TimerObject::TimerObject(const TimerObject& Other)
     : m_ID(Other.m_ID)
-    , m_IsSingleTime(Other.m_IsSingleTime)
-    , m_Interval(Other.m_Interval)
-    , m_IsRunning(Other.m_IsRunning)
-    , m_EventID(Other.m_EventID)
-    , m_EventIDQueue(Other.m_EventIDQueue)
-    , m_OnFinished(Other.m_OnFinished)
-    , m_RepeatCount(Other.m_RepeatCount)
-    , m_CurrentRepeatCount(Other.m_CurrentRepeatCount)
-    , m_ElapsedTime(Other.m_ElapsedTime)
+  , m_IsSingleTime(Other.m_IsSingleTime)
+  , m_Interval(Other.m_Interval)
+  , m_IsRunning(Other.m_IsRunning)
+  , m_EventID(Other.m_EventID)
+  , m_EventIDQueue(Other.m_EventIDQueue)
+  , m_OnFinished(Other.m_OnFinished)
+  , m_RepeatCount(Other.m_RepeatCount)
+  , m_CurrentRepeatCount(Other.m_CurrentRepeatCount)
+  , m_ElapsedTime(Other.m_ElapsedTime)
 {
 }
 
-TimerObject &TimerObject::operator=(const TimerObject &Other)
+TimerObject& TimerObject::operator=(const TimerObject& Other)
 {
-    m_ID = Other.m_ID;
-    m_IsSingleTime = Other.m_IsSingleTime;
-    m_Interval = Other.m_Interval;
-    m_IsRunning = Other.m_IsRunning;
-    m_EventID = Other.m_EventID;
-    m_EventIDQueue = Other.m_EventIDQueue;
-    m_OnFinished = Other.m_OnFinished;
-    m_RepeatCount = Other.m_RepeatCount;
+    m_ID                 = Other.m_ID;
+    m_IsSingleTime       = Other.m_IsSingleTime;
+    m_Interval           = Other.m_Interval;
+    m_IsRunning          = Other.m_IsRunning;
+    m_EventID            = Other.m_EventID;
+    m_EventIDQueue       = Other.m_EventIDQueue;
+    m_OnFinished         = Other.m_OnFinished;
+    m_RepeatCount        = Other.m_RepeatCount;
     m_CurrentRepeatCount = Other.m_CurrentRepeatCount;
-    m_ElapsedTime = Other.m_ElapsedTime;
+    m_ElapsedTime        = Other.m_ElapsedTime;
 
     return *this;
 }
 
-TimerObject::TimerObject(const std::uint64_t ID, const std::uint32_t IntervalMs, const std::optional<std::uint32_t> &RepeatCount, const std::uint8_t EventID, std::queue<std::uint8_t> &EventIDQueue, const std::function<void(std::uint32_t)> &OnFinished)
+TimerObject::TimerObject(const std::uint64_t                       ID,
+                         const std::uint32_t                       IntervalMs,
+                         const std::optional<std::uint32_t>&       RepeatCount,
+                         const std::uint8_t                        EventID,
+                         std::queue<std::uint8_t>&                 EventIDQueue,
+                         const std::function<void(std::uint32_t)>& OnFinished)
     : m_ID(ID)
-    , m_IsSingleTime(RepeatCount == 0u)
-    , m_Interval(std::chrono::milliseconds(static_cast<std::int32_t>(IntervalMs == 0u ? 1u : IntervalMs)))
-    , m_IsRunning(false)
-    , m_EventID(EventID)
-    , m_EventIDQueue(EventIDQueue)
-    , m_OnFinished(OnFinished)
-    , m_RepeatCount(RepeatCount)
-    , m_CurrentRepeatCount(0u)
-    , m_ElapsedTime(0u)
+  , m_IsSingleTime(RepeatCount == 0u)
+  , m_Interval(std::chrono::milliseconds(static_cast<std::int32_t>(IntervalMs == 0u ? 1u : IntervalMs)))
+  , m_IsRunning(false)
+  , m_EventID(EventID)
+  , m_EventIDQueue(EventIDQueue)
+  , m_OnFinished(OnFinished)
+  , m_RepeatCount(RepeatCount)
+  , m_CurrentRepeatCount(0u)
+  , m_ElapsedTime(0u)
 {
 }
 
@@ -118,10 +123,7 @@ void TimerObject::Tick(const std::chrono::milliseconds DeltaTime)
     {
         return;
     }
-    else
-    {
-        m_ElapsedTime = std::chrono::milliseconds(0u);
-    }
+    m_ElapsedTime = std::chrono::milliseconds(0u);
 
     if (m_IsSingleTime)
     {

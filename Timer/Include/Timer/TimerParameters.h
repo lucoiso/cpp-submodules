@@ -12,8 +12,8 @@ namespace Timer
 {
     struct TIMERMODULE_API TimerParameters
     {
-        std::uint8_t EventID;
-        std::uint32_t Interval;
+        std::uint8_t                 EventID;
+        std::uint32_t                Interval;
         std::optional<std::uint32_t> RepeatCount;
     };
 };

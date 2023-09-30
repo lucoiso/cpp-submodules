@@ -5,15 +5,10 @@
 #pragma once
 
 #include "ConfigurationModule.h"
-#include <memory>
-#include <string_view>
 #include <boost/json/value.hpp>
 #include <boost/json/value_from.hpp>
-#include <boost/json/array.hpp>
-#include <concepts>
 
-template <typename T>
-concept SerializableToJson = requires(const T &value) { { boost::json::value_from(value) }; };
+template <typename T>concept SerializableToJson = requires(const T& Value) { { boost::json::value_from(Value) }; };
 
 namespace Configuration
 {
@@ -23,15 +18,15 @@ namespace Configuration
         Manager();
         ~Manager();
 
-        [[nodiscard]] static std::shared_ptr<Manager> GetInstance();
+        [[nodiscard]] static Manager& Get();
 
-        [[nodiscard]] const boost::json::value &GetValue(const std::string_view Key) const;
+        [[nodiscard]] const boost::json::value& GetValue(std::string_view Key) const;
 
         template <typename T>
             requires SerializableToJson<T>
-        constexpr inline void SetValue(const std::string_view Key, const T &Value)
+        constexpr void SetValue(const std::string_view Key, const T& Value)
         {
-            if constexpr (std::is_pointer<T>::value || std::is_null_pointer<T>::value)
+            if constexpr (std::is_pointer_v<T> || std::is_null_pointer_v<T>)
             {
                 if (Value == nullptr)
                 {
@@ -42,18 +37,18 @@ namespace Configuration
             m_Data.insert_or_assign(Key, Value);
         }
 
-        void RemoveValue(const std::string_view Key);
+        void RemoveValue(std::string_view Key);
 
-        bool Contains(const std::string_view Key) const;
+        bool Contains(std::string_view Key) const;
 
         [[nodiscard]] boost::json::value GetData() const;
-        [[nodiscard]] std::string Dump() const;
+        [[nodiscard]] std::string        Dump() const;
 
-        void SaveData(const std::string_view Path) const;
-        void LoadData(const std::string_view Path);
+        void SaveData(std::string_view Path) const;
+        void LoadData(std::string_view Path);
 
     private:
-        static std::shared_ptr<Manager> m_Instance;
+        static Manager      g_Instance;
         boost::json::object m_Data;
     };
 }
