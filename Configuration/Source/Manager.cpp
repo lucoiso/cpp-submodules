@@ -3,16 +3,16 @@
 // Repo : https://github.com/lucoiso/cpp-submodules
 
 #include "Manager.h"
-#include <filesystem>
-#include <fstream>
 #include <boost/json/parse.hpp>
 #include <boost/json/serialize.hpp>
+#include <filesystem>
+#include <fstream>
 
 using namespace Configuration;
 
 Manager& Manager::Get()
 {
-    static Manager Instance{};
+    static Manager Instance {};
     return Instance;
 }
 
@@ -73,7 +73,7 @@ void Manager::LoadData(std::string_view const Path)
     FileStream.close();
 
     for (boost::json::value const JsonContent = boost::json::parse(FileContent);
-         auto const& [Key, Value] : JsonContent.get_object())
+         auto const& [Key, Value]: JsonContent.get_object())
     {
         m_Data.insert_or_assign(Key, Value);
     }

@@ -34,7 +34,7 @@ BOOST_AUTO_TEST_CASE(InsertData)
 
     Configuration::Manager::Get().SetValue("Null", nullptr);
     BOOST_TEST(!Configuration::Manager::Get().Contains("Null"));
-    BOOST_CHECK_THROW(Configuration::Manager::Get().GetValue("Null") == nullptr, std::exception); // NOLINT(clang-diagnostic-unused-comparison)
+    BOOST_CHECK_THROW(Configuration::Manager::Get().GetValue("Null") == nullptr, std::exception);
 }
 
 BOOST_AUTO_TEST_CASE(RemoveData)
@@ -56,11 +56,10 @@ BOOST_AUTO_TEST_CASE(DumpConfiguration)
     BOOST_TEST(Configuration::Manager::Get().Contains("Float"));
     BOOST_TEST(Configuration::Manager::Get().GetValue("Float") == 2.F);
 
-    boost::json::array const Value{
-        "Item1",
-        "Item2",
-        "Item3"
-    };
+    boost::json::array const Value {
+            "Item1",
+            "Item2",
+            "Item3"};
 
     Configuration::Manager::Get().SetValue("Array", Value);
     BOOST_TEST(Configuration::Manager::Get().Contains("Array"));

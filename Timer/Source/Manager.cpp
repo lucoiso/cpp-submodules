@@ -36,7 +36,7 @@ Manager::~Manager()
 
 Manager& Manager::Get()
 {
-    static Manager Instance{};
+    static Manager Instance {};
     return Instance;
 }
 
@@ -49,15 +49,16 @@ std::uint64_t Manager::StartTimer(Parameters const& Parameters, std::queue<std::
         m_TimerIDCounter = 0U;
     }
 
-    m_TimerObjects.emplace_back(std::make_unique<Object>(m_TimerIDCounter.fetch_add(1U),
-                                                         Parameters.Interval,
-                                                         Parameters.RepeatCount,
-                                                         Parameters.EventID,
-                                                         EventIDQueue,
-                                                         [this](std::uint64_t const EventID)
-                                                         {
-                                                             TimerFinished(std::forward<std::uint64_t const>(EventID));
-                                                         }));
+    m_TimerObjects.emplace_back(
+            std::make_unique<Object>(
+                    m_TimerIDCounter.fetch_add(1U),
+                    Parameters.Interval,
+                    Parameters.RepeatCount,
+                    Parameters.EventID,
+                    EventIDQueue,
+                    [this](std::uint64_t const EventID) {
+                        TimerFinished(std::forward<std::uint64_t const>(EventID));
+                    }));
 
     m_TimerObjects.back()->Start();
     return m_TimerObjects.back()->GetID();
@@ -67,11 +68,11 @@ void Manager::StopTimer(std::uint64_t const TimerID)
 {
     std::lock_guard const Lock(m_Mutex);
 
-    if (auto const MatchingTimer = std::ranges::find_if(m_TimerObjects,
-                                                        [TimerID](std::unique_ptr<Object> const& Timer)
-                                                        {
-                                                            return Timer->GetID() == TimerID;
-                                                        });
+    if (auto const MatchingTimer = std::ranges::find_if(
+                m_TimerObjects,
+                [TimerID](std::unique_ptr<Object> const& Timer) {
+                    return Timer->GetID() == TimerID;
+                });
         MatchingTimer != m_TimerObjects.end())
     {
         (*MatchingTimer)->Stop();
@@ -87,11 +88,11 @@ void Manager::TimerFinished(std::uint64_t const TimerID)
 {
     std::lock_guard const Lock(m_Mutex);
 
-    std::erase_if(m_TimerObjects,
-                  [TimerID](std::unique_ptr<Object> const& Timer)
-                  {
-                      return Timer->GetID() == TimerID;
-                  });
+    std::erase_if(
+            m_TimerObjects,
+            [TimerID](std::unique_ptr<Object> const& Timer) {
+                return Timer->GetID() == TimerID;
+            });
 }
 
 void Manager::Tick()
@@ -105,7 +106,7 @@ void Manager::Tick()
     {
         std::lock_guard const Lock(m_Mutex);
 
-        for (std::unique_ptr<Object> const& Timer : m_TimerObjects)
+        for (std::unique_ptr<Object> const& Timer: m_TimerObjects)
         {
             if (!Timer || !Timer->IsRunning())
             {

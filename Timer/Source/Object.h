@@ -6,13 +6,13 @@
 
 #include <chrono>
 #include <cstdint>
-#include <queue>
 #include <functional>
 #include <optional>
+#include <queue>
 
 namespace Timer
 {
-    class Object final // NOLINT(cppcoreguidelines-special-member-functions)
+    class Object final
     {
         friend class Manager;
 
@@ -60,10 +60,10 @@ namespace Timer
         std::chrono::milliseconds m_Interval;
         bool m_IsRunning;
         std::uint8_t m_EventID;
-        std::queue<std::uint8_t>& m_EventIDQueue; // NOLINT(cppcoreguidelines-avoid-const-or-ref-data-members)
+        std::queue<std::uint8_t>& m_EventIDQueue;
         std::function<void(std::uint64_t)> m_OnFinished;
         std::optional<std::uint32_t> m_RepeatCount;
         std::uint32_t m_CurrentRepeatCount;
         std::chrono::milliseconds m_ElapsedTime;
     };
-}
+}// namespace Timer

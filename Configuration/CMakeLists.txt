@@ -3,22 +3,22 @@
 # Repo: https://github.com/lucoiso/cpp-submodules
 
 # ----------- Global Definitions -----------
-set(LIBRARY_NAME Configuration)
+SET(LIBRARY_NAME Configuration)
 
 # ------------- Library Setup --------------
-set(SOURCE_FILES
-    ${CMAKE_CURRENT_SOURCE_DIR}/Source/Manager.cpp
+SET(SOURCE_FILES
+	${CMAKE_CURRENT_SOURCE_DIR}/Source/Manager.cpp
 )
 
-set(INCLUDE_FILES
-    ${CMAKE_CURRENT_SOURCE_DIR}/Include/${LIBRARY_NAME}/Manager.h
+SET(INCLUDE_FILES
+	${CMAKE_CURRENT_SOURCE_DIR}/Include/${LIBRARY_NAME}/Manager.h
 )
 
-add_library(${LIBRARY_NAME} SHARED ${SOURCE_FILES} ${INCLUDE_FILES})
+ADD_LIBRARY(${LIBRARY_NAME} SHARED ${SOURCE_FILES} ${INCLUDE_FILES})
 
-target_include_directories(${LIBRARY_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Include)
-target_include_directories(${LIBRARY_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Include/${LIBRARY_NAME})
-target_compile_definitions(${LIBRARY_NAME} PRIVATE BUILD_DLL)
+TARGET_INCLUDE_DIRECTORIES(${LIBRARY_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Include)
+TARGET_INCLUDE_DIRECTORIES(${LIBRARY_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Include/${LIBRARY_NAME})
+TARGET_COMPILE_DEFINITIONS(${LIBRARY_NAME} PRIVATE BUILD_DLL)
 
-find_package(Boost REQUIRED COMPONENTS json)
-target_link_libraries(${LIBRARY_NAME} PUBLIC Boost::json)
+FIND_PACKAGE(Boost REQUIRED COMPONENTS json)
+TARGET_LINK_LIBRARIES(${LIBRARY_NAME} PUBLIC Boost::json)

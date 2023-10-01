@@ -5,15 +5,15 @@
 #pragma once
 
 #include "TimerModule.h"
-#include <optional>
 #include <cstdint>
+#include <optional>
 
 namespace Timer
 {
     struct TIMERMODULE_API Parameters
     {
-        std::uint8_t EventID{};
-        std::uint32_t Interval{};
+        std::uint8_t EventID {};
+        std::uint32_t Interval {};
         std::optional<std::uint32_t> RepeatCount;
     };
-}
+}// namespace Timer

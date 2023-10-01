@@ -8,11 +8,12 @@
 #include <boost/json/value.hpp>
 #include <boost/json/value_from.hpp>
 
-template <typename T>concept SerializableToJson = requires(T const& Value) { { boost::json::value_from(Value) }; };
+template<typename T>
+concept SerializableToJson = requires(T const& Value) { { boost::json::value_from(Value) }; };
 
 namespace Configuration
 {
-    class CONFIGURATIONMODULE_API Manager // NOLINT(cppcoreguidelines-special-member-functions)
+    class CONFIGURATIONMODULE_API Manager
     {
     public:
         Manager() = default;
@@ -26,7 +27,7 @@ namespace Configuration
 
         [[nodiscard]] boost::json::value const& GetValue(std::string_view Key) const;
 
-        template <typename T>
+        template<typename T>
             requires SerializableToJson<T>
         constexpr void SetValue(std::string_view const Key, T const& Value)
         {
@@ -53,4 +54,4 @@ namespace Configuration
     private:
         boost::json::object m_Data;
     };
-}
+}// namespace Configuration

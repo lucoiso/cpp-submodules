@@ -3,9 +3,9 @@
 # Repo: https://github.com/lucoiso/cpp-submodules
 
 # -------------- Directories ---------------
-add_subdirectory(Configuration)
-add_subdirectory(Timer)
+ADD_SUBDIRECTORY(Configuration)
+ADD_SUBDIRECTORY(Timer)
 
-if (BUILD_TESTING)
-    add_subdirectory(Tests)
-endif()
+IF (BUILD_TESTING)
+	ADD_SUBDIRECTORY(Tests)
+ENDIF ()

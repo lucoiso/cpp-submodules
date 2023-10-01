@@ -4,20 +4,20 @@
 
 #pragma once
 
-#include "TimerModule.h"
 #include "Parameters.h"
+#include "TimerModule.h"
 #include <atomic>
 #include <chrono>
+#include <mutex>
 #include <queue>
 #include <thread>
-#include <mutex>
 #include <vector>
 
 namespace Timer
 {
     class Object;
 
-    class TIMERMODULE_API Manager // NOLINT(cppcoreguidelines-special-member-functions)
+    class TIMERMODULE_API Manager
     {
     public:
         Manager();
@@ -45,4 +45,4 @@ namespace Timer
         std::recursive_mutex m_Mutex;
         bool m_IsActive;
     };
-}
+}// namespace Timer

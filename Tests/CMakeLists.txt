@@ -3,8 +3,8 @@
 # Repo: https://github.com/lucoiso/cpp-submodules
 
 # ------------ Module Settings -------------
-enable_testing()
+ENABLE_TESTING()
 
 # -------------- Directories ---------------
-add_subdirectory(SubmodulesBenchmark)
-add_subdirectory(SubmodulesUnit)
+ADD_SUBDIRECTORY(SubmodulesBenchmark)
+ADD_SUBDIRECTORY(SubmodulesUnit)
