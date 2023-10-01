@@ -6,42 +6,12 @@
 
 using namespace Timer;
 
-Object::Object(const Object& Other)
-    : m_ID(Other.m_ID)
-  , m_IsSingleTime(Other.m_IsSingleTime)
-  , m_Interval(Other.m_Interval)
-  , m_IsRunning(Other.m_IsRunning)
-  , m_EventID(Other.m_EventID)
-  , m_EventIDQueue(Other.m_EventIDQueue)
-  , m_OnFinished(Other.m_OnFinished)
-  , m_RepeatCount(Other.m_RepeatCount)
-  , m_CurrentRepeatCount(Other.m_CurrentRepeatCount)
-  , m_ElapsedTime(Other.m_ElapsedTime)
-{
-}
-
-Object& Object::operator=(const Object& Other)
-{
-    m_ID                 = Other.m_ID;
-    m_IsSingleTime       = Other.m_IsSingleTime;
-    m_Interval           = Other.m_Interval;
-    m_IsRunning          = Other.m_IsRunning;
-    m_EventID            = Other.m_EventID;
-    m_EventIDQueue       = Other.m_EventIDQueue;
-    m_OnFinished         = Other.m_OnFinished;
-    m_RepeatCount        = Other.m_RepeatCount;
-    m_CurrentRepeatCount = Other.m_CurrentRepeatCount;
-    m_ElapsedTime        = Other.m_ElapsedTime;
-
-    return *this;
-}
-
-Object::Object(const std::uint64_t                       ID,
-               const std::uint32_t                       IntervalMs,
-               const std::optional<std::uint32_t>&       RepeatCount,
-               const std::uint8_t                        EventID,
-               std::queue<std::uint8_t>&                 EventIDQueue,
-               const std::function<void(std::uint32_t)>& OnFinished)
+Object::Object(const std::uint64_t ID,
+               const std::uint32_t IntervalMs,
+               const std::optional<std::uint32_t>& RepeatCount,
+               const std::uint8_t EventID,
+               std::queue<std::uint8_t>& EventIDQueue,
+               const std::function<void(std::uint64_t)>& OnFinished)
     : m_ID(ID)
   , m_IsSingleTime(RepeatCount == 0u)
   , m_Interval(std::chrono::milliseconds(static_cast<std::int32_t>(IntervalMs == 0u ? 1u : IntervalMs)))
@@ -52,10 +22,6 @@ Object::Object(const std::uint64_t                       ID,
   , m_RepeatCount(RepeatCount)
   , m_CurrentRepeatCount(0u)
   , m_ElapsedTime(0u)
-{
-}
-
-Object::~Object()
 {
 }
 

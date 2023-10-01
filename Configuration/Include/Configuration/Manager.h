@@ -12,10 +12,14 @@ template <typename T>concept SerializableToJson = requires(const T& Value) { { b
 
 namespace Configuration
 {
-    class CONFIGURATIONMODULE_API Manager
+    class CONFIGURATIONMODULE_API Manager // NOLINT(cppcoreguidelines-special-member-functions)
     {
     public:
         Manager();
+
+        Manager(const Manager& Other)            = delete;
+        Manager& operator=(const Manager& Other) = delete;
+
         ~Manager();
 
         [[nodiscard]] static Manager& Get();
@@ -39,7 +43,7 @@ namespace Configuration
 
         void RemoveValue(std::string_view Key);
 
-        bool Contains(std::string_view Key) const;
+        [[nodiscard]] bool Contains(std::string_view Key) const;
 
         [[nodiscard]] std::string Dump() const;
 
@@ -47,7 +51,7 @@ namespace Configuration
         void LoadData(std::string_view Path);
 
     private:
-        static Manager      g_Instance;
+        static Manager g_Instance;
         boost::json::object m_Data;
     };
 }

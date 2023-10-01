@@ -12,7 +12,8 @@ using namespace Configuration;
 
 Manager Manager::g_Instance;
 
-Manager::Manager()  = default;
+Manager::Manager() = default;
+
 Manager::~Manager() = default;
 
 Manager& Manager::Get()
@@ -77,7 +78,7 @@ void Manager::LoadData(const std::string_view Path)
     FileStream.close();
 
     for (const boost::json::value JsonContent = boost::json::parse(FileContent);
-         const auto&              [Key, Value] : JsonContent.get_object())
+         const auto& [Key, Value] : JsonContent.get_object())
     {
         m_Data.insert_or_assign(Key, Value);
     }
