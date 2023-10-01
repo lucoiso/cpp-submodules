@@ -12,22 +12,22 @@
 
 namespace Timer
 {
-    class TimerObject
+    class Object
     {
-        friend class TimerManager;
+        friend class Manager;
 
     public:
-        TimerObject(const TimerObject& Other);
-        TimerObject& operator=(const TimerObject& Other);
+        Object(const Object& Other);
+        Object& operator=(const Object& Other);
 
-        TimerObject(std::uint64_t                             ID,
-                    std::uint32_t                             IntervalMs,
-                    const std::optional<std::uint32_t>&       RepeatCount,
-                    std::uint8_t                              EventID,
-                    std::queue<std::uint8_t>&                 EventIDQueue,
-                    const std::function<void(std::uint32_t)>& OnFinished);
+        Object(std::uint64_t                             ID,
+               std::uint32_t                             IntervalMs,
+               const std::optional<std::uint32_t>&       RepeatCount,
+               std::uint8_t                              EventID,
+               std::queue<std::uint8_t>&                 EventIDQueue,
+               const std::function<void(std::uint32_t)>& OnFinished);
 
-        ~TimerObject();
+        ~Object();
 
         void Start();
         void Stop();
@@ -39,12 +39,12 @@ namespace Timer
         std::uint32_t                GetCurrentRepeatCount() const;
         std::chrono::milliseconds    GetElapsedTime() const;
 
-        bool operator==(const TimerObject& Other) const
+        bool operator==(const Object& Other) const
         {
             return m_ID == Other.m_ID;
         }
 
-        bool operator!=(const TimerObject& Other) const
+        bool operator!=(const Object& Other) const
         {
             return !(*this == Other);
         }

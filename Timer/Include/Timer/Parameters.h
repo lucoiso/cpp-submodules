@@ -10,7 +10,7 @@
 
 namespace Timer
 {
-    struct TIMERMODULE_API TimerParameters
+    struct TIMERMODULE_API Parameters
     {
         std::uint8_t                 EventID;
         std::uint32_t                Interval;

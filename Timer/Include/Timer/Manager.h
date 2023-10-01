@@ -5,7 +5,7 @@
 #pragma once
 
 #include "TimerModule.h"
-#include "TimerParameters.h"
+#include "Parameters.h"
 #include <atomic>
 #include <chrono>
 #include <queue>
@@ -15,17 +15,17 @@
 
 namespace Timer
 {
-    class TimerObject;
+    class Object;
 
-    class TIMERMODULE_API TimerManager
+    class TIMERMODULE_API Manager
     {
     public:
-        TimerManager();
-        ~TimerManager();
+        Manager();
+        ~Manager();
 
-        static TimerManager& Get();
+        static Manager& Get();
 
-        std::uint64_t StartTimer(const TimerParameters& Parameters, std::queue<std::uint8_t>& EventIDQueue);
+        std::uint64_t StartTimer(const Parameters& Parameters, std::queue<std::uint8_t>& EventIDQueue);
 
         void StopTimer(std::uint32_t TimerID);
 
@@ -36,10 +36,10 @@ namespace Timer
 
         void Tick();
 
-        static TimerManager g_Instance;
+        static Manager g_Instance;
 
-        std::atomic<std::uint64_t>                m_TimerIDCounter;
-        std::vector<std::unique_ptr<TimerObject>> m_TimerObjects;
+        std::atomic<std::uint64_t>           m_TimerIDCounter;
+        std::vector<std::unique_ptr<Object>> m_TimerObjects;
 
         std::chrono::milliseconds m_TickIntervalMs;
 

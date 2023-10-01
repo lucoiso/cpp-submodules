@@ -7,17 +7,17 @@ set(LIBRARY_NAME Timer)
 
 # ------------- Library Setup --------------
 set(SOURCE_FILES
-    ${CMAKE_CURRENT_SOURCE_DIR}/Source/TimerManager.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/Source/TimerObject.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Source/Manager.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Source/Object.cpp
 )
 
 set(INCLUDE_FILES
     # Public Headers
-    ${CMAKE_CURRENT_SOURCE_DIR}/Include/${LIBRARY_NAME}/TimerManager.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/Include/${LIBRARY_NAME}/TimerParameters.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/Include/${LIBRARY_NAME}/Manager.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/Include/${LIBRARY_NAME}/Parameters.h
     
     # Private Headers
-    ${CMAKE_CURRENT_SOURCE_DIR}/Source/TimerObject.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/Source/Object.h
 )
 
 add_library(${LIBRARY_NAME} SHARED ${SOURCE_FILES} ${INCLUDE_FILES})

@@ -62,7 +62,11 @@ BOOST_AUTO_TEST_CASE(DumpConfiguration)
     BOOST_TEST(TestManager.Contains("Float"));
     BOOST_TEST(TestManager.GetValue("Float") == 2.f);
 
-    const boost::json::array Value{"Item1", "Item2", "Item3"};
+    const boost::json::array Value{
+        "Item1",
+        "Item2",
+        "Item3"
+    };
     TestManager.SetValue("Array", Value);
     BOOST_TEST(TestManager.Contains("Array"));
     BOOST_TEST(TestManager.GetValue("Array").as_array() == Value);

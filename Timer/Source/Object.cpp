@@ -2,11 +2,11 @@
 // Year : 2023
 // Repo : https://github.com/lucoiso/cpp-submodules
 
-#include "TimerObject.h"
+#include "Object.h"
 
 using namespace Timer;
 
-TimerObject::TimerObject(const TimerObject& Other)
+Object::Object(const Object& Other)
     : m_ID(Other.m_ID)
   , m_IsSingleTime(Other.m_IsSingleTime)
   , m_Interval(Other.m_Interval)
@@ -20,7 +20,7 @@ TimerObject::TimerObject(const TimerObject& Other)
 {
 }
 
-TimerObject& TimerObject::operator=(const TimerObject& Other)
+Object& Object::operator=(const Object& Other)
 {
     m_ID                 = Other.m_ID;
     m_IsSingleTime       = Other.m_IsSingleTime;
@@ -36,12 +36,12 @@ TimerObject& TimerObject::operator=(const TimerObject& Other)
     return *this;
 }
 
-TimerObject::TimerObject(const std::uint64_t                       ID,
-                         const std::uint32_t                       IntervalMs,
-                         const std::optional<std::uint32_t>&       RepeatCount,
-                         const std::uint8_t                        EventID,
-                         std::queue<std::uint8_t>&                 EventIDQueue,
-                         const std::function<void(std::uint32_t)>& OnFinished)
+Object::Object(const std::uint64_t                       ID,
+               const std::uint32_t                       IntervalMs,
+               const std::optional<std::uint32_t>&       RepeatCount,
+               const std::uint8_t                        EventID,
+               std::queue<std::uint8_t>&                 EventIDQueue,
+               const std::function<void(std::uint32_t)>& OnFinished)
     : m_ID(ID)
   , m_IsSingleTime(RepeatCount == 0u)
   , m_Interval(std::chrono::milliseconds(static_cast<std::int32_t>(IntervalMs == 0u ? 1u : IntervalMs)))
@@ -55,11 +55,11 @@ TimerObject::TimerObject(const std::uint64_t                       ID,
 {
 }
 
-TimerObject::~TimerObject()
+Object::~Object()
 {
 }
 
-void TimerObject::Start()
+void Object::Start()
 {
     if (m_IsRunning)
     {
@@ -69,7 +69,7 @@ void TimerObject::Start()
     m_IsRunning = true;
 }
 
-void TimerObject::Stop()
+void Object::Stop()
 {
     if (!m_IsRunning)
     {
@@ -80,37 +80,37 @@ void TimerObject::Stop()
     m_OnFinished(m_ID);
 }
 
-std::uint64_t TimerObject::GetID() const
+std::uint64_t Object::GetID() const
 {
     return m_ID;
 }
 
-bool TimerObject::IsRunning() const
+bool Object::IsRunning() const
 {
     return m_IsRunning;
 }
 
-std::uint8_t TimerObject::GetEventID() const
+std::uint8_t Object::GetEventID() const
 {
     return m_EventID;
 }
 
-std::optional<std::uint32_t> TimerObject::GetRepeatCount() const
+std::optional<std::uint32_t> Object::GetRepeatCount() const
 {
     return m_RepeatCount;
 }
 
-std::uint32_t TimerObject::GetCurrentRepeatCount() const
+std::uint32_t Object::GetCurrentRepeatCount() const
 {
     return m_CurrentRepeatCount;
 }
 
-std::chrono::milliseconds TimerObject::GetElapsedTime() const
+std::chrono::milliseconds Object::GetElapsedTime() const
 {
     return m_ElapsedTime;
 }
 
-void TimerObject::Tick(const std::chrono::milliseconds DeltaTime)
+void Object::Tick(const std::chrono::milliseconds DeltaTime)
 {
     if (!m_IsRunning)
     {
@@ -135,7 +135,7 @@ void TimerObject::Tick(const std::chrono::milliseconds DeltaTime)
     }
 }
 
-void TimerObject::SingleTime()
+void Object::SingleTime()
 {
     if (!m_IsRunning)
     {
@@ -146,7 +146,7 @@ void TimerObject::SingleTime()
     Stop();
 }
 
-void TimerObject::TimerLoop()
+void Object::TimerLoop()
 {
     if (!m_IsRunning)
     {
