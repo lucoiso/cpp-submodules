@@ -9,7 +9,7 @@
 
 static void ConfigurationInsertion(benchmark::State& State)
 {
-    for (const auto _ : State)
+    for (auto const _ : State)
     {
         Configuration::Manager::Get().SetValue("BenchmarkValue", 42);
     }
@@ -19,7 +19,7 @@ BENCHMARK(ConfigurationInsertion);
 
 static void ConfigurationRemoval(benchmark::State& State)
 {
-    for (const auto _ : State)
+    for (auto const _ : State)
     {
         Configuration::Manager::Get().RemoveValue("BenchmarkValue");
     }
@@ -31,7 +31,7 @@ static void ConfigurationContains(benchmark::State& State)
 {
     Configuration::Manager::Get().SetValue("BenchmarkValue", 42);
 
-    for (const auto _ : State)
+    for (auto const _ : State)
     {
         benchmark::DoNotOptimize(Configuration::Manager::Get().Contains("BenchmarkValue"));
     }
@@ -45,10 +45,9 @@ static void ConfigurationSaveData(benchmark::State& State)
     Configuration::Manager::Get().SetValue("Value2", "TestString");
     Configuration::Manager::Get().SetValue("Value3", 3.14);
 
-    // ReSharper disable once CppLocalVariableMayBeConst
     std::string Path = ".\\benchmark_test_data.json";
 
-    for (const auto _ : State)
+    for (auto const _ : State)
     {
         Configuration::Manager::Get().SaveData(Path);
         benchmark::DoNotOptimize(Path);
@@ -59,10 +58,9 @@ BENCHMARK(ConfigurationSaveData);
 
 static void ConfigurationLoadData(benchmark::State& State)
 {
-    // ReSharper disable once CppLocalVariableMayBeConst
     std::string Path = ".\\benchmark_test_data.json";
 
-    for (const auto _ : State)
+    for (auto const _ : State)
     {
         Configuration::Manager::Get().LoadData(Path);
         benchmark::DoNotOptimize(Path);

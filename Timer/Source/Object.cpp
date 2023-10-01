@@ -6,22 +6,22 @@
 
 using namespace Timer;
 
-Object::Object(const std::uint64_t ID,
-               const std::uint32_t IntervalMs,
-               const std::optional<std::uint32_t>& RepeatCount,
-               const std::uint8_t EventID,
+Object::Object(std::uint64_t const ID,
+               std::uint32_t const IntervalMs,
+               std::optional<std::uint32_t> const& RepeatCount,
+               std::uint8_t const EventID,
                std::queue<std::uint8_t>& EventIDQueue,
-               const std::function<void(std::uint64_t)>& OnFinished)
-    : m_ID(ID)
-  , m_IsSingleTime(RepeatCount == 0u)
-  , m_Interval(std::chrono::milliseconds(static_cast<std::int32_t>(IntervalMs == 0u ? 1u : IntervalMs)))
-  , m_IsRunning(false)
-  , m_EventID(EventID)
-  , m_EventIDQueue(EventIDQueue)
-  , m_OnFinished(OnFinished)
-  , m_RepeatCount(RepeatCount)
-  , m_CurrentRepeatCount(0u)
-  , m_ElapsedTime(0u)
+               std::function<void(std::uint64_t)> const& OnFinished)
+    : m_ID(ID),
+      m_IsSingleTime(RepeatCount == 0U),
+      m_Interval(std::chrono::milliseconds(static_cast<std::int32_t>(IntervalMs == 0U ? 1U : IntervalMs))),
+      m_IsRunning(false),
+      m_EventID(EventID),
+      m_EventIDQueue(EventIDQueue),
+      m_OnFinished(OnFinished),
+      m_RepeatCount(RepeatCount),
+      m_CurrentRepeatCount(0U),
+      m_ElapsedTime(0U)
 {
 }
 
@@ -76,7 +76,7 @@ std::chrono::milliseconds Object::GetElapsedTime() const
     return m_ElapsedTime;
 }
 
-void Object::Tick(const std::chrono::milliseconds DeltaTime)
+void Object::Tick(std::chrono::milliseconds const DeltaTime)
 {
     if (!m_IsRunning)
     {
@@ -89,7 +89,7 @@ void Object::Tick(const std::chrono::milliseconds DeltaTime)
     {
         return;
     }
-    m_ElapsedTime = std::chrono::milliseconds(0u);
+    m_ElapsedTime = std::chrono::milliseconds(0U);
 
     if (m_IsSingleTime)
     {

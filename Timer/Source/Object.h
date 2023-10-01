@@ -19,13 +19,13 @@ namespace Timer
     public:
         Object(std::uint64_t ID,
                std::uint32_t IntervalMs,
-               const std::optional<std::uint32_t>& RepeatCount,
+               std::optional<std::uint32_t> const& RepeatCount,
                std::uint8_t EventID,
                std::queue<std::uint8_t>& EventIDQueue,
-               const std::function<void(std::uint64_t)>& OnFinished);
+               std::function<void(std::uint64_t)> const& OnFinished);
 
-        Object(const Object& Other)            = delete;
-        Object& operator=(const Object& Other) = delete;
+        Object(Object const& Other)            = delete;
+        Object& operator=(Object const& Other) = delete;
 
         ~Object() = default;
 
@@ -39,12 +39,12 @@ namespace Timer
         [[nodiscard]] std::uint32_t GetCurrentRepeatCount() const;
         [[nodiscard]] std::chrono::milliseconds GetElapsedTime() const;
 
-        bool operator==(const Object& Other) const
+        bool operator==(Object const& Other) const
         {
             return m_ID == Other.m_ID;
         }
 
-        bool operator!=(const Object& Other) const
+        bool operator!=(Object const& Other) const
         {
             return !(*this == Other);
         }

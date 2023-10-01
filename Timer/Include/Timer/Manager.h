@@ -22,14 +22,14 @@ namespace Timer
     public:
         Manager();
 
-        Manager(const Manager& Other)            = delete;
-        Manager& operator=(const Manager& Other) = delete;
+        Manager(Manager const& Other)            = delete;
+        Manager& operator=(Manager const& Other) = delete;
 
         ~Manager();
 
         static Manager& Get();
 
-        std::uint64_t StartTimer(const Parameters& Parameters, std::queue<std::uint8_t>& EventIDQueue);
+        std::uint64_t StartTimer(Parameters const& Parameters, std::queue<std::uint8_t>& EventIDQueue);
         void StopTimer(std::uint64_t TimerID);
 
         void SetTickInterval(std::chrono::milliseconds IntervalMs);
@@ -38,7 +38,6 @@ namespace Timer
         void TimerFinished(std::uint64_t TimerID);
         void Tick();
 
-        static Manager g_Instance;
         std::atomic<std::uint64_t> m_TimerIDCounter;
         std::vector<std::unique_ptr<Object>> m_TimerObjects;
         std::chrono::milliseconds m_TickIntervalMs;

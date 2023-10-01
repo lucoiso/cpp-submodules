@@ -16,13 +16,13 @@ BOOST_AUTO_TEST_CASE(InsertData)
     BOOST_TEST(Configuration::Manager::Get().Contains("Signed"));
     BOOST_TEST(Configuration::Manager::Get().GetValue("Signed") == 1);
 
-    Configuration::Manager::Get().SetValue("Unsigned", 2u);
+    Configuration::Manager::Get().SetValue("Unsigned", 2U);
     BOOST_TEST(Configuration::Manager::Get().Contains("Unsigned"));
-    BOOST_TEST(Configuration::Manager::Get().GetValue("Unsigned") == 2u);
+    BOOST_TEST(Configuration::Manager::Get().GetValue("Unsigned") == 2U);
 
-    Configuration::Manager::Get().SetValue("Float", 3.f);
+    Configuration::Manager::Get().SetValue("Float", 3.F);
     BOOST_TEST(Configuration::Manager::Get().Contains("Float"));
-    BOOST_TEST(Configuration::Manager::Get().GetValue("Float") == 3.f);
+    BOOST_TEST(Configuration::Manager::Get().GetValue("Float") == 3.F);
 
     Configuration::Manager::Get().SetValue("Double", 4.0);
     BOOST_TEST(Configuration::Manager::Get().Contains("Double"));
@@ -52,11 +52,11 @@ BOOST_AUTO_TEST_CASE(DumpConfiguration)
     BOOST_TEST(Configuration::Manager::Get().Contains("Signed"));
     BOOST_TEST(Configuration::Manager::Get().GetValue("Signed") == 1);
 
-    Configuration::Manager::Get().SetValue("Float", 2.f);
+    Configuration::Manager::Get().SetValue("Float", 2.F);
     BOOST_TEST(Configuration::Manager::Get().Contains("Float"));
-    BOOST_TEST(Configuration::Manager::Get().GetValue("Float") == 2.f);
+    BOOST_TEST(Configuration::Manager::Get().GetValue("Float") == 2.F);
 
-    const boost::json::array Value{
+    boost::json::array const Value{
         "Item1",
         "Item2",
         "Item3"
@@ -66,14 +66,14 @@ BOOST_AUTO_TEST_CASE(DumpConfiguration)
     BOOST_TEST(Configuration::Manager::Get().Contains("Array"));
     BOOST_TEST(Configuration::Manager::Get().GetValue("Array").as_array() == Value);
 
-    const std::string DumpContent          = Configuration::Manager::Get().Dump();
+    std::string const DumpContent          = Configuration::Manager::Get().Dump();
     constexpr std::string_view TestContent = R"({"Signed":1,"Unsigned":2,"Float":2E0,"Double":4E0,"String":"Five","Array":["Item1","Item2","Item3"]})";
     BOOST_TEST(DumpContent == TestContent);
 }
 
 BOOST_AUTO_TEST_CASE(SaveAndLoadData)
 {
-    const std::string FilePath = R"(.\test_data.json)";
+    std::string const FilePath = R"(.\test_data.json)";
 
     Configuration::Manager::Get().SetValue("Value1", 123);
     Configuration::Manager::Get().SetValue("Value2", "TestString");
@@ -93,7 +93,7 @@ BOOST_AUTO_TEST_CASE(SaveAndLoadData)
 
 BOOST_AUTO_TEST_CASE(LoadInvalidData)
 {
-    const std::string FilePath = R"(.\non_existent_file.json)";
+    std::string const FilePath = R"(.\non_existent_file.json)";
     BOOST_CHECK_THROW(Configuration::Manager::Get().LoadData(FilePath), std::filesystem::filesystem_error);
 }
 #undef BOOST_TEST_MODULE

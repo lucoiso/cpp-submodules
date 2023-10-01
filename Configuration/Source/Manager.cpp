@@ -10,28 +10,23 @@
 
 using namespace Configuration;
 
-Manager Manager::g_Instance;
-
-Manager::Manager() = default;
-
-Manager::~Manager() = default;
-
 Manager& Manager::Get()
 {
-    return g_Instance;
+    static Manager Instance{};
+    return Instance;
 }
 
-const boost::json::value& Manager::GetValue(const std::string_view Key) const
+boost::json::value const& Manager::GetValue(std::string_view const Key) const
 {
     return m_Data.at(Key);
 }
 
-void Manager::RemoveValue(const std::string_view Key)
+void Manager::RemoveValue(std::string_view const Key)
 {
     m_Data.erase(Key);
 }
 
-bool Manager::Contains(const std::string_view Key) const
+bool Manager::Contains(std::string_view const Key) const
 {
     return m_Data.contains(Key);
 }
@@ -41,9 +36,9 @@ std::string Manager::Dump() const
     return serialize(m_Data);
 }
 
-void Manager::SaveData(const std::string_view Path) const
+void Manager::SaveData(std::string_view const Path) const
 {
-    const std::filesystem::path Destination(Path);
+    std::filesystem::path const Destination(Path);
     if (!is_directory(Destination.parent_path()))
     {
         throw std::filesystem::filesystem_error("Directory not found", std::filesystem::path(Path), std::make_error_code(std::errc::no_such_file_or_directory));
@@ -59,9 +54,9 @@ void Manager::SaveData(const std::string_view Path) const
     FileStream.close();
 }
 
-void Manager::LoadData(const std::string_view Path)
+void Manager::LoadData(std::string_view const Path)
 {
-    const std::filesystem::path Destination(Path);
+    std::filesystem::path const Destination(Path);
     if (!exists(Destination))
     {
         throw std::filesystem::filesystem_error("File not found", std::filesystem::path(Path), std::make_error_code(std::errc::no_such_file_or_directory));
@@ -77,8 +72,8 @@ void Manager::LoadData(const std::string_view Path)
     FileContent << FileStream.rdbuf();
     FileStream.close();
 
-    for (const boost::json::value JsonContent = boost::json::parse(FileContent);
-         const auto& [Key, Value] : JsonContent.get_object())
+    for (boost::json::value const JsonContent = boost::json::parse(FileContent);
+         auto const& [Key, Value] : JsonContent.get_object())
     {
         m_Data.insert_or_assign(Key, Value);
     }
