@@ -49,7 +49,7 @@ std::uint64_t Manager::StartTimer(Parameters const& Parameters, std::queue<std::
         m_TimerIDCounter = 0U;
     }
 
-    m_TimerObjects.emplace_back(
+    m_TimerObjects.push_back(
             std::make_unique<Object>(
                     m_TimerIDCounter.fetch_add(1U),
                     Parameters.Interval,
