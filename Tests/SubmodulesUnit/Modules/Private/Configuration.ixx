@@ -2,13 +2,12 @@
 // Year : 2023
 // Repo : https://github.com/lucoiso/cpp-submodules
 
-#pragma once
+module;
 
 #define BOOST_TEST_MODULE CONFIGURATION_TEST_MODULE
-#include <boost/test/included/unit_test.hpp>
+#include "boost/test/included/unit_test.hpp"
 
-#include <Configuration/Manager.h>
-#include <filesystem>
+module Submodules.Unit.Config;
 
 BOOST_AUTO_TEST_CASE(InsertData)
 {

@@ -2,8 +2,19 @@
 // Year : 2023
 // Repo : https://github.com/lucoiso/cpp-submodules
 
-#include "Manager.h"
-#include "Object.h"
+module Timer.Manager;
+
+import <atomic>;
+import <chrono>;
+import <functional>;
+import <memory>;
+import <mutex>;
+import <optional>;
+import <queue>;
+import <thread>;
+
+import Timer.Object;
+import Timer.Parameters;
 
 using namespace Timer;
 

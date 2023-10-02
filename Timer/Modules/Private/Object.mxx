@@ -2,7 +2,12 @@
 // Year : 2023
 // Repo : https://github.com/lucoiso/cpp-submodules
 
-#include "Object.h"
+module Timer.Object;
+
+import <chrono>;
+import <functional>;
+import <optional>;
+import <queue>;
 
 using namespace Timer;
 
@@ -127,3 +132,6 @@ void Object::TimerLoop()
         Stop();
     }
 }
+}
+;
+}// namespace Timer

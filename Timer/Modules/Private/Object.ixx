@@ -2,19 +2,31 @@
 // Year : 2023
 // Repo : https://github.com/lucoiso/cpp-submodules
 
-#pragma once
+module;
 
 #include <chrono>
-#include <cstdint>
 #include <functional>
 #include <optional>
 #include <queue>
 
+export module Timer.Object;
+
 namespace Timer
 {
-    class Object final
+    export class Object final
     {
         friend class Manager;
+
+        std::uint64_t m_ID {};
+        bool m_IsSingleTime;
+        std::chrono::milliseconds m_Interval {};
+        bool m_IsRunning;
+        std::uint8_t m_EventID {};
+        std::queue<std::uint8_t>& m_EventIDQueue;
+        std::function<void(std::uint64_t)> m_OnFinished {};
+        std::optional<std::uint32_t> m_RepeatCount {};
+        std::uint32_t m_CurrentRepeatCount {};
+        std::chrono::milliseconds m_ElapsedTime {};
 
     public:
         Object(std::uint64_t ID,
@@ -23,11 +35,6 @@ namespace Timer
                std::uint8_t EventID,
                std::queue<std::uint8_t>& EventIDQueue,
                std::function<void(std::uint64_t)> const& OnFinished);
-
-        Object(Object const& Other)            = delete;
-        Object& operator=(Object const& Other) = delete;
-
-        ~Object() = default;
 
         void Start();
         void Stop();
@@ -39,31 +46,9 @@ namespace Timer
         [[nodiscard]] std::uint32_t GetCurrentRepeatCount() const;
         [[nodiscard]] std::chrono::milliseconds GetElapsedTime() const;
 
-        bool operator==(Object const& Other) const
-        {
-            return m_ID == Other.m_ID;
-        }
-
-        bool operator!=(Object const& Other) const
-        {
-            return !(*this == Other);
-        }
-
     private:
         void Tick(std::chrono::milliseconds DeltaTime);
-
         void SingleTime();
         void TimerLoop();
-
-        std::uint64_t m_ID;
-        bool m_IsSingleTime;
-        std::chrono::milliseconds m_Interval;
-        bool m_IsRunning;
-        std::uint8_t m_EventID;
-        std::queue<std::uint8_t>& m_EventIDQueue;
-        std::function<void(std::uint64_t)> m_OnFinished;
-        std::optional<std::uint32_t> m_RepeatCount;
-        std::uint32_t m_CurrentRepeatCount;
-        std::chrono::milliseconds m_ElapsedTime;
     };
 }// namespace Timer

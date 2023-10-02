@@ -2,15 +2,16 @@
 // Year : 2023
 // Repo : https://github.com/lucoiso/cpp-submodules
 
-#pragma once
+module;
 
 #include "TimerModule.h"
-#include <cstdint>
 #include <optional>
+
+export module Timer.Parameters;
 
 namespace Timer
 {
-    struct TIMERMODULE_API Parameters
+    export struct TIMERMODULE_API Parameters
     {
         std::uint8_t EventID {};
         std::uint32_t Interval {};
