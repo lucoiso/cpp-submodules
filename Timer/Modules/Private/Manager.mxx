@@ -2,7 +2,9 @@
 // Year : 2023
 // Repo : https://github.com/lucoiso/cpp-submodules
 
-module Timer.Manager;
+module;
+
+module TimerManager;
 
 import <atomic>;
 import <chrono>;
@@ -13,8 +15,8 @@ import <optional>;
 import <queue>;
 import <thread>;
 
-import Timer.Object;
-import Timer.Parameters;
+import TimerObject;
+import TimerParameters;
 
 using namespace Timer;
 

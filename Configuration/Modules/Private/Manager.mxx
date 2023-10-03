@@ -2,19 +2,22 @@
 // Year : 2023
 // Repo : https://github.com/lucoiso/cpp-submodules
 
-module Configuration.Manager;
-
-import <filesystem>;
-import <fstream>;
-import <string_view>;
+module;
 
 #include <boost/json/object.hpp>
 #include <boost/json/parse.hpp>
 #include <boost/json/serialize.hpp>
 
+module ConfigurationManager;
+
+import <filesystem>;
+import <fstream>;
+import <string_view>;
+import <stdexcept>;
+
 using namespace Configuration;
 
-Manager::Manager& Get()
+Manager& Manager::Get()
 {
     static Manager Instance {};
     return Instance;

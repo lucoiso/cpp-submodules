@@ -5,9 +5,17 @@
 module;
 
 #define BOOST_TEST_MODULE CONFIGURATION_TEST_MODULE
-#include "boost/test/included/unit_test.hpp"
+#include <boost/json/object.hpp>
+#include <boost/json/parse.hpp>
+#include <boost/json/serialize.hpp>
+#include <boost/test/included/unit_test.hpp>
 
-module Submodules.Unit.Config;
+export module SubmodulesUnitConfig;
+
+import <filesystem>;
+import <stdexcept>;
+
+import ConfigurationManager;
 
 BOOST_AUTO_TEST_CASE(InsertData)
 {
@@ -94,4 +102,5 @@ BOOST_AUTO_TEST_CASE(LoadInvalidData)
     std::string const FilePath = R"(.\non_existent_file.json)";
     BOOST_CHECK_THROW(Configuration::Manager::Get().LoadData(FilePath), std::filesystem::filesystem_error);
 }
+
 #undef BOOST_TEST_MODULE

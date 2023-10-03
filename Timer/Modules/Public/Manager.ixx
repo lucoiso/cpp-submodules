@@ -5,20 +5,24 @@
 module;
 
 #include "TimerModule.h"
-#include <atomic>
-#include <chrono>
-#include <functional>
-#include <memory>
-#include <mutex>
-#include <optional>
-#include <queue>
-#include <thread>
 
-export module Timer.Manager;
+export module TimerManager;
 
-namespace Timer
+import <atomic>;
+import <chrono>;
+import <functional>;
+import <memory>;
+import <mutex>;
+import <optional>;
+import <queue>;
+import <thread>;
+
+import TimerObject;
+import TimerParameters;
+
+export namespace Timer
 {
-    export class TIMERMODULE_API Manager
+    class TIMERMODULE_API Manager
     {
         std::vector<std::unique_ptr<class Object>> m_TimerObjects;
         std::chrono::milliseconds m_TickIntervalMs;

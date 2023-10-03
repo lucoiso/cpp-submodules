@@ -6,15 +6,14 @@ module;
 
 #include "ConfigurationModule.h"
 #include <boost/json/object.hpp>
-#include <filesystem>
-#include <fstream>
-#include <string_view>
 
-export module Configuration.Manager;
+export module ConfigurationManager;
 
-namespace Configuration
+import <string_view>;
+
+export namespace Configuration
 {
-    export class CONFIGURATIONMODULE_API Manager
+    class CONFIGURATIONMODULE_API Manager
     {
         boost::json::object m_Data;
 
@@ -22,6 +21,21 @@ namespace Configuration
         static Manager& Get();
 
         [[nodiscard]] boost::json::value const& GetValue(std::string_view Key) const;
+
+        template<typename T>
+        constexpr void SetValue(std::string_view const Key, T&& Value)
+        {
+            if constexpr (std::is_pointer_v<T> || std::is_null_pointer_v<T>)
+            {
+                if (Value == nullptr)
+                {
+                    return;
+                }
+            }
+
+            m_Data.insert_or_assign(Key, Value);
+        }
+
         void RemoveValue(std::string_view Key);
 
         [[nodiscard]] bool Contains(std::string_view Key) const;

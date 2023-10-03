@@ -2,10 +2,7 @@
 // Year : 2023
 // Repo : https://github.com/lucoiso/cpp-submodules
 
-module;
-
-import Submodules.Benchmark.Config;
-
-module SubmodulesBenchmark;
+import SubmodulesBenchmarkConfig;
+#include <benchmark/benchmark.h>
 
 BENCHMARK_MAIN();

@@ -4,16 +4,16 @@
 
 module;
 
-#include <chrono>
-#include <functional>
-#include <optional>
-#include <queue>
+export module TimerObject;
 
-export module Timer.Object;
+import <chrono>;
+import <functional>;
+import <optional>;
+import <queue>;
 
-namespace Timer
+export namespace Timer
 {
-    export class Object final
+    class Object final
     {
         friend class Manager;
 

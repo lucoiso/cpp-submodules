@@ -4,11 +4,11 @@
 
 module;
 
-#include "benchmark/benchmark.h"
+#include <benchmark/benchmark.h>
 
-import Configuration.Manager;
+export module SubmodulesBenchmarkConfig;
 
-module Submodules.Benchmark.Config;
+import ConfigurationManager;
 
 static void ConfigurationInsertion(benchmark::State& State)
 {

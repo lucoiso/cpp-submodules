@@ -5,13 +5,14 @@
 module;
 
 #include "TimerModule.h"
-#include <optional>
 
-export module Timer.Parameters;
+export module TimerParameters;
 
-namespace Timer
+import <optional>;
+
+export namespace Timer
 {
-    export struct TIMERMODULE_API Parameters
+    struct TIMERMODULE_API Parameters
     {
         std::uint8_t EventID {};
         std::uint32_t Interval {};

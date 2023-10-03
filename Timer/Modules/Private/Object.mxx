@@ -2,7 +2,9 @@
 // Year : 2023
 // Repo : https://github.com/lucoiso/cpp-submodules
 
-module Timer.Object;
+module;
+
+module TimerObject;
 
 import <chrono>;
 import <functional>;
@@ -132,6 +134,3 @@ void Object::TimerLoop()
         Stop();
     }
 }
-}
-;
-}// namespace Timer

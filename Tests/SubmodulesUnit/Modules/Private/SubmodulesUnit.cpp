@@ -2,8 +2,4 @@
 // Year : 2023
 // Repo : https://github.com/lucoiso/cpp-submodules
 
-module;
-
-import Submodules.Unit.Config;
-
-module SubmodulesUnit;
+import SubmodulesUnitConfig;
