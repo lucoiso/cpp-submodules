@@ -2,10 +2,13 @@
 // Year : 2023
 // Repo : https://github.com/lucoiso/cpp-submodules
 
-#pragma once
+module;
 
-#include <Configuration/Manager.h>
 #include <benchmark/benchmark.h>
+
+export module Submodules.Benchmark.Config;
+
+import Configuration.Manager;
 
 static void ConfigurationInsertion(benchmark::State& State)
 {

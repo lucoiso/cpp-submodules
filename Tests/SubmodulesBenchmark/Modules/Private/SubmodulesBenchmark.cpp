@@ -2,6 +2,9 @@
 // Year : 2023
 // Repo : https://github.com/lucoiso/cpp-submodules
 
-#include "Configuration.h"
+import Submodules.Benchmark.Config;
+import Submodules.Benchmark.Timer;
+
+#include <benchmark/benchmark.h>
 
 BENCHMARK_MAIN();

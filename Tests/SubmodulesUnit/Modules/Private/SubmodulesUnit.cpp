@@ -2,13 +2,17 @@
 // Year : 2023
 // Repo : https://github.com/lucoiso/cpp-submodules
 
-#pragma once
-
-#define BOOST_TEST_MODULE CONFIGURATION_TEST_MODULE
+#define BOOST_TEST_MODULE Submodules
 #include <boost/test/included/unit_test.hpp>
 
-#include <Configuration/Manager.h>
+#include <boost/json/object.hpp>
 #include <filesystem>
+#include <stdexcept>
+
+import Configuration.Manager;
+import Timer.Manager;
+
+BOOST_AUTO_TEST_SUITE(Configuration)
 
 BOOST_AUTO_TEST_CASE(InsertData)
 {
@@ -95,4 +99,14 @@ BOOST_AUTO_TEST_CASE(LoadInvalidData)
     std::string const FilePath = R"(.\non_existent_file.json)";
     BOOST_CHECK_THROW(Configuration::Manager::Get().LoadData(FilePath), std::filesystem::filesystem_error);
 }
-#undef BOOST_TEST_MODULE
+
+BOOST_AUTO_TEST_SUITE_END()
+
+BOOST_AUTO_TEST_SUITE(Timer)
+
+BOOST_AUTO_TEST_CASE(PLaceholder)
+{
+    BOOST_TEST(true);
+}
+
+BOOST_AUTO_TEST_SUITE_END()

@@ -2,11 +2,18 @@
 // Year : 2023
 // Repo : https://github.com/lucoiso/cpp-submodules
 
-#include "Manager.h"
+module;
+
+#include <boost/json/object.hpp>
 #include <boost/json/parse.hpp>
 #include <boost/json/serialize.hpp>
-#include <filesystem>
-#include <fstream>
+
+module Configuration.Manager;
+
+import <filesystem>;
+import <fstream>;
+import <string_view>;
+import <stdexcept>;
 
 using namespace Configuration;
 

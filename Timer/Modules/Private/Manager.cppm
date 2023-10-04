@@ -2,8 +2,19 @@
 // Year : 2023
 // Repo : https://github.com/lucoiso/cpp-submodules
 
-#include "Manager.h"
-#include "Object.h"
+module Timer.Manager;
+
+import <atomic>;
+import <chrono>;
+import <functional>;
+import <memory>;
+import <mutex>;
+import <optional>;
+import <queue>;
+import <thread>;
+
+import Timer.Object;
+import Timer.Parameters;
 
 using namespace Timer;
 
@@ -27,7 +38,7 @@ Manager::~Manager()
         {
             m_TickThread.join();
         }
-        m_TimerObjects.clear();
+        m_Timer.clear();
     }
     catch (...)
     {
@@ -44,12 +55,12 @@ std::uint64_t Manager::StartTimer(Parameters const& Parameters, std::queue<std::
 {
     std::lock_guard const Lock(m_Mutex);
 
-    if (m_TimerObjects.empty())
+    if (m_Timer.empty())
     {
         m_TimerIDCounter = 0U;
     }
 
-    m_TimerObjects.push_back(
+    m_Timer.push_back(
             std::make_unique<Object>(
                     m_TimerIDCounter.fetch_add(1U),
                     Parameters.Interval,
@@ -60,8 +71,8 @@ std::uint64_t Manager::StartTimer(Parameters const& Parameters, std::queue<std::
                         TimerFinished(std::forward<std::uint64_t const>(EventID));
                     }));
 
-    m_TimerObjects.back()->Start();
-    return m_TimerObjects.back()->GetID();
+    m_Timer.back()->Start();
+    return m_Timer.back()->GetID();
 }
 
 void Manager::StopTimer(std::uint64_t const TimerID)
@@ -69,11 +80,11 @@ void Manager::StopTimer(std::uint64_t const TimerID)
     std::lock_guard const Lock(m_Mutex);
 
     if (auto const MatchingTimer = std::ranges::find_if(
-                m_TimerObjects,
+                m_Timer,
                 [TimerID](std::unique_ptr<Object> const& Timer) {
                     return Timer->GetID() == TimerID;
                 });
-        MatchingTimer != m_TimerObjects.end())
+        MatchingTimer != m_Timer.end())
     {
         (*MatchingTimer)->Stop();
     }
@@ -89,7 +100,7 @@ void Manager::TimerFinished(std::uint64_t const TimerID)
     std::lock_guard const Lock(m_Mutex);
 
     std::erase_if(
-            m_TimerObjects,
+            m_Timer,
             [TimerID](std::unique_ptr<Object> const& Timer) {
                 return Timer->GetID() == TimerID;
             });
@@ -106,7 +117,7 @@ void Manager::Tick()
     {
         std::lock_guard const Lock(m_Mutex);
 
-        for (std::unique_ptr<Object> const& Timer: m_TimerObjects)
+        for (std::unique_ptr<Object> const& Timer: m_Timer)
         {
             if (!Timer || !Timer->IsRunning())
             {
