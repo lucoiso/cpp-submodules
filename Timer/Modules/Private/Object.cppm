@@ -4,7 +4,7 @@
 
 module;
 
-module TimerObject;
+module Timer.Object;
 
 import <chrono>;
 import <functional>;

@@ -6,7 +6,7 @@ module;
 
 #include "TimerModule.h"
 
-export module TimerParameters;
+export module Timer.Parameters;
 
 import <optional>;
 

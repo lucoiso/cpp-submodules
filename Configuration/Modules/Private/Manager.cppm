@@ -8,7 +8,7 @@ module;
 #include <boost/json/parse.hpp>
 #include <boost/json/serialize.hpp>
 
-module ConfigurationManager;
+module Configuration.Manager;
 
 import <filesystem>;
 import <fstream>;

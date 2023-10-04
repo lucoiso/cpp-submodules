@@ -6,7 +6,7 @@ module;
 
 #include "TimerModule.h"
 
-export module TimerManager;
+export module Timer.Manager;
 
 import <atomic>;
 import <chrono>;
@@ -17,14 +17,14 @@ import <optional>;
 import <queue>;
 import <thread>;
 
-import TimerObject;
-import TimerParameters;
+import Timer.Object;
+import Timer.Parameters;
 
 export namespace Timer
 {
     class TIMERMODULE_API Manager
     {
-        std::vector<std::unique_ptr<class Object>> m_TimerObjects;
+        std::vector<std::unique_ptr<class Object>> m_Timer;
         std::chrono::milliseconds m_TickIntervalMs;
         std::thread m_TickThread;
         std::atomic<std::uint64_t> m_TimerIDCounter;

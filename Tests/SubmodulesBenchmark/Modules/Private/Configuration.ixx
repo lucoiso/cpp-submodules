@@ -6,9 +6,9 @@ module;
 
 #include <benchmark/benchmark.h>
 
-export module SubmodulesBenchmarkConfig;
+export module Submodules.Benchmark.Config;
 
-import ConfigurationManager;
+import Configuration.Manager;
 
 static void ConfigurationInsertion(benchmark::State& State)
 {

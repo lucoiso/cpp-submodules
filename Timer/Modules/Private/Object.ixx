@@ -2,9 +2,7 @@
 // Year : 2023
 // Repo : https://github.com/lucoiso/cpp-submodules
 
-module;
-
-export module TimerObject;
+export module Timer.Object;
 
 import <chrono>;
 import <functional>;

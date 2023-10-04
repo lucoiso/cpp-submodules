@@ -7,7 +7,7 @@ module;
 #include "ConfigurationModule.h"
 #include <boost/json/object.hpp>
 
-export module ConfigurationManager;
+export module Configuration.Manager;
 
 import <string_view>;
 
