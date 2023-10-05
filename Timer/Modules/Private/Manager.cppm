@@ -110,27 +110,26 @@ void Manager::Tick()
 {
     static std::chrono::steady_clock::time_point LastTickTime = std::chrono::steady_clock::now();
 
-    auto const CurrentTime = std::chrono::steady_clock::now();
-    auto const DeltaTime   = std::chrono::duration_cast<std::chrono::milliseconds>(CurrentTime - LastTickTime);
-    LastTickTime           = CurrentTime;
-
+    while (m_IsActive)
     {
-        std::lock_guard const Lock(m_Mutex);
+        auto const CurrentTime = std::chrono::steady_clock::now();
+        auto const DeltaTime   = std::chrono::duration_cast<std::chrono::milliseconds>(CurrentTime - LastTickTime);
+        LastTickTime           = CurrentTime;
 
-        for (std::unique_ptr<Object> const& Timer: m_Timer)
         {
-            if (!Timer || !Timer->IsRunning())
+            std::lock_guard const Lock(m_Mutex);
+
+            for (std::unique_ptr<Object> const& Timer: m_Timer)
             {
-                continue;
+                if (!Timer || !Timer->IsRunning())
+                {
+                    continue;
+                }
+
+                Timer->Tick(DeltaTime);
             }
-
-            Timer->Tick(DeltaTime);
         }
-    }
 
-    if (m_IsActive)
-    {
         std::this_thread::sleep_for(m_TickIntervalMs);
-        Tick();
     }
 }
