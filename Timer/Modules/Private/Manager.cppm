@@ -13,9 +13,6 @@ import <optional>;
 import <queue>;
 import <thread>;
 
-import Timer.Object;
-import Timer.Parameters;
-
 using namespace Timer;
 
 Manager::Manager()

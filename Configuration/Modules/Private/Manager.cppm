@@ -17,33 +17,27 @@ import <stdexcept>;
 
 using namespace Configuration;
 
-Manager& Manager::Get()
+boost::json::value const& Configuration::GetValue(std::string_view const Key)
 {
-    static Manager Instance {};
-    return Instance;
+    return g_Data.at(Key);
 }
 
-boost::json::value const& Manager::GetValue(std::string_view const Key) const
+void Configuration::RemoveValue(std::string_view const Key)
 {
-    return m_Data.at(Key);
+    g_Data.erase(Key);
 }
 
-void Manager::RemoveValue(std::string_view const Key)
+bool Configuration::Contains(std::string_view const Key)
 {
-    m_Data.erase(Key);
+    return g_Data.contains(Key);
 }
 
-bool Manager::Contains(std::string_view const Key) const
+std::string Configuration::Dump()
 {
-    return m_Data.contains(Key);
+    return serialize(g_Data);
 }
 
-std::string Manager::Dump() const
-{
-    return serialize(m_Data);
-}
-
-void Manager::SaveData(std::string_view const Path) const
+void Configuration::SaveData(std::string_view const Path)
 {
     std::filesystem::path const Destination(Path);
     if (!is_directory(Destination.parent_path()))
@@ -61,7 +55,7 @@ void Manager::SaveData(std::string_view const Path) const
     FileStream.close();
 }
 
-void Manager::LoadData(std::string_view const Path)
+void Configuration::LoadData(std::string_view const Path)
 {
     std::filesystem::path const Destination(Path);
     if (!exists(Destination))
@@ -82,6 +76,6 @@ void Manager::LoadData(std::string_view const Path)
     for (boost::json::value const JsonContent = boost::json::parse(FileContent);
          auto const& [Key, Value]: JsonContent.get_object())
     {
-        m_Data.insert_or_assign(Key, Value);
+        g_Data.insert_or_assign(Key, Value);
     }
 }

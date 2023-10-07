@@ -4,44 +4,39 @@
 
 module;
 
-#include "ConfigurationModule.h"
+#pragma once
+
 #include <boost/json/object.hpp>
 
 export module Configuration.Manager;
 
 import <string_view>;
 
-export namespace Configuration
+namespace Configuration
 {
-    class CONFIGURATIONMODULE_API Manager
+    boost::json::object g_Data;
+
+    export [[nodiscard]] boost::json::value const& GetValue(std::string_view);
+
+    export template<typename T>
+    constexpr void SetValue(std::string_view const Key, T&& Value)
     {
-        boost::json::object m_Data;
-
-    public:
-        static Manager& Get();
-
-        [[nodiscard]] boost::json::value const& GetValue(std::string_view Key) const;
-
-        template<typename T>
-        constexpr void SetValue(std::string_view const Key, T&& Value)
+        if constexpr (std::is_pointer_v<T> || std::is_null_pointer_v<T>)
         {
-            if constexpr (std::is_pointer_v<T> || std::is_null_pointer_v<T>)
+            if (Value == nullptr)
             {
-                if (Value == nullptr)
-                {
-                    return;
-                }
+                return;
             }
-
-            m_Data.insert_or_assign(Key, Value);
         }
 
-        void RemoveValue(std::string_view Key);
+        g_Data.insert_or_assign(Key, Value);
+    }
 
-        [[nodiscard]] bool Contains(std::string_view Key) const;
-        [[nodiscard]] std::string Dump() const;
+    export void RemoveValue(std::string_view);
 
-        void SaveData(std::string_view Path) const;
-        void LoadData(std::string_view Path);
-    };
+    export [[nodiscard]] bool Contains(std::string_view);
+    export [[nodiscard]] std::string Dump();
+
+    export void SaveData(std::string_view);
+    export void LoadData(std::string_view);
 }// namespace Configuration
