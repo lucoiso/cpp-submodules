@@ -51,7 +51,7 @@ Manager& Manager::Get()
     return Instance;
 }
 
-std::uint64_t Manager::StartTimer(Parameters const& Parameters, std::queue<std::uint8_t>& EventIDQueue)
+std::uint32_t Manager::StartTimer(Parameters const& Parameters, std::queue<std::uint8_t>& EventIDQueue)
 {
     std::lock_guard const Lock(m_Mutex);
 
@@ -67,15 +67,15 @@ std::uint64_t Manager::StartTimer(Parameters const& Parameters, std::queue<std::
                     Parameters.RepeatCount,
                     Parameters.EventID,
                     EventIDQueue,
-                    [this](std::uint64_t const EventID) {
-                        TimerFinished(std::forward<std::uint64_t const>(EventID));
+                    [this](std::uint32_t const EventID) {
+                        TimerFinished(std::forward<std::uint32_t const>(EventID));
                     }));
 
     m_Timer.back()->Start();
     return m_Timer.back()->GetID();
 }
 
-void Manager::StopTimer(std::uint64_t const TimerID)
+void Manager::StopTimer(std::uint32_t const TimerID)
 {
     std::lock_guard const Lock(m_Mutex);
 
@@ -95,7 +95,7 @@ void Manager::SetTickInterval(std::chrono::milliseconds const IntervalMs)
     m_TickIntervalMs = IntervalMs;
 }
 
-void Manager::TimerFinished(std::uint64_t const TimerID)
+void Manager::TimerFinished(std::uint32_t const TimerID)
 {
     std::lock_guard const Lock(m_Mutex);
 
@@ -112,12 +112,11 @@ void Manager::Tick()
 
     while (m_IsActive)
     {
-        auto const CurrentTime = std::chrono::steady_clock::now();
-        auto const DeltaTime   = std::chrono::duration_cast<std::chrono::milliseconds>(CurrentTime - LastTickTime);
-        LastTickTime           = CurrentTime;
-
+        if (m_Mutex.try_lock())
         {
-            std::lock_guard const Lock(m_Mutex);
+            auto const CurrentTime = std::chrono::steady_clock::now();
+            auto const DeltaTime   = std::chrono::duration_cast<std::chrono::milliseconds>(CurrentTime - LastTickTime);
+            LastTickTime           = CurrentTime;
 
             for (std::unique_ptr<Object> const& Timer: m_Timer)
             {
@@ -128,6 +127,8 @@ void Manager::Tick()
 
                 Timer->Tick(DeltaTime);
             }
+
+            m_Mutex.unlock();
         }
 
         std::this_thread::sleep_for(m_TickIntervalMs);

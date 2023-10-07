@@ -9,6 +9,7 @@ module;
 export module Timer.Parameters;
 
 import <optional>;
+import <cstdint>;
 
 export namespace Timer
 {
@@ -16,6 +17,6 @@ export namespace Timer
     {
         std::uint8_t EventID {};
         std::uint32_t Interval {};
-        std::optional<std::uint32_t> RepeatCount;
+        std::optional<std::uint32_t> RepeatCount {};
     };
 }// namespace Timer

@@ -10,10 +10,8 @@ export module Timer.Manager;
 
 import <atomic>;
 import <chrono>;
-import <functional>;
 import <memory>;
 import <mutex>;
-import <optional>;
 import <queue>;
 import <thread>;
 
@@ -27,7 +25,7 @@ export namespace Timer
         std::vector<std::unique_ptr<class Object>> m_Timer;
         std::chrono::milliseconds m_TickIntervalMs;
         std::thread m_TickThread;
-        std::atomic<std::uint64_t> m_TimerIDCounter;
+        std::atomic<std::uint32_t> m_TimerIDCounter;
         std::recursive_mutex m_Mutex;
         bool m_IsActive;
 
@@ -37,12 +35,12 @@ export namespace Timer
 
         static Manager& Get();
 
-        [[nodiscard]] std::uint64_t StartTimer(struct Parameters const& Parameters, std::queue<std::uint8_t>& EventIDQueue);
-        void StopTimer(std::uint64_t TimerID);
+        [[nodiscard]] std::uint32_t StartTimer(struct Parameters const& Parameters, std::queue<std::uint8_t>& EventIDQueue);
+        void StopTimer(std::uint32_t TimerID);
         void SetTickInterval(std::chrono::milliseconds IntervalMs);
 
     private:
-        void TimerFinished(std::uint64_t TimerID);
+        void TimerFinished(std::uint32_t TimerID);
         void Tick();
     };
 }// namespace Timer
