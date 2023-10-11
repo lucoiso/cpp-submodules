@@ -16,88 +16,119 @@ import <thread>;
 using namespace Timer;
 
 Manager::Manager()
-    : m_TimerIDCounter(0U),
-      m_TickIntervalMs(1U),
-      m_TickThread(&Manager::Tick, this),
-      m_IsActive(true)
+    : m_Timers(),
+      m_TimerIDCounter(0U),
+      m_TimerThread(),
+      m_Mutex(),
+      m_Callbacks(),
+      m_Interval(1U),
+      m_Active(false)
 {
+    SetActive(true);
 }
 
 Manager::~Manager()
 {
     try
     {
+        m_Active = false;
+
         std::lock_guard const Lock(m_Mutex);
 
-        m_IsActive = false;
-
-        if (m_TickThread.joinable())
+        if (m_TimerThread.joinable())
         {
-            m_TickThread.join();
+            m_TimerThread.join();
         }
-        m_Timer.clear();
+
+        m_Timers.clear();
     }
     catch (...)
     {
     }
 }
 
-Manager& Manager::Get()
+std::thread::id Manager::GetThreadID() const
 {
-    static Manager Instance {};
-    return Instance;
+    return m_TimerThread.get_id();
 }
 
-std::uint32_t Manager::StartTimer(Parameters const& Parameters, std::queue<std::uint8_t>& EventIDQueue)
+void Manager::SetTimer(std::uint32_t const Time, std::function<void()> const& Callback)
 {
     std::lock_guard const Lock(m_Mutex);
 
-    if (m_Timer.empty())
+    if (m_Timers.empty())
     {
         m_TimerIDCounter = 0U;
     }
 
-    m_Timer.push_back(
+    std::uint32_t const TimerID = m_TimerIDCounter.fetch_add(1U);
+    m_Callbacks.insert_or_assign(TimerID, Callback);
+
+    m_Timers.push_back(
             std::make_unique<Object>(
-                    m_TimerIDCounter.fetch_add(1U),
-                    Parameters.Interval,
-                    Parameters.RepeatCount,
-                    Parameters.EventID,
-                    EventIDQueue,
+                    TimerID,
+                    Time,
                     [this](std::uint32_t const EventID) {
                         TimerFinished(std::forward<std::uint32_t const>(EventID));
                     }));
-
-    m_Timer.back()->Start();
-    return m_Timer.back()->GetID();
 }
 
-void Manager::StopTimer(std::uint32_t const TimerID)
+void Manager::SetInterval(std::chrono::milliseconds const& Interval)
 {
-    std::lock_guard const Lock(m_Mutex);
+    m_Interval = Interval;
+}
 
-    if (auto const MatchingTimer = std::ranges::find_if(
-                m_Timer,
-                [TimerID](std::unique_ptr<Object> const& Timer) {
-                    return Timer->GetID() == TimerID;
-                });
-        MatchingTimer != m_Timer.end())
+std::chrono::milliseconds Manager::GetInterval() const
+{
+    return m_Interval;
+}
+
+void Manager::SetActive(bool const Active)
+{
+    if (m_Active == Active)
     {
-        (*MatchingTimer)->Stop();
+        return;
+    }
+
+    m_Active = Active;
+
+    if (Active)
+    {
+        m_TimerThread = std::thread([this]() {
+            Tick();
+        });
+    }
+    else
+    {
+        if (m_TimerThread.joinable())
+        {
+            m_TimerThread.join();
+        }
     }
 }
 
-void Manager::SetTickInterval(std::chrono::milliseconds const IntervalMs)
+bool Manager::IsActive() const
 {
-    m_TickIntervalMs = IntervalMs;
+    return m_Active;
+}
+
+std::uint32_t Manager::GetNumTimers() const
+{
+    return static_cast<std::uint32_t>(m_Timers.size());
 }
 
 void Manager::TimerFinished(std::uint32_t const TimerID)
 {
     std::lock_guard const Lock(m_Mutex);
 
+    if (m_Callbacks.contains(TimerID))
+    {
+        m_Callbacks[TimerID]();
+        m_Callbacks.erase(TimerID);
+    }
+
     std::erase_if(
-            m_Timer,
+            m_Timers,
             [TimerID](std::unique_ptr<Object> const& Timer) {
                 return Timer->GetID() == TimerID;
             });
@@ -107,7 +138,7 @@ void Manager::Tick()
 {
     static std::chrono::steady_clock::time_point LastTickTime = std::chrono::steady_clock::now();
 
-    while (m_IsActive)
+    while (m_Active)
     {
         if (m_Mutex.try_lock())
         {
@@ -115,9 +146,9 @@ void Manager::Tick()
             auto const DeltaTime   = std::chrono::duration_cast<std::chrono::milliseconds>(CurrentTime - LastTickTime);
             LastTickTime           = CurrentTime;
 
-            for (std::unique_ptr<Object> const& Timer: m_Timer)
+            for (std::unique_ptr<Object> const& Timer: m_Timers)
             {
-                if (!Timer || !Timer->IsRunning())
+                if (!Timer)
                 {
                     continue;
                 }
@@ -128,6 +159,6 @@ void Manager::Tick()
             m_Mutex.unlock();
         }
 
-        std::this_thread::sleep_for(m_TickIntervalMs);
+        std::this_thread::sleep_for(std::chrono::milliseconds(m_Interval));
     }
 }

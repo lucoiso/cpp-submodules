@@ -4,8 +4,6 @@
 
 module;
 
-#pragma once
-
 #include <boost/json/object.hpp>
 
 export module Configuration.Manager;
