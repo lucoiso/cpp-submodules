@@ -21,8 +21,7 @@ Manager::Manager()
       m_TimerThread(),
       m_Mutex(),
       m_Callbacks(),
-      m_Interval(1U),
-      m_Active(false)
+      m_Interval(1U)
 {
     SetActive(true);
 }
@@ -31,16 +30,7 @@ Manager::~Manager()
 {
     try
     {
-        m_Active = false;
-
-        std::lock_guard const Lock(m_Mutex);
-
-        if (m_TimerThread.joinable())
-        {
-            m_TimerThread.join();
-        }
-
-        m_Timers.clear();
+        StopThreadWork();
     }
     catch (...)
     {
@@ -85,31 +75,25 @@ std::chrono::milliseconds Manager::GetInterval() const
 
 void Manager::SetActive(bool const Active)
 {
-    if (m_Active == Active)
+    if (Active && !m_TimerThread.get_stop_token().stop_possible())
     {
-        return;
+        InitializeThreadWork();
     }
-
-    m_Active = Active;
-
-    if (Active)
+    else if (!Active && m_TimerThread.get_stop_token().stop_possible())
     {
-        m_TimerThread = std::thread([this]() {
-            Tick();
-        });
-    }
-    else
-    {
-        if (m_TimerThread.joinable())
-        {
-            m_TimerThread.join();
-        }
+        StopThreadWork();
     }
 }
 
 bool Manager::IsActive() const
 {
-    return m_Active;
+    return m_TimerThread.get_stop_token().stop_possible();
+}
+
+void Manager::ClearTimers()
+{
+    std::lock_guard const Lock(m_Mutex);
+    m_Timers.clear();
 }
 
 std::uint32_t Manager::GetNumTimers() const
@@ -134,11 +118,38 @@ void Manager::TimerFinished(std::uint32_t const TimerID)
             });
 }
 
+void Manager::InitializeThreadWork()
+{
+    if (IsActive())
+    {
+        StopThreadWork();
+    }
+
+    m_TimerThread = std::jthread([this]() {
+        Tick();
+    });
+}
+
+void Manager::StopThreadWork()
+{
+    if (m_TimerThread.get_stop_token().stop_possible())
+    {
+        m_TimerThread.request_stop();
+    }
+
+    if (m_TimerThread.joinable())
+    {
+        m_TimerThread.join();
+    }
+
+    ClearTimers();
+}
+
 void Manager::Tick()
 {
     static std::chrono::steady_clock::time_point LastTickTime = std::chrono::steady_clock::now();
 
-    while (m_Active)
+    while (!m_TimerThread.get_stop_token().stop_requested())
     {
         if (m_Mutex.try_lock())
         {

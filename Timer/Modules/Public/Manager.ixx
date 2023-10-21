@@ -28,7 +28,6 @@ namespace Timer
         std::chrono::milliseconds m_TimeToComplete {};
         std::function<void(std::uint32_t)> m_OnFinished {};
         std::chrono::milliseconds m_ElapsedTime {};
-        bool m_HasFinished {false};
 
     public:
         Object(std::uint32_t ID,
@@ -48,11 +47,6 @@ namespace Timer
 
         void Tick(std::chrono::milliseconds const DeltaTime)
         {
-            if (m_HasFinished)
-            {
-                return;
-            }
-
             m_ElapsedTime += DeltaTime;
 
             if (m_ElapsedTime < m_TimeToComplete)
@@ -68,17 +62,16 @@ namespace Timer
     {
         std::vector<std::unique_ptr<Object>> m_Timers {};
         std::atomic<std::uint32_t> m_TimerIDCounter {};
-        std::thread m_TimerThread {};
+        std::jthread m_TimerThread {};
         std::recursive_mutex m_Mutex {};
         std::unordered_map<std::uint32_t, std::function<void()>> m_Callbacks {};
         std::chrono::milliseconds m_Interval {1U};
-        bool m_Active {false};
 
     public:
         Manager();
         ~Manager();
 
-        [[nodiscard]] std::thread::id GetThreadID() const;
+        [[nodiscard]] std::jthread::id GetThreadID() const;
         void SetTimer(std::uint32_t, std::function<void()> const&);
 
         void SetInterval(std::chrono::milliseconds const&);
@@ -87,10 +80,15 @@ namespace Timer
         void SetActive(bool);
         [[nodiscard]] bool IsActive() const;
 
+        void ClearTimers();
+
         [[nodiscard]] std::uint32_t GetNumTimers() const;
 
     private:
         void TimerFinished(std::uint32_t);
+        void InitializeThreadWork();
+        void StopThreadWork();
+
         [[noreturn]] void Tick();
     };
 }// namespace Timer
