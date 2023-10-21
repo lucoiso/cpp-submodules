@@ -32,7 +32,7 @@ bool Configuration::Contains(std::string_view const Key)
     return g_Data.contains(Key);
 }
 
-std::string Configuration::Dump()
+std::string const Configuration::Dump()
 {
     return serialize(g_Data);
 }

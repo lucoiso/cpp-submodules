@@ -33,7 +33,7 @@ namespace Configuration
     export void RemoveValue(std::string_view);
 
     export [[nodiscard]] bool Contains(std::string_view);
-    export [[nodiscard]] std::string Dump();
+    export [[nodiscard]] std::string const Dump();
 
     export void SaveData(std::string_view);
     export void LoadData(std::string_view);

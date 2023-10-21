@@ -98,7 +98,7 @@ void Manager::ClearTimers()
 
 std::uint32_t Manager::GetNumTimers() const
 {
-    return static_cast<std::uint32_t>(m_Timers.size());
+    return static_cast<std::uint32_t>(std::size(m_Timers));
 }
 
 void Manager::TimerFinished(std::uint32_t const TimerID)
