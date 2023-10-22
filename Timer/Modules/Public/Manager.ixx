@@ -8,15 +8,11 @@ module;
 
 export module Timer.Manager;
 
-import <atomic>;
-import <chrono>;
-import <memory>;
-import <mutex>;
-import <queue>;
-import <thread>;
-import <optional>;
-import <cstdint>;
-import <functional>;
+export import <chrono>;
+export import <functional>;
+export import <thread>;
+export import <mutex>;
+export import <cstdint>;
 
 namespace Timer
 {

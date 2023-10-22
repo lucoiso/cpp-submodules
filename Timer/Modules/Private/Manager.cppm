@@ -4,15 +4,6 @@
 
 module Timer.Manager;
 
-import <atomic>;
-import <chrono>;
-import <functional>;
-import <memory>;
-import <mutex>;
-import <optional>;
-import <queue>;
-import <thread>;
-
 using namespace Timer;
 
 Manager::Manager()
@@ -46,7 +37,7 @@ void Manager::SetTimer(std::uint32_t const Time, std::function<void()> const& Ca
 {
     std::lock_guard const Lock(m_Mutex);
 
-    if (m_Timers.empty())
+    if (std::empty(m_Timers))
     {
         m_TimerIDCounter = 0U;
     }

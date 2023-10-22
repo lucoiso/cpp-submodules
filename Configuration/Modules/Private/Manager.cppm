@@ -12,8 +12,6 @@ module Configuration.Manager;
 
 import <filesystem>;
 import <fstream>;
-import <string_view>;
-import <stdexcept>;
 
 using namespace Configuration;
 
