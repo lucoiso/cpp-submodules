@@ -35,7 +35,7 @@ std::string const Configuration::Dump()
     return serialize(g_Data);
 }
 
-void Configuration::SaveData(std::string_view const Path)
+bool Configuration::SaveData(std::string_view const Path)
 {
     std::filesystem::path const Destination(Path);
     if (!is_directory(Destination.parent_path()))
@@ -49,11 +49,14 @@ void Configuration::SaveData(std::string_view const Path)
         throw std::filesystem::filesystem_error("Failed to open file", std::filesystem::path(Path), std::make_error_code(std::errc::text_file_busy));
     }
 
-    FileStream << Dump();
+    std::string const Content = Dump();
+    FileStream << Content;
     FileStream.close();
+
+    return !Content.empty();
 }
 
-void Configuration::LoadData(std::string_view const Path)
+bool Configuration::LoadData(std::string_view const Path)
 {
     std::filesystem::path const Destination(Path);
     if (!exists(Destination))
@@ -71,9 +74,13 @@ void Configuration::LoadData(std::string_view const Path)
     FileContent << FileStream.rdbuf();
     FileStream.close();
 
-    for (boost::json::value const JsonContent = boost::json::parse(FileContent);
-         auto const& [Key, Value]: JsonContent.get_object())
+    boost::json::value const JsonContent  = boost::json::parse(FileContent);
+    boost::json::object const& JsonObject = JsonContent.get_object();
+
+    for (auto const& [Key, Value]: JsonObject)
     {
         g_Data.insert_or_assign(Key, Value);
     }
+
+    return !JsonObject.empty();
 }

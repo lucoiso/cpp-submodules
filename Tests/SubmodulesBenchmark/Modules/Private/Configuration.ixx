@@ -50,8 +50,9 @@ static void ConfigurationSaveData(benchmark::State& State)
 
     for ([[maybe_unused]] auto const _: State)
     {
-        Configuration::SaveData(Path);
+        bool Discard = Configuration::SaveData(Path);
         benchmark::DoNotOptimize(Path);
+        benchmark::DoNotOptimize(Discard);
     }
 }
 
@@ -63,8 +64,9 @@ static void ConfigurationLoadData(benchmark::State& State)
 
     for ([[maybe_unused]] auto const _: State)
     {
-        Configuration::LoadData(Path);
+        bool Discard = Configuration::LoadData(Path);
         benchmark::DoNotOptimize(Path);
+        benchmark::DoNotOptimize(Discard);
     }
 }
 

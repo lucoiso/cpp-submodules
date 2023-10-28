@@ -45,13 +45,11 @@ void Manager::SetTimer(std::uint32_t const Time, std::function<void()> const& Ca
     std::uint32_t const TimerID = m_TimerIDCounter.fetch_add(1U);
     m_Callbacks.insert_or_assign(TimerID, Callback);
 
-    m_Timers.push_back(
-            std::make_unique<Object>(
-                    TimerID,
-                    Time,
-                    [this](std::uint32_t const EventID) {
-                        TimerFinished(std::forward<std::uint32_t const>(EventID));
-                    }));
+    m_Timers.emplace_back(TimerID,
+                          Time,
+                          [this](std::uint32_t const EventID) {
+                              TimerFinished(std::forward<std::uint32_t const>(EventID));
+                          });
 }
 
 void Manager::SetInterval(std::chrono::milliseconds const& Interval)
@@ -66,11 +64,18 @@ std::chrono::milliseconds Manager::GetInterval() const
 
 void Manager::SetActive(bool const Active)
 {
-    if (Active && !m_TimerThread.get_stop_token().stop_possible())
+    if (m_Active == Active)
+    {
+        return;
+    }
+
+    m_Active = Active;
+
+    if (m_Active)
     {
         InitializeThreadWork();
     }
-    else if (!Active && m_TimerThread.get_stop_token().stop_possible())
+    else
     {
         StopThreadWork();
     }
@@ -78,7 +83,7 @@ void Manager::SetActive(bool const Active)
 
 bool Manager::IsActive() const
 {
-    return m_TimerThread.get_stop_token().stop_possible();
+    return m_Active;
 }
 
 void Manager::ClearTimers()
@@ -96,17 +101,20 @@ void Manager::TimerFinished(std::uint32_t const TimerID)
 {
     std::lock_guard const Lock(m_Mutex);
 
+    auto Callback = m_Callbacks.at(TimerID);
+
     if (m_Callbacks.contains(TimerID))
     {
-        m_Callbacks[TimerID]();
         m_Callbacks.erase(TimerID);
     }
 
     std::erase_if(
             m_Timers,
-            [TimerID](std::unique_ptr<Object> const& Timer) {
-                return Timer->GetID() == TimerID;
+            [TimerID](Object const& Timer) {
+                return Timer.GetID() == TimerID;
             });
+
+    Callback();
 }
 
 void Manager::InitializeThreadWork()
@@ -140,22 +148,23 @@ void Manager::Tick()
 {
     static std::chrono::steady_clock::time_point LastTickTime = std::chrono::steady_clock::now();
 
-    while (!m_TimerThread.get_stop_token().stop_requested())
+    while (IsActive() && !m_TimerThread.get_stop_token().stop_requested())
     {
         if (m_Mutex.try_lock())
         {
-            auto const CurrentTime = std::chrono::steady_clock::now();
-            auto const DeltaTime   = std::chrono::duration_cast<std::chrono::milliseconds>(CurrentTime - LastTickTime);
-            LastTickTime           = CurrentTime;
-
-            for (std::unique_ptr<Object> const& Timer: m_Timers)
+            try
             {
-                if (!Timer)
-                {
-                    continue;
-                }
+                auto const CurrentTime = std::chrono::steady_clock::now();
+                auto const DeltaTime   = std::chrono::duration_cast<std::chrono::milliseconds>(CurrentTime - LastTickTime);
+                LastTickTime           = CurrentTime;
 
-                Timer->Tick(DeltaTime);
+                for (Object& Timer: m_Timers)
+                {
+                    Timer.Tick(DeltaTime);
+                }
+            }
+            catch (...)
+            {
             }
 
             m_Mutex.unlock();

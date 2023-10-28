@@ -35,6 +35,6 @@ namespace Configuration
     export [[nodiscard]] bool Contains(std::string_view);
     export [[nodiscard]] std::string const Dump();
 
-    export void SaveData(std::string_view);
-    export void LoadData(std::string_view);
+    export [[nodiscard]] bool SaveData(std::string_view);
+    export [[nodiscard]] bool LoadData(std::string_view);
 }// namespace Configuration

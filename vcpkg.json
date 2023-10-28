@@ -2,7 +2,8 @@
   "name": "cpp-submodules",
   "version-string": "0.0.1",
   "dependencies": [
-    "boost-test",
-    "benchmark"
+    "benchmark",
+    "catch2",
+    "boost-json"
   ]
 }

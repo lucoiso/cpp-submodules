@@ -50,18 +50,25 @@ namespace Timer
                 return;
             }
 
-            m_OnFinished(m_ID);
+            try
+            {
+                m_OnFinished(m_ID);
+            }
+            catch (...)
+            {
+            }
         }
     };
 
     export class TIMERMODULE_API Manager
     {
-        std::vector<std::unique_ptr<Object>> m_Timers {};
+        std::vector<Object> m_Timers {};
         std::atomic<std::uint32_t> m_TimerIDCounter {};
         std::jthread m_TimerThread {};
         std::recursive_mutex m_Mutex {};
         std::unordered_map<std::uint32_t, std::function<void()>> m_Callbacks {};
         std::chrono::milliseconds m_Interval {1U};
+        bool m_Active {false};
 
     public:
         Manager();
