@@ -16,6 +16,9 @@ import Configuration.Manager;
 
 TEST_CASE("InsertData", "[Configuration]")
 {
+    Configuration::ClearData();
+    REQUIRE(Configuration::IsEmpty());
+
     Configuration::SetValue("Signed", 1);
     REQUIRE(Configuration::Contains("Signed"));
     REQUIRE(Configuration::GetValue("Signed") == 1);
@@ -43,6 +46,9 @@ TEST_CASE("InsertData", "[Configuration]")
 
 TEST_CASE("RemoveData", "[Configuration]")
 {
+    Configuration::ClearData();
+    REQUIRE(Configuration::IsEmpty());
+
     Configuration::SetValue("Testing", 1);
     REQUIRE(Configuration::Contains("Testing"));
 
@@ -52,6 +58,9 @@ TEST_CASE("RemoveData", "[Configuration]")
 
 TEST_CASE("DumpContent", "[Configuration]")
 {
+    Configuration::ClearData();
+    REQUIRE(Configuration::IsEmpty());
+
     Configuration::SetValue("Signed", 1);
     REQUIRE(Configuration::Contains("Signed"));
     REQUIRE(Configuration::GetValue("Signed") == 1);
@@ -70,12 +79,15 @@ TEST_CASE("DumpContent", "[Configuration]")
     REQUIRE(Configuration::GetValue("Array").as_array() == Value);
 
     std::string const DumpContent          = Configuration::Dump();
-    constexpr std::string_view TestContent = R"({"Signed":1,"Unsigned":2,"Float":2E0,"Double":4E0,"String":"Five","Array":["Item1","Item2","Item3"]})";
+    constexpr std::string_view TestContent = R"({"Signed":1,"Float":2E0,"Array":["Item1","Item2","Item3"]})";
     REQUIRE(DumpContent == TestContent);
 }
 
 TEST_CASE("SaveAndLoadData", "[Configuration]")
 {
+    Configuration::ClearData();
+    REQUIRE(Configuration::IsEmpty());
+
     std::string const FilePath = R"(.\test_data.json)";
 
     Configuration::SetValue("Value1", 123);
@@ -96,11 +108,9 @@ TEST_CASE("SaveAndLoadData", "[Configuration]")
 
 TEST_CASE("LoadInvalidData", "[Configuration]")
 {
+    Configuration::ClearData();
+    REQUIRE(Configuration::IsEmpty());
+
     std::string const FilePath = R"(.\non_existent_file.json)";
     REQUIRE_THROWS_AS(Configuration::LoadData(FilePath), std::filesystem::filesystem_error);
-}
-
-TEST_CASE("Placeholder", "[Configuration]")
-{
-    REQUIRE(true);
 }

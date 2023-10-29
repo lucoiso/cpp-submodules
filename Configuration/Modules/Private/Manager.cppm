@@ -25,9 +25,19 @@ void Configuration::RemoveValue(std::string_view const Key)
     g_Data.erase(Key);
 }
 
+void Configuration::ClearData()
+{
+    g_Data.clear();
+}
+
 bool Configuration::Contains(std::string_view const Key)
 {
     return g_Data.contains(Key);
+}
+
+bool Configuration::IsEmpty()
+{
+    return g_Data.empty();
 }
 
 std::string const Configuration::Dump()

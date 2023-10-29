@@ -31,8 +31,11 @@ namespace Configuration
     }
 
     export void RemoveValue(std::string_view);
+    export void ClearData();
 
     export [[nodiscard]] bool Contains(std::string_view);
+    export [[nodiscard]] bool IsEmpty();
+
     export [[nodiscard]] std::string const Dump();
 
     export [[nodiscard]] bool SaveData(std::string_view);
