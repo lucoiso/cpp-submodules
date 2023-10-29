@@ -74,6 +74,7 @@ namespace Timer
         std::condition_variable m_ConditionVariable {};
         std::unordered_map<std::uint32_t, std::function<void()>> m_Callbacks {};
         std::chrono::milliseconds m_Interval {1U};
+        std::chrono::steady_clock::time_point m_LastTickTime {};
         bool m_Active {false};
 
     public:
@@ -97,7 +98,5 @@ namespace Timer
         void TimerFinished(std::uint32_t);
         void InitializeThreadWork();
         void StopThreadWork();
-
-        [[noreturn]] void RefreshTimers();
     };
 }// namespace Timer
