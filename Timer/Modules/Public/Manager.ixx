@@ -8,11 +8,12 @@ module;
 
 export module Timer.Manager;
 
-export import <chrono>;
 export import <functional>;
-export import <thread>;
-export import <mutex>;
 export import <cstdint>;
+export import <chrono>;
+import <thread>;
+import <mutex>;
+import <condition_variable>;
 
 namespace Timer
 {
@@ -22,17 +23,16 @@ namespace Timer
 
         std::uint32_t m_ID {};
         std::chrono::milliseconds m_TimeToComplete {};
-        std::function<void(std::uint32_t)> m_OnFinished {};
         std::chrono::milliseconds m_ElapsedTime {};
+        bool m_Active {false};
 
     public:
         Object(std::uint32_t ID,
-               std::uint32_t TimeToComplete,
-               std::function<void(std::uint32_t)> const& OnFinished)
+               std::uint32_t TimeToComplete)
             : m_ID(ID),
               m_TimeToComplete(TimeToComplete),
-              m_OnFinished(OnFinished),
-              m_ElapsedTime(0U)
+              m_ElapsedTime(0U),
+              m_Active(true)
         {
         }
 
@@ -41,22 +41,26 @@ namespace Timer
             return m_ID;
         }
 
-        void Tick(std::chrono::milliseconds const DeltaTime)
+        [[nodiscard]] std::chrono::milliseconds GetTimeToComplete() const
+        {
+            return m_TimeToComplete;
+        }
+
+        [[nodiscard]] std::chrono::milliseconds GetElapsedTime() const
+        {
+            return m_ElapsedTime;
+        }
+
+        [[nodiscard]] bool IsActive() const
+        {
+            return m_Active;
+        }
+
+        [[nodiscard]] bool Update(std::chrono::milliseconds const DeltaTime)
         {
             m_ElapsedTime += DeltaTime;
-
-            if (m_ElapsedTime < m_TimeToComplete)
-            {
-                return;
-            }
-
-            try
-            {
-                m_OnFinished(m_ID);
-            }
-            catch (...)
-            {
-            }
+            m_Active = m_ElapsedTime < m_TimeToComplete;
+            return !m_Active;
         }
     };
 
@@ -66,6 +70,8 @@ namespace Timer
         std::atomic<std::uint32_t> m_TimerIDCounter {};
         std::jthread m_TimerThread {};
         std::recursive_mutex m_Mutex {};
+        std::mutex m_IntervalMutex {};
+        std::condition_variable m_ConditionVariable {};
         std::unordered_map<std::uint32_t, std::function<void()>> m_Callbacks {};
         std::chrono::milliseconds m_Interval {1U};
         bool m_Active {false};
@@ -77,7 +83,7 @@ namespace Timer
         [[nodiscard]] std::jthread::id GetThreadID() const;
         void SetTimer(std::uint32_t, std::function<void()> const&);
 
-        void SetInterval(std::chrono::milliseconds const&);
+        void SetInterval(std::chrono::milliseconds);
         [[nodiscard]] std::chrono::milliseconds GetInterval() const;
 
         void SetActive(bool);
@@ -92,6 +98,6 @@ namespace Timer
         void InitializeThreadWork();
         void StopThreadWork();
 
-        [[noreturn]] void Tick();
+        [[noreturn]] void RefreshTimers();
     };
 }// namespace Timer

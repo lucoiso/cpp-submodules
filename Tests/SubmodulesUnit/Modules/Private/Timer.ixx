@@ -42,7 +42,7 @@ TEST_CASE("Timer Activation", "[Timer]")
     REQUIRE(TimerManager->IsActive());
     REQUIRE(TimerManager->GetNumTimers() == 0U);
 
-    std::latch Latch1 {1};
+    std::latch Latch1 {1U};
     bool Called1 {false};
     auto TimerTester1 = [&Called1, &Latch1] {
         Called1 = true;
@@ -52,14 +52,14 @@ TEST_CASE("Timer Activation", "[Timer]")
     TimerManager->SetTimer(1000U, TimerTester1);
     REQUIRE(TimerManager->GetNumTimers() == 1U);
 
-    std::latch Latch2 {1};
+    std::latch Latch2 {1U};
     bool Called2 {false};
     auto TimerTester2 = [&Called2, &Latch2] {
         Called2 = true;
         Latch2.count_down();
     };
 
-    TimerManager->SetTimer(1000U, TimerTester2);
+    TimerManager->SetTimer(2000U, TimerTester2);
     REQUIRE(TimerManager->GetNumTimers() == 2U);
 
     Latch1.wait();

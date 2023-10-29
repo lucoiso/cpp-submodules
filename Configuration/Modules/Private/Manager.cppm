@@ -58,13 +58,13 @@ bool Configuration::SaveData(std::string_view const Path)
 
 bool Configuration::LoadData(std::string_view const Path)
 {
-    std::filesystem::path const Destination(Path);
-    if (!exists(Destination))
+    std::filesystem::path const Source(Path);
+    if (!exists(Source))
     {
         throw std::filesystem::filesystem_error("File not found", std::filesystem::path(Path), std::make_error_code(std::errc::no_such_file_or_directory));
     }
 
-    std::ifstream FileStream(Destination);
+    std::ifstream FileStream(Source);
     if (!FileStream.is_open())
     {
         throw std::filesystem::filesystem_error("Failed to open file", std::filesystem::path(Path), std::make_error_code(std::errc::text_file_busy));
