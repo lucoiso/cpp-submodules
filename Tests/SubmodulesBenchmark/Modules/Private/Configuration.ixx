@@ -2,9 +2,11 @@
 // Year : 2023
 // Repo : https://github.com/lucoiso/cpp-submodules
 
-export module Submodules.Benchmark.Config;
+module;
 
-import <benchmark/benchmark.h>;
+#include <benchmark/benchmark.h>
+
+export module Submodules.Benchmark.Config;
 
 import Configuration.Manager;
 
@@ -47,11 +49,11 @@ static void ConfigurationSaveData(benchmark::State& State)
     Configuration::SetValue("Value3", 3.14);
 
     std::string Path = ".\\benchmark_test_data.json";
+    benchmark::DoNotOptimize(Path);
 
     for ([[maybe_unused]] auto const _: State)
     {
         bool Discard = Configuration::SaveData(Path);
-        benchmark::DoNotOptimize(Path);
         benchmark::DoNotOptimize(Discard);
     }
 }
@@ -61,11 +63,11 @@ BENCHMARK(ConfigurationSaveData);
 static void ConfigurationLoadData(benchmark::State& State)
 {
     std::string Path = ".\\benchmark_test_data.json";
+    benchmark::DoNotOptimize(Path);
 
     for ([[maybe_unused]] auto const _: State)
     {
         bool Discard = Configuration::LoadData(Path);
-        benchmark::DoNotOptimize(Path);
         benchmark::DoNotOptimize(Discard);
     }
 }
