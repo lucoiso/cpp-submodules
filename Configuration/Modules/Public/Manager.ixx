@@ -14,7 +14,7 @@ namespace Configuration
 {
     boost::json::object g_Data;
 
-    export [[nodiscard]] boost::json::value const& GetValue(std::string_view);
+    export [[nodiscard]] boost::json::value const& GetValue(std::string_view const&);
 
     export template<typename T>
     constexpr void SetValue(std::string_view const Key, T&& Value)
@@ -30,14 +30,14 @@ namespace Configuration
         g_Data.insert_or_assign(Key, Value);
     }
 
-    export void RemoveValue(std::string_view);
+    export void RemoveValue(std::string_view const&);
     export void ClearData();
 
-    export [[nodiscard]] bool Contains(std::string_view);
+    export [[nodiscard]] bool Contains(std::string_view const&);
     export [[nodiscard]] bool IsEmpty();
 
     export [[nodiscard]] std::string const Dump();
 
-    export [[nodiscard]] bool SaveData(std::string_view);
-    export [[nodiscard]] bool LoadData(std::string_view);
+    export [[nodiscard]] bool SaveData(std::string_view const&);
+    export [[nodiscard]] bool LoadData(std::string_view const&);
 }// namespace Configuration
