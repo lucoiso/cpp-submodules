@@ -5,6 +5,7 @@
 # -------------- Directories ---------------
 ADD_SUBDIRECTORY(Configuration)
 ADD_SUBDIRECTORY(Timer)
+ADD_SUBDIRECTORY(Coroutine)
 
 IF (BUILD_TESTING)
 	ADD_SUBDIRECTORY(Tests)
