@@ -12,59 +12,72 @@ import Timer.Manager;
 
 static void ManagerStatus(benchmark::State& State)
 {
-    std::unique_ptr<Timer::Manager> TimerManager {std::make_unique<Timer::Manager>()};
-    std::uint32_t Interval {1U};
+    auto TimerManager {std::make_unique<Timer::Manager>()};
+    benchmark::DoNotOptimize(TimerManager);
+
     bool Active {false};
+    benchmark::DoNotOptimize(Active);
 
     for ([[maybe_unused]] auto const _: State)
     {
-        TimerManager->SetInterval(std::chrono::milliseconds(Interval));
         TimerManager->SetActive(Active);
         Active = !Active;
-        ++Interval;
     }
 }
 BENCHMARK(ManagerStatus);
 
 static void TimerEmpty(benchmark::State& State)
 {
-    std::unique_ptr<Timer::Manager> TimerManager {std::make_unique<Timer::Manager>()};
-    auto empty_lambda = [] {
+    auto TimerManager {std::make_unique<Timer::Manager>()};
+    benchmark::DoNotOptimize(TimerManager);
+
+    auto EmptyLambda = [] {
     };
+    benchmark::DoNotOptimize(EmptyLambda);
 
     for ([[maybe_unused]] auto const _: State)
     {
-        TimerManager->SetTimer(0U, empty_lambda);
+        TimerManager->SetTimer(std::chrono::nanoseconds(0U), EmptyLambda);
     }
 }
 BENCHMARK(TimerEmpty);
 
 static void TimerCounter(benchmark::State& State)
 {
-    std::unique_ptr<Timer::Manager> TimerManager {std::make_unique<Timer::Manager>()};
+    auto TimerManager {std::make_unique<Timer::Manager>()};
+    benchmark::DoNotOptimize(TimerManager);
+
     std::uint64_t Counter {0U};
-    auto empty_lambda = [&Counter] {
+    benchmark::DoNotOptimize(Counter);
+
+    auto EmptyLambda = [&Counter] {
         ++Counter;
     };
+    benchmark::DoNotOptimize(EmptyLambda);
 
     for ([[maybe_unused]] auto const _: State)
     {
-        TimerManager->SetTimer(0U, empty_lambda);
+        TimerManager->SetTimer(std::chrono::nanoseconds(0U), EmptyLambda);
     }
 }
 BENCHMARK(TimerCounter);
 
 static void TimerClear(benchmark::State& State)
 {
-    std::unique_ptr<Timer::Manager> TimerManager {std::make_unique<Timer::Manager>()};
+    auto TimerManager {std::make_unique<Timer::Manager>()};
+    benchmark::DoNotOptimize(TimerManager);
+
     std::uint64_t Counter {0U};
-    auto empty_lambda = [&Counter] {
+    benchmark::DoNotOptimize(Counter);
+
+    auto EmptyLambda = [&Counter] {
         ++Counter;
     };
+    benchmark::DoNotOptimize(EmptyLambda);
 
     for ([[maybe_unused]] auto const _: State)
     {
-        TimerManager->SetTimer(1000U, empty_lambda);
+        TimerManager->SetTimer(std::chrono::milliseconds(1U), EmptyLambda);
 
         TimerManager->ClearTimers();
     }

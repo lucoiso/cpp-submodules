@@ -20,10 +20,10 @@ namespace Timer
 {
     void PrintExecutionTime(std::string_view const& Identifier, std::chrono::nanoseconds const& Duration)
     {
-        const auto CastedDuration         = std::chrono::duration_cast<std::chrono::nanoseconds>(Duration);
-        const std::uint64_t DurationCount = static_cast<std::uint64_t>(CastedDuration.count());
+        auto const CastedDuration = std::chrono::duration_cast<std::chrono::nanoseconds>(Duration);
+        auto const DurationCount  = static_cast<std::uint64_t>(CastedDuration.count());
 
-        BOOST_LOG_TRIVIAL(info) << "[" << Identifier << "]: Execution time: " << DurationCount * 0.000001f << "ms";
+        BOOST_LOG_TRIVIAL(info) << "[" << Identifier << "]: Execution time: " << static_cast<float>(DurationCount) * 0.000001f << "ms";
     }
 
     export template<typename Function, typename... Args>
@@ -41,12 +41,12 @@ namespace Timer
         std::chrono::high_resolution_clock::time_point m_StartPoint;
 
     public:
-        ScopedTimer(std::string_view const& Identifier)
+        explicit ScopedTimer(std::string_view const& Identifier) noexcept
             : m_Identifier(Identifier), m_StartPoint(std::chrono::high_resolution_clock::now())
         {
         }
 
-        ~ScopedTimer()
+        ~ScopedTimer() noexcept
         {
             const auto EllapsedTime   = std::chrono::high_resolution_clock::now() - m_StartPoint;
             const auto CastedDuration = std::chrono::duration_cast<std::chrono::nanoseconds>(EllapsedTime);

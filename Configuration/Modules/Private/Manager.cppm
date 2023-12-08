@@ -40,7 +40,7 @@ bool Configuration::IsEmpty()
     return g_Data.empty();
 }
 
-std::string const Configuration::Dump()
+std::string Configuration::Dump()
 {
     return serialize(g_Data);
 }

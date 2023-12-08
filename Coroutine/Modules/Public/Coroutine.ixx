@@ -94,7 +94,7 @@ namespace RenderCore
         std::coroutine_handle<promise_type> m_CoroutineHandle;
 
     public:
-        AsyncOperation(std::coroutine_handle<promise_type> Handle)
+        explicit AsyncOperation(std::coroutine_handle<promise_type> const& Handle)
             : m_CoroutineHandle(Handle)
         {
         }
@@ -148,7 +148,7 @@ namespace RenderCore
                 m_Exception = std::current_exception();
             }
 
-            void get()
+            void get() const
             {
             }
         };
@@ -157,23 +157,23 @@ namespace RenderCore
         {
             promise_type& promise;
 
-            bool await_ready() noexcept
+            bool await_ready() const noexcept
             {
                 return promise.final_suspend().await_ready();
             }
 
-            void await_suspend(std::coroutine_handle<> awaiting_coroutine)
+            void await_suspend(std::coroutine_handle<> const& awaiting_coroutine) const
             {
                 promise.final_suspend().await_suspend(awaiting_coroutine);
             }
 
-            void await_resume()
+            void await_resume() const
             {
                 promise.get();
             }
         };
 
-        awaitable operator co_await() noexcept
+        awaitable operator co_await() const noexcept
         {
             return awaitable {m_CoroutineHandle.promise()};
         }
@@ -182,7 +182,7 @@ namespace RenderCore
         std::coroutine_handle<promise_type> m_CoroutineHandle;
 
     public:
-        AsyncTask(std::coroutine_handle<promise_type> Handle)
+        explicit AsyncTask(std::coroutine_handle<promise_type> const& Handle)
             : m_CoroutineHandle(Handle)
         {
         }
@@ -195,7 +195,7 @@ namespace RenderCore
             }
         }
 
-        void Get()
+        void Get() const
         {
             return m_CoroutineHandle.promise().get();
         }

@@ -17,15 +17,12 @@ import Timer.Manager;
 
 TEST_CASE("Manager Status", "[Timer]")
 {
-    std::unique_ptr<Timer::Manager> TimerManager {std::make_unique<Timer::Manager>()};
+    auto TimerManager {std::make_unique<Timer::Manager>()};
     REQUIRE(TimerManager != nullptr);
     REQUIRE(TimerManager->IsActive());
     REQUIRE(TimerManager->GetNumTimers() == 0U);
 
-    TimerManager->SetInterval(std::chrono::milliseconds(1000U));
-    REQUIRE(TimerManager->GetInterval() == std::chrono::milliseconds(1000U));
-
-    TimerManager->SetTimer(1000U, [] {
+    TimerManager->SetTimer(std::chrono::milliseconds(1U), [] {
     });
     REQUIRE(TimerManager->GetNumTimers() == 1U);
     TimerManager->ClearTimers();
@@ -37,7 +34,7 @@ TEST_CASE("Manager Status", "[Timer]")
 
 TEST_CASE("Timer Activation", "[Timer]")
 {
-    std::unique_ptr<Timer::Manager> TimerManager {std::make_unique<Timer::Manager>()};
+    auto TimerManager {std::make_unique<Timer::Manager>()};
     REQUIRE(TimerManager != nullptr);
     REQUIRE(TimerManager->IsActive());
     REQUIRE(TimerManager->GetNumTimers() == 0U);
@@ -49,7 +46,7 @@ TEST_CASE("Timer Activation", "[Timer]")
         Latch1.count_down();
     };
 
-    TimerManager->SetTimer(1000U, TimerTester1);
+    TimerManager->SetTimer(std::chrono::milliseconds(1U), TimerTester1);
     REQUIRE(TimerManager->GetNumTimers() == 1U);
 
     std::latch Latch2 {1U};
@@ -59,7 +56,7 @@ TEST_CASE("Timer Activation", "[Timer]")
         Latch2.count_down();
     };
 
-    TimerManager->SetTimer(2000U, TimerTester2);
+    TimerManager->SetTimer(std::chrono::milliseconds(2U), TimerTester2);
     REQUIRE(TimerManager->GetNumTimers() == 2U);
 
     Latch1.wait();
