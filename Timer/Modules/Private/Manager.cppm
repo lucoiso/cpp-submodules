@@ -14,6 +14,7 @@ using namespace Timer;
 Manager::Manager()
     : m_TimerIDCounter(0U)
 {
+    SetActive(true);
 }
 
 Manager::~Manager()
@@ -36,7 +37,6 @@ void Manager::SetTimer(std::chrono::nanoseconds const& Time, std::function<void(
 {
     if (std::empty(m_Timers))
     {
-        SetActive(true);
         m_TimerIDCounter = 0U;
     }
 
