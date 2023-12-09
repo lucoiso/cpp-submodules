@@ -14,7 +14,6 @@ using namespace Timer;
 Manager::Manager()
     : m_TimerIDCounter(0U)
 {
-    SetActive(true);
 }
 
 Manager::~Manager()
@@ -35,10 +34,9 @@ std::thread::id Manager::GetThreadID() const
 
 void Manager::SetTimer(std::chrono::nanoseconds const& Time, std::function<void()> const& Callback)
 {
-    std::lock_guard const Lock(m_Mutex);
-
     if (std::empty(m_Timers))
     {
+        SetActive(true);
         m_TimerIDCounter = 0U;
     }
 
