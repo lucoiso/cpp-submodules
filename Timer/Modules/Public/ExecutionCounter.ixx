@@ -18,7 +18,7 @@ export import <cstdint>;
 
 namespace Timer
 {
-    void PrintExecutionTime(std::string_view const& Identifier, std::chrono::nanoseconds const& Duration)
+    void PrintExecutionTime(std::string_view const Identifier, std::chrono::nanoseconds const& Duration)
     {
         auto const CastedDuration = std::chrono::duration_cast<std::chrono::nanoseconds>(Duration);
         auto const DurationCount  = static_cast<std::uint64_t>(CastedDuration.count());
@@ -41,7 +41,7 @@ namespace Timer
         std::chrono::high_resolution_clock::time_point m_StartPoint;
 
     public:
-        explicit ScopedTimer(std::string_view const& Identifier) noexcept
+        explicit ScopedTimer(std::string_view const Identifier) noexcept
             : m_Identifier(Identifier), m_StartPoint(std::chrono::high_resolution_clock::now())
         {
         }
