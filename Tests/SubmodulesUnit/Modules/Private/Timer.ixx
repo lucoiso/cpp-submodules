@@ -18,7 +18,6 @@ import Timer.Manager;
 TEST_CASE("Manager Status", "[Timer]")
 {
     Timer::Manager TimerManager;
-    REQUIRE(TimerManager != nullptr);
     REQUIRE(TimerManager.IsActive());
     REQUIRE(TimerManager.GetNumTimers() == 0U);
 
@@ -35,7 +34,6 @@ TEST_CASE("Manager Status", "[Timer]")
 TEST_CASE("Timer Activation", "[Timer]")
 {
     Timer::Manager TimerManager;
-    REQUIRE(TimerManager != nullptr);
     REQUIRE(TimerManager.IsActive());
     REQUIRE(TimerManager.GetNumTimers() == 0U);
 
