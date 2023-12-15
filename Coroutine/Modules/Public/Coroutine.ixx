@@ -8,7 +8,7 @@ module;
 
 export module Coroutine.Types;
 
-export import <coroutine>;
+import <coroutine>;
 import <algorithm>;
 
 namespace RenderCore

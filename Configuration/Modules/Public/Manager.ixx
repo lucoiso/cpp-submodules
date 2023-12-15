@@ -8,7 +8,7 @@ module;
 
 export module Configuration.Manager;
 
-export import <string_view>;
+import <string_view>;
 
 namespace Configuration
 {

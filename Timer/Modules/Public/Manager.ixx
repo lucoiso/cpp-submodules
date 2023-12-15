@@ -8,9 +8,9 @@ module;
 
 export module Timer.Manager;
 
-export import <functional>;
-export import <cstdint>;
-export import <chrono>;
+import <functional>;
+import <cstdint>;
+import <chrono>;
 import <thread>;
 import <mutex>;
 

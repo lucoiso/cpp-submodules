@@ -9,12 +9,12 @@ module;
 
 export module Timer.ExecutionCounter;
 
-export import <chrono>;
-export import <memory>;
-export import <string>;
-export import <typeinfo>;
-export import <utility>;
-export import <cstdint>;
+import <chrono>;
+import <memory>;
+import <string>;
+import <typeinfo>;
+import <utility>;
+import <cstdint>;
 
 namespace Timer
 {
