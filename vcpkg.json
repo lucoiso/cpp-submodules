@@ -4,6 +4,7 @@
   "dependencies": [
     "benchmark",
     "catch2",
-    "boost-json"
+    "boost-json",
+    "boost-log"
   ]
 }
