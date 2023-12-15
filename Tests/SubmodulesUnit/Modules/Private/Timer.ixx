@@ -17,27 +17,27 @@ import Timer.Manager;
 
 TEST_CASE("Manager Status", "[Timer]")
 {
-    auto TimerManager {std::make_unique<Timer::Manager>()};
+    Timer::Manager TimerManager;
     REQUIRE(TimerManager != nullptr);
-    REQUIRE(TimerManager->IsActive());
-    REQUIRE(TimerManager->GetNumTimers() == 0U);
+    REQUIRE(TimerManager.IsActive());
+    REQUIRE(TimerManager.GetNumTimers() == 0U);
 
-    TimerManager->SetTimer(std::chrono::milliseconds(1U), [] {
+    TimerManager.SetTimer(std::chrono::milliseconds(1U), [] {
     });
-    REQUIRE(TimerManager->GetNumTimers() == 1U);
-    TimerManager->ClearTimers();
-    REQUIRE(TimerManager->GetNumTimers() == 0U);
+    REQUIRE(TimerManager.GetNumTimers() == 1U);
+    TimerManager.ClearTimers();
+    REQUIRE(TimerManager.GetNumTimers() == 0U);
 
-    TimerManager->SetActive(false);
-    REQUIRE_FALSE(TimerManager->IsActive());
+    TimerManager.SetActive(false);
+    REQUIRE_FALSE(TimerManager.IsActive());
 }
 
 TEST_CASE("Timer Activation", "[Timer]")
 {
-    auto TimerManager {std::make_unique<Timer::Manager>()};
+    Timer::Manager TimerManager;
     REQUIRE(TimerManager != nullptr);
-    REQUIRE(TimerManager->IsActive());
-    REQUIRE(TimerManager->GetNumTimers() == 0U);
+    REQUIRE(TimerManager.IsActive());
+    REQUIRE(TimerManager.GetNumTimers() == 0U);
 
     std::latch Latch1 {1U};
     bool Called1 {false};
@@ -46,8 +46,8 @@ TEST_CASE("Timer Activation", "[Timer]")
         Latch1.count_down();
     };
 
-    TimerManager->SetTimer(std::chrono::milliseconds(1U), TimerTester1);
-    REQUIRE(TimerManager->GetNumTimers() == 1U);
+    TimerManager.SetTimer(std::chrono::milliseconds(1U), TimerTester1);
+    REQUIRE(TimerManager.GetNumTimers() == 1U);
 
     std::latch Latch2 {1U};
     bool Called2 {false};
@@ -56,17 +56,17 @@ TEST_CASE("Timer Activation", "[Timer]")
         Latch2.count_down();
     };
 
-    TimerManager->SetTimer(std::chrono::milliseconds(2U), TimerTester2);
-    REQUIRE(TimerManager->GetNumTimers() == 2U);
+    TimerManager.SetTimer(std::chrono::milliseconds(2U), TimerTester2);
+    REQUIRE(TimerManager.GetNumTimers() == 2U);
 
     Latch1.wait();
     REQUIRE(Called1);
-    REQUIRE(TimerManager->GetNumTimers() == 1U);
+    REQUIRE(TimerManager.GetNumTimers() == 1U);
 
     Latch2.wait();
     REQUIRE(Called2);
-    REQUIRE(TimerManager->GetNumTimers() == 0U);
+    REQUIRE(TimerManager.GetNumTimers() == 0U);
 
-    TimerManager->SetActive(false);
-    REQUIRE_FALSE(TimerManager->IsActive());
+    TimerManager.SetActive(false);
+    REQUIRE_FALSE(TimerManager.IsActive());
 }

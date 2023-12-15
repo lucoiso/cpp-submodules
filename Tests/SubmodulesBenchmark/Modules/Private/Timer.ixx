@@ -8,11 +8,13 @@ module;
 
 export module Submodules.Benchmark.Timer;
 
+import <memory>;
+
 import Timer.Manager;
 
 static void ManagerStatus(benchmark::State& State)
 {
-    auto TimerManager {std::make_unique<Timer::Manager>()};
+    Timer::Manager TimerManager;
     benchmark::DoNotOptimize(TimerManager);
 
     bool Active {false};
@@ -20,7 +22,7 @@ static void ManagerStatus(benchmark::State& State)
 
     for ([[maybe_unused]] auto const _: State)
     {
-        TimerManager->SetActive(Active);
+        TimerManager.SetActive(Active);
         Active = !Active;
     }
 }
@@ -28,7 +30,7 @@ BENCHMARK(ManagerStatus);
 
 static void TimerEmpty(benchmark::State& State)
 {
-    auto TimerManager {std::make_unique<Timer::Manager>()};
+    Timer::Manager TimerManager;
     benchmark::DoNotOptimize(TimerManager);
 
     auto EmptyLambda = [] {
@@ -37,14 +39,14 @@ static void TimerEmpty(benchmark::State& State)
 
     for ([[maybe_unused]] auto const _: State)
     {
-        TimerManager->SetTimer(std::chrono::nanoseconds(0U), EmptyLambda);
+        TimerManager.SetTimer(std::chrono::nanoseconds(0U), EmptyLambda);
     }
 }
 BENCHMARK(TimerEmpty);
 
 static void TimerCounter(benchmark::State& State)
 {
-    auto TimerManager {std::make_unique<Timer::Manager>()};
+    Timer::Manager TimerManager;
     benchmark::DoNotOptimize(TimerManager);
 
     std::uint64_t Counter {0U};
@@ -57,14 +59,14 @@ static void TimerCounter(benchmark::State& State)
 
     for ([[maybe_unused]] auto const _: State)
     {
-        TimerManager->SetTimer(std::chrono::nanoseconds(0U), EmptyLambda);
+        TimerManager.SetTimer(std::chrono::nanoseconds(0U), EmptyLambda);
     }
 }
 BENCHMARK(TimerCounter);
 
 static void TimerClear(benchmark::State& State)
 {
-    auto TimerManager {std::make_unique<Timer::Manager>()};
+    Timer::Manager TimerManager;
     benchmark::DoNotOptimize(TimerManager);
 
     std::uint64_t Counter {0U};
@@ -77,9 +79,9 @@ static void TimerClear(benchmark::State& State)
 
     for ([[maybe_unused]] auto const _: State)
     {
-        TimerManager->SetTimer(std::chrono::milliseconds(1U), EmptyLambda);
+        TimerManager.SetTimer(std::chrono::milliseconds(1U), EmptyLambda);
 
-        TimerManager->ClearTimers();
+        TimerManager.ClearTimers();
     }
 }
 BENCHMARK(TimerClear);
