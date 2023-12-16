@@ -1,6 +1,4 @@
-# cpp-submodules
-
-Shared standard C++ modules that I'm using in personal projects.
+[![cpp-submodules CMake Workflow](https://github.com/lucoiso/cpp-submodules/actions/workflows/windows-x64-cmake-release.yml/badge.svg)](https://github.com/lucoiso/cpp-submodules/actions/workflows/windows-x64-cmake-release.yml)
 
 ## Dependencies
 
