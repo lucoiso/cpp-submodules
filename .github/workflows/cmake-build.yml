@@ -29,7 +29,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [windows-latest, ubuntu-latest, macos-latest]
+        os: [ windows-latest, ubuntu-latest, macos-latest ]
 
     steps:
       - name: Checkout & Init Submodules
@@ -38,8 +38,11 @@ jobs:
           fetch-depth: 0
           submodules: 'recursive'
 
-      - name: Install Latest CMake Version
+      - name: Get CMake and Ninja
         uses: lukka/get-cmake@latest
+        with:
+          cmakeVersion: latest
+          ninjaVersion: latest
 
       - name: Setup VCPKG
         uses: lukka/run-vcpkg@v11

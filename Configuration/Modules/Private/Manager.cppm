@@ -7,20 +7,19 @@ module;
 #include <boost/json/object.hpp>
 #include <boost/json/parse.hpp>
 #include <boost/json/serialize.hpp>
+#include <filesystem>
+#include <fstream>
 
 module Configuration.Manager;
 
-import <filesystem>;
-import <fstream>;
-
 using namespace Configuration;
 
-boost::json::value const& Configuration::GetValue(std::string_view const Key)
+boost::json::value const& Configuration::GetValue(std::string const& Key)
 {
     return g_Data.at(Key);
 }
 
-void Configuration::RemoveValue(std::string_view const Key)
+void Configuration::RemoveValue(std::string const& Key)
 {
     g_Data.erase(Key);
 }
@@ -30,7 +29,7 @@ void Configuration::ClearData()
     g_Data.clear();
 }
 
-bool Configuration::Contains(std::string_view const Key)
+bool Configuration::Contains(std::string const& Key)
 {
     return g_Data.contains(Key);
 }
@@ -45,7 +44,7 @@ std::string Configuration::Dump()
     return serialize(g_Data);
 }
 
-bool Configuration::SaveData(std::string_view const Path)
+bool Configuration::SaveData(std::string const& Path)
 {
     std::filesystem::path const Destination(Path);
     if (!is_directory(Destination.parent_path()))
@@ -66,7 +65,7 @@ bool Configuration::SaveData(std::string_view const Path)
     return !Content.empty();
 }
 
-bool Configuration::LoadData(std::string_view const Path)
+bool Configuration::LoadData(std::string const& Path)
 {
     std::filesystem::path const Source(Path);
     if (!exists(Source))

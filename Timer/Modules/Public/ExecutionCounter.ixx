@@ -6,24 +6,20 @@ module;
 
 #include "TimerModule.h"
 #include <boost/log/trivial.hpp>
+#include <chrono>
+#include <cstdint>
+#include <memory>
+#include <string>
+#include <typeinfo>
+#include <utility>
 
 export module Timer.ExecutionCounter;
 
-import <chrono>;
-import <memory>;
-import <string>;
-import <typeinfo>;
-import <utility>;
-import <cstdint>;
-
 namespace Timer
 {
-    void PrintExecutionTime(std::string_view const Identifier, std::chrono::nanoseconds const& Duration)
+    void PrintExecutionTimer(std::string const& Identifier, std::chrono::nanoseconds const& Duration)
     {
-        auto const CastedDuration = std::chrono::duration_cast<std::chrono::nanoseconds>(Duration);
-        auto const DurationCount  = static_cast<std::uint64_t>(CastedDuration.count());
-
-        BOOST_LOG_TRIVIAL(info) << "[" << Identifier << "]: Execution time: " << static_cast<float>(DurationCount) * 0.000001f << "ms";
+        BOOST_LOG_TRIVIAL(info) << "[" << Identifier << "]: Execution time: " << static_cast<float>(Duration.count()) * 0.000001f << "ms";
     }
 
     export template<typename Function, typename... Args>
@@ -41,8 +37,8 @@ namespace Timer
         std::chrono::high_resolution_clock::time_point m_StartPoint;
 
     public:
-        explicit ScopedTimer(std::string_view const Identifier) noexcept
-            : m_Identifier(Identifier), m_StartPoint(std::chrono::high_resolution_clock::now())
+        explicit ScopedTimer(std::string Identifier) noexcept
+            : m_Identifier(std::move(Identifier)), m_StartPoint(std::chrono::high_resolution_clock::now())
         {
         }
 
@@ -51,7 +47,7 @@ namespace Timer
             const auto EllapsedTime   = std::chrono::high_resolution_clock::now() - m_StartPoint;
             const auto CastedDuration = std::chrono::duration_cast<std::chrono::nanoseconds>(EllapsedTime);
 
-            PrintExecutionTime(m_Identifier, CastedDuration);
+            PrintExecutionTimer(m_Identifier, CastedDuration);
         }
     };
 }// namespace Timer

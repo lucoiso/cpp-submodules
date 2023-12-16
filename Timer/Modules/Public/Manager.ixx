@@ -4,17 +4,16 @@
 
 module;
 
-#include <TimerModule.h>
+#include "TimerModule.h"
+#include <atomic>
+#include <chrono>
+#include <functional>
+#include <mutex>
+#include <thread>
+#include <unordered_map>
+#include <vector>
 
 export module Timer.Manager;
-
-import <vector>;
-import <atomic>;
-import <thread>;
-import <chrono>;
-import <functional>;
-import <mutex>;
-import <unordered_map>;
 
 namespace Timer
 {

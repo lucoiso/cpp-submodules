@@ -2,10 +2,14 @@
 // Year : 2023
 // Repo : https://github.com/lucoiso/cpp-submodules
 
-module Timer.Manager;
+module;
 
-import <algorithm>;
-import <numeric>;
+#include <algorithm>
+#include <numeric>
+#include <chrono>
+#include <mutex>
+
+module Timer.Manager;
 
 using namespace Timer;
 

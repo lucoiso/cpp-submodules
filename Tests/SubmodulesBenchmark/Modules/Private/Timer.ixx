@@ -8,8 +8,6 @@ module;
 
 export module Submodules.Benchmark.Timer;
 
-import <memory>;
-
 import Timer.Manager;
 
 static void ManagerStatus(benchmark::State& State)

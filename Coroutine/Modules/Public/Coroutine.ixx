@@ -5,11 +5,10 @@
 module;
 
 #include "CoroutineModule.h"
+#include <coroutine>
+#include <algorithm>
 
 export module Coroutine.Types;
-
-import <coroutine>;
-import <algorithm>;
 
 namespace RenderCore
 {

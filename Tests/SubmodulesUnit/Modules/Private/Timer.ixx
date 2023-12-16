@@ -5,13 +5,11 @@
 module;
 
 #include <catch2/catch_test_macros.hpp>
+#include <chrono>
+#include <latch>
+#include <thread>
 
 export module Submodules.Unit.Timer;
-
-import <thread>;
-import <latch>;
-import <chrono>;
-import <memory>;
 
 import Timer.Manager;
 

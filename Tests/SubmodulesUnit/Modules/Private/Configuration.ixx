@@ -9,8 +9,8 @@ module;
 
 export module Submodules.Unit.Config;
 
-import <filesystem>;
-import <stdexcept>;
+#include <filesystem>
+#include <stdexcept>
 
 import Configuration.Manager;
 
@@ -79,7 +79,7 @@ TEST_CASE("DumpContent", "[Configuration]")
     REQUIRE(Configuration::GetValue("Array").as_array() == Value);
 
     std::string const DumpContent          = Configuration::Dump();
-    constexpr std::string_view TestContent = R"({"Signed":1,"Float":2E0,"Array":["Item1","Item2","Item3"]})";
+    constexpr std::string const& TestContent = R"({"Signed":1,"Float":2E0,"Array":["Item1","Item2","Item3"]})";
     REQUIRE(DumpContent == TestContent);
 }
 
