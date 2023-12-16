@@ -1,4 +1,4 @@
-name: cpp-submodules CMake Workflow
+name: CMake Build Workflow
 
 on:
   push:
@@ -27,7 +27,10 @@ permissions:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
 
     steps:
       - name: Checkout & Init Submodules
