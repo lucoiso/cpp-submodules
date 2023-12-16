@@ -68,6 +68,8 @@ std::jthread::id Manager::GetThreadID() const
 
 void Manager::SetTimer(std::chrono::nanoseconds const& Time, std::function<void()> const& Callback)
 {
+    std::lock_guard const Lock(m_Mutex);
+
     if (std::empty(m_Timers))
     {
         m_TimerIDCounter = 0U;
@@ -104,11 +106,15 @@ bool Manager::IsActive() const
 
 void Manager::ClearTimers()
 {
+    std::unique_lock const Lock(m_Mutex);
+
     m_Timers.clear();
 }
 
 std::uint32_t Manager::GetNumTimers() const
 {
+    std::unique_lock const Lock(m_Mutex);
+
     return std::ranges::count_if(m_Timers,
                                  [](Object const& Timer) {
                                      return Timer.IsActive();
