@@ -4,12 +4,45 @@
 
 module Timer.Manager;
 
-import <thread>;
-import <mutex>;
-import <numeric>;
 import <algorithm>;
+import <numeric>;
 
 using namespace Timer;
+
+Object::Object(std::uint32_t const ID, std::chrono::nanoseconds const& TimeToComplete)
+    : m_ID(ID),
+      m_TimeToComplete(TimeToComplete),
+      m_ElapsedTime(0U),
+      m_Active(true)
+{
+}
+
+std::uint32_t Object::GetID() const
+{
+    return m_ID;
+}
+
+std::chrono::nanoseconds Object::GetTimeToComplete() const
+{
+    return m_TimeToComplete;
+}
+
+std::chrono::nanoseconds Object::GetElapsedTime() const
+{
+    return m_ElapsedTime;
+}
+
+bool Object::IsActive() const
+{
+    return m_Active;
+}
+
+bool Object::Update(std::chrono::nanoseconds const& DeltaTime)
+{
+    m_ElapsedTime += DeltaTime;
+    m_Active = m_ElapsedTime < m_TimeToComplete;
+    return !m_Active;
+}
 
 Manager::Manager()
     : m_TimerIDCounter(0U)
@@ -28,7 +61,7 @@ Manager::~Manager()
     }
 }
 
-std::thread::id Manager::GetThreadID() const
+std::jthread::id Manager::GetThreadID() const
 {
     return m_TimerThread.get_id();
 }
@@ -47,8 +80,6 @@ void Manager::SetTimer(std::chrono::nanoseconds const& Time, std::function<void(
 
 void Manager::SetActive(bool const Active)
 {
-    std::lock_guard const Lock(m_Mutex);
-
     if (m_Active == Active)
     {
         return;
@@ -73,7 +104,6 @@ bool Manager::IsActive() const
 
 void Manager::ClearTimers()
 {
-    std::lock_guard const Lock(m_Mutex);
     m_Timers.clear();
 }
 
@@ -87,8 +117,6 @@ std::uint32_t Manager::GetNumTimers() const
 
 void Manager::TimerFinished(std::uint32_t const TimerID)
 {
-    std::lock_guard const Lock(m_Mutex);
-
     if (m_Callbacks.contains(TimerID))
     {
         m_Callbacks.at(TimerID)();
@@ -103,23 +131,20 @@ void Manager::InitializeThreadWork()
     m_TimerThread = std::jthread([this](std::stop_token const& Token) {
         while (Token.stop_possible() && !Token.stop_requested())
         {
-            if (m_Mutex.try_lock())
+            std::unique_lock const Lock(m_Mutex);
+
+            auto const CurrentTime = std::chrono::steady_clock::now();
+            auto const DeltaTime   = std::chrono::duration_cast<std::chrono::nanoseconds>(CurrentTime - m_LastTickTime);
+            m_LastTickTime         = CurrentTime;
+
+            for (std::uint32_t Iterator = 0U; Iterator < std::size(m_Timers); ++Iterator)
             {
-                auto const CurrentTime = std::chrono::steady_clock::now();
-                auto const DeltaTime   = std::chrono::duration_cast<std::chrono::nanoseconds>(CurrentTime - m_LastTickTime);
-                m_LastTickTime         = CurrentTime;
-
-                for (std::uint32_t Iterator = 0U; Iterator < std::size(m_Timers); ++Iterator)
+                if (auto& Timer = m_Timers[Iterator]; Timer.Update(DeltaTime))
                 {
-                    if (auto& Timer = m_Timers[Iterator]; Timer.Update(DeltaTime))
-                    {
-                        TimerFinished(Timer.GetID());
-                        m_Timers.erase(std::begin(m_Timers) + Iterator);
-                        --Iterator;
-                    }
+                    TimerFinished(Timer.GetID());
+                    m_Timers.erase(std::begin(m_Timers) + Iterator);
+                    --Iterator;
                 }
-
-                m_Mutex.unlock();
             }
         }
     });
@@ -127,8 +152,6 @@ void Manager::InitializeThreadWork()
 
 void Manager::StopThreadWork()
 {
-    std::lock_guard const Lock(m_Mutex);
-
     if (m_TimerThread.get_stop_token().stop_possible())
     {
         m_TimerThread.request_stop();

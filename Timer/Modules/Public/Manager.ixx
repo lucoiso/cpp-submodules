@@ -4,15 +4,17 @@
 
 module;
 
-#include "TimerModule.h"
+#include <TimerModule.h>
 
 export module Timer.Manager;
 
-import <functional>;
-import <cstdint>;
-import <chrono>;
+import <vector>;
+import <atomic>;
 import <thread>;
+import <chrono>;
+import <functional>;
 import <mutex>;
+import <unordered_map>;
 
 namespace Timer
 {
@@ -26,41 +28,14 @@ namespace Timer
         bool m_Active {false};
 
     public:
-        Object(std::uint32_t const ID,
-               std::chrono::nanoseconds const TimeToComplete)
-            : m_ID(ID),
-              m_TimeToComplete(TimeToComplete),
-              m_ElapsedTime(0U),
-              m_Active(true)
-        {
-        }
+        Object(std::uint32_t, std::chrono::nanoseconds const&);
 
-        [[nodiscard]] std::uint32_t GetID() const
-        {
-            return m_ID;
-        }
+        [[nodiscard]] std::uint32_t GetID() const;
+        [[nodiscard]] std::chrono::nanoseconds GetTimeToComplete() const;
+        [[nodiscard]] std::chrono::nanoseconds GetElapsedTime() const;
+        [[nodiscard]] bool IsActive() const;
 
-        [[nodiscard]] std::chrono::nanoseconds GetTimeToComplete() const
-        {
-            return m_TimeToComplete;
-        }
-
-        [[nodiscard]] std::chrono::nanoseconds GetElapsedTime() const
-        {
-            return m_ElapsedTime;
-        }
-
-        [[nodiscard]] bool IsActive() const
-        {
-            return m_Active;
-        }
-
-        [[nodiscard]] bool Update(std::chrono::nanoseconds const DeltaTime)
-        {
-            m_ElapsedTime += DeltaTime;
-            m_Active = m_ElapsedTime < m_TimeToComplete;
-            return !m_Active;
-        }
+        [[nodiscard]] bool Update(std::chrono::nanoseconds const&);
     };
 
     export class TIMERMODULE_API Manager
@@ -68,7 +43,7 @@ namespace Timer
         std::vector<Object> m_Timers {};
         std::atomic<std::uint32_t> m_TimerIDCounter {};
         std::jthread m_TimerThread {};
-        std::recursive_mutex m_Mutex {};
+        mutable std::mutex m_Mutex {};
         std::unordered_map<std::uint32_t, std::function<void()>> m_Callbacks {};
         std::chrono::steady_clock::time_point m_LastTickTime {};
         bool m_Active {false};
