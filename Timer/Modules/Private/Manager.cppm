@@ -106,14 +106,14 @@ bool Manager::IsActive() const
 
 void Manager::ClearTimers()
 {
-    std::unique_lock const Lock(m_Mutex);
+    std::lock_guard const Lock(m_Mutex);
 
     m_Timers.clear();
 }
 
 std::uint32_t Manager::GetNumTimers() const
 {
-    std::unique_lock const Lock(m_Mutex);
+    std::lock_guard const Lock(m_Mutex);
 
     return std::ranges::count_if(m_Timers,
                                  [](Object const& Timer) {

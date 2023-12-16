@@ -44,7 +44,7 @@ TEST_CASE("Timer Activation", "[Timer]")
         Latch1.count_down();
     };
 
-    TimerManager.SetTimer(std::chrono::milliseconds(1U), TimerTester1);
+    TimerManager.SetTimer(std::chrono::milliseconds(5U), TimerTester1);
     REQUIRE(TimerManager.GetNumTimers() == 1U);
 
     std::latch Latch2 {1U};
@@ -54,7 +54,7 @@ TEST_CASE("Timer Activation", "[Timer]")
         Latch2.count_down();
     };
 
-    TimerManager.SetTimer(std::chrono::milliseconds(2U), TimerTester2);
+    TimerManager.SetTimer(std::chrono::milliseconds(10U), TimerTester2);
     REQUIRE(TimerManager.GetNumTimers() == 2U);
 
     Latch1.wait();
