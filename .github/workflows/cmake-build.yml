@@ -44,6 +44,12 @@ jobs:
           cmakeVersion: latest
           ninjaVersion: latest
 
+      - name: Setup Environment
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 100
+          sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-10 100
+
       - name: Setup VCPKG
         uses: lukka/run-vcpkg@v11
         with:
