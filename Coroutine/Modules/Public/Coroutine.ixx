@@ -5,8 +5,8 @@
 module;
 
 #include "CoroutineModule.hpp"
-#include <coroutine>
 #include <algorithm>
+#include <coroutine>
 
 export module Coroutine.Types;
 
