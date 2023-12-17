@@ -51,6 +51,7 @@ jobs:
 
       - name: Configure and Build Project
         run: |
+          mkdir -p ${{env.OUTPUT_DIRECTORY}}/${{env.BUILD_TYPE}}
           cmake --build --preset ${{env.BUILD_TYPE}}
 
       - name: Run Tests
