@@ -25,7 +25,7 @@ permissions:
   security-events: write
 
 jobs:
-  setup_environment:
+  build_project:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
