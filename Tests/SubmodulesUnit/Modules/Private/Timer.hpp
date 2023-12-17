@@ -2,14 +2,12 @@
 // Year : 2023
 // Repo : https://github.com/lucoiso/cpp-submodules
 
-module;
+#pragma once
 
 #include <catch2/catch_test_macros.hpp>
 #include <chrono>
 #include <latch>
 #include <thread>
-
-export module Submodules.Unit.Timer;
 
 import Timer.Manager;
 

@@ -2,11 +2,10 @@
 // Year : 2023
 // Repo : https://github.com/lucoiso/cpp-submodules
 
-module;
+#pragma once
 
 #include <benchmark/benchmark.h>
-
-export module Submodules.Benchmark.Timer;
+#include <chrono>
 
 import Timer.Manager;
 

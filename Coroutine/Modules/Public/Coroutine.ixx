@@ -4,7 +4,7 @@
 
 module;
 
-#include "CoroutineModule.h"
+#include "CoroutineModule.hpp"
 #include <coroutine>
 #include <algorithm>
 

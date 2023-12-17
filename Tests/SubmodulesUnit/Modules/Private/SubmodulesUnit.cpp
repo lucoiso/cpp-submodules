@@ -2,5 +2,6 @@
 // Year : 2023
 // Repo : https://github.com/lucoiso/cpp-submodules
 
-import Submodules.Unit.Config;
-import Submodules.Unit.Timer;
+// User defined modules
+#include "Configuration.hpp"
+#include "Timer.hpp"

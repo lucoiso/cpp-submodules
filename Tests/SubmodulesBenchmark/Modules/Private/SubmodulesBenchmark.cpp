@@ -4,7 +4,8 @@
 
 #include <benchmark/benchmark.h>
 
-import Submodules.Benchmark.Config;
-import Submodules.Benchmark.Timer;
+// User defined modules
+#include "Configuration.hpp"
+#include "Timer.hpp"
 
 BENCHMARK_MAIN();

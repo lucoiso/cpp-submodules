@@ -2,15 +2,11 @@
 // Year : 2023
 // Repo : https://github.com/lucoiso/cpp-submodules
 
-module;
+#pragma once
 
 #include <boost/json/object.hpp>
 #include <catch2/catch_test_macros.hpp>
-
-export module Submodules.Unit.Config;
-
 #include <filesystem>
-#include <stdexcept>
 
 import Configuration.Manager;
 
@@ -78,8 +74,8 @@ TEST_CASE("DumpContent", "[Configuration]")
     REQUIRE(Configuration::Contains("Array"));
     REQUIRE(Configuration::GetValue("Array").as_array() == Value);
 
-    std::string const DumpContent          = Configuration::Dump();
-    constexpr std::string const& TestContent = R"({"Signed":1,"Float":2E0,"Array":["Item1","Item2","Item3"]})";
+    std::string const DumpContent = Configuration::Dump();
+    std::string const TestContent = R"({"Signed":1,"Float":2E0,"Array":["Item1","Item2","Item3"]})";
     REQUIRE(DumpContent == TestContent);
 }
 

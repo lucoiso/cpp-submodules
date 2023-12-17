@@ -4,7 +4,7 @@
 
 module;
 
-#include "TimerModule.h"
+#include "TimerModule.hpp"
 #include <boost/log/trivial.hpp>
 #include <chrono>
 #include <cstdint>
