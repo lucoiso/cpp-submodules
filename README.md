@@ -1,4 +1,4 @@
-[![cpp-submodules CMake Workflow](https://github.com/lucoiso/cpp-submodules/actions/workflows/windows-x64-cmake-release.yml/badge.svg)](https://github.com/lucoiso/cpp-submodules/actions/workflows/windows-x64-cmake-release.yml)
+[![cpp-submodules CMake Workflow](https://github.com/lucoiso/cpp-submodules/actions/workflows/cmake-build.yml/badge.svg)](https://github.com/lucoiso/cpp-submodules/actions/workflows/cmake-build.yml)
 
 ## Dependencies
 
