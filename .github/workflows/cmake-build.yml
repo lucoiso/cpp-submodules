@@ -30,7 +30,6 @@ jobs:
     strategy:
       matrix:
         os: [ windows-latest ] # , ubuntu-latest, macos-latest
-      fail-fast: false
 
     steps:
       - name: Checkout & Init Submodules
@@ -72,13 +71,12 @@ jobs:
     strategy:
       matrix:
         os: [ windows-latest ] # , ubuntu-latest, macos-latest
-      fail-fast: false
 
     steps:
       - name: Configure and Build Project
         uses: lukka/run-cmake@v10
         with:
-          cmakeListsTxtPath: '${{github.workspace}}/CMakeLists.txt'
+          cmakeListsTxtPath: 'CMakeLists.txt'
           configurePreset: ${{env.BUILD_TYPE}}
           buildPreset: ${{env.BUILD_TYPE}}
 
@@ -88,7 +86,6 @@ jobs:
     strategy:
       matrix:
         os: [ windows-latest ] # , ubuntu-latest, macos-latest
-      fail-fast: false
 
     steps:
       - name: Run Tests
@@ -101,7 +98,6 @@ jobs:
     strategy:
       matrix:
         os: [ windows-latest ] # , ubuntu-latest, macos-latest
-      fail-fast: false
 
     steps:
       - name: Run Benchmark
