@@ -17,7 +17,7 @@ export module Timer.ExecutionCounter;
 
 namespace Timer
 {
-    void PrintExecutionTimer(std::string const& Identifier, std::chrono::nanoseconds const& Duration)
+    void PrintExecutionTimer(std::string_view const& Identifier, std::chrono::nanoseconds const& Duration)
     {
         BOOST_LOG_TRIVIAL(info) << "[" << Identifier << "]: Execution time: " << static_cast<float>(Duration.count()) * 0.000001f << "ms";
     }
