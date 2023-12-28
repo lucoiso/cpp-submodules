@@ -4,14 +4,14 @@
 
 module;
 
-#include "TimerModule.hpp"
-#include <boost/log/trivial.hpp>
 #include <chrono>
 #include <cstdint>
 #include <memory>
 #include <string>
 #include <typeinfo>
 #include <utility>
+#include <boost/log/trivial.hpp>
+#include "TimerModule.hpp"
 
 export module Timer.ExecutionCounter;
 

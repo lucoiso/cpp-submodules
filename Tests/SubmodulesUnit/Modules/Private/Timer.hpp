@@ -4,10 +4,10 @@
 
 #pragma once
 
-#include <catch2/catch_test_macros.hpp>
 #include <chrono>
 #include <latch>
 #include <thread>
+#include <catch2/catch_test_macros.hpp>
 
 import Timer.Manager;
 

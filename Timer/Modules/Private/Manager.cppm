@@ -5,9 +5,9 @@
 module;
 
 #include <algorithm>
-#include <numeric>
 #include <chrono>
 #include <mutex>
+#include <numeric>
 
 module Timer.Manager;
 

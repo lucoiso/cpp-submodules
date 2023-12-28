@@ -4,8 +4,8 @@
 
 #pragma once
 
-#include <benchmark/benchmark.h>
 #include <chrono>
+#include <benchmark/benchmark.h>
 
 import Timer.Manager;
 

@@ -4,7 +4,6 @@
 
 module;
 
-#include "TimerModule.hpp"
 #include <atomic>
 #include <chrono>
 #include <functional>
@@ -12,6 +11,7 @@ module;
 #include <thread>
 #include <unordered_map>
 #include <vector>
+#include "TimerModule.hpp"
 
 export module Timer.Manager;
 
