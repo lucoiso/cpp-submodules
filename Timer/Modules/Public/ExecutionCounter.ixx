@@ -17,18 +17,18 @@ export module Timer.ExecutionCounter;
 
 namespace Timer
 {
-    void PrintExecutionTimer(std::string_view const& Identifier, std::chrono::nanoseconds const& Duration)
+    void PrintExecutionTimer(std::string_view const &Identifier, std::chrono::nanoseconds const &Duration)
     {
         BOOST_LOG_TRIVIAL(info) << "[" << Identifier << "]: Execution time: " << static_cast<float>(Duration.count()) * 0.000001f << "ms";
     }
 
     export template<typename Function, typename... Args>
-    auto TimedExecution(Function&& InFunction, Args&&... InArgs)
+    auto TimedExecution(Function &&InFunction, Args &&... InArgs)
     {
-        auto const Start  = std::chrono::high_resolution_clock::now();
+        auto const Start = std::chrono::high_resolution_clock::now();
         auto const Result = InFunction(std::forward<Args>(InArgs)...);
-        auto const End    = std::chrono::high_resolution_clock::now();
-        return std::pair {Result, End - Start};
+        auto const End = std::chrono::high_resolution_clock::now();
+        return std::pair{Result, End - Start};
     }
 
     export class TIMERMODULE_API ScopedTimer
@@ -38,16 +38,17 @@ namespace Timer
 
     public:
         explicit ScopedTimer(std::string Identifier) noexcept
-            : m_Identifier(std::move(Identifier)), m_StartPoint(std::chrono::high_resolution_clock::now())
+            : m_Identifier(std::move(Identifier))
+            , m_StartPoint(std::chrono::high_resolution_clock::now())
         {
         }
 
         ~ScopedTimer() noexcept
         {
-            const auto EllapsedTime   = std::chrono::high_resolution_clock::now() - m_StartPoint;
+            const auto EllapsedTime = std::chrono::high_resolution_clock::now() - m_StartPoint;
             const auto CastedDuration = std::chrono::duration_cast<std::chrono::nanoseconds>(EllapsedTime);
 
             PrintExecutionTimer(m_Identifier, CastedDuration);
         }
     };
-}// namespace Timer
+} // namespace Timer
