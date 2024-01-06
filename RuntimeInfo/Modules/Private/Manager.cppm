@@ -33,6 +33,11 @@ Manager& Manager::Get()
 
 void Manager::PushCallstack(std::source_location Location)
 {
+    if (!m_Active)
+    {
+        return;
+    }
+
     InsertCallstack(std::move(Location));
 }
 
@@ -54,6 +59,16 @@ ScopedCounter Manager::PushCallstackWithCounter(std::source_location Location)
     return ScopedCounter(ExtractFunctionName(m_Callstack.back().function_name()));
 }
 
+bool Manager::IsActive() const
+{
+    return m_Active;
+}
+
+void Manager::SetActive(bool const Value)
+{
+    m_Active = Value;
+}
+
 void Manager::PopCallstack()
 {
     std::lock_guard lock(m_CallstackMutex);
@@ -62,6 +77,13 @@ void Manager::PopCallstack()
     {
         m_Callstack.pop_back();
     }
+}
+
+void Manager::Reset()
+{
+    std::lock_guard lock(m_CallstackMutex);
+
+    m_Callstack.clear();
 }
 
 void Manager::SetCallstackLimit(std::uint8_t const Limit)
@@ -83,4 +105,9 @@ void Manager::SetCallstackLimit(std::uint8_t const Limit)
 std::vector<std::source_location> const& Manager::GetCallstack() const
 {
     return m_Callstack;
+}
+
+std::uint8_t Manager::GetCallstackLimit() const
+{
+    return m_CallstackLimit;
 }

@@ -51,7 +51,6 @@ bool Object::Update(std::chrono::nanoseconds const& DeltaTime)
 Manager::Manager()
     : m_TimerIDCounter(0U)
 {
-    SetActive(true);
 }
 
 Manager::~Manager()
