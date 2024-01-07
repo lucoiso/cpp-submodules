@@ -28,7 +28,7 @@ namespace RuntimeInfo
         void InsertCallstack(std::source_location&& Location);
 
     public:
-        static Manager& Get();
+        [[nodiscard]] static Manager& Get();
 
         void PushCallstack(std::source_location Location = std::source_location::current());
         [[nodiscard]] ScopedCounter PushCallstackWithCounter(std::source_location Location = std::source_location::current());
