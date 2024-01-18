@@ -12,7 +12,7 @@ module RuntimeInfo.ExecutionCounter;
 
 using namespace RuntimeInfo;
 
-ScopedCounter::ScopedCounter(std::string_view const& Identifier) noexcept
+ScopedCounter::ScopedCounter(std::string_view const Identifier) noexcept
     : m_Identifier(Identifier), m_StartPoint(std::chrono::high_resolution_clock::now())
 {
 }
