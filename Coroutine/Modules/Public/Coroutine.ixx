@@ -2,6 +2,7 @@
 // Year : 2023
 // Repo : https://github.com/lucoiso/cpp-submodules
 
+// ReSharper disable CppMemberFunctionMayBeStatic
 module;
 
 #include <algorithm>
@@ -14,7 +15,7 @@ namespace RenderCore
 {
     export template<typename T>
         requires(!std::is_void_v<T>)
-    struct COROUTINEMODULE_H AsyncOperation
+    struct COROUTINEMODULE_API AsyncOperation
     {
         struct promise_type
         {
@@ -23,7 +24,8 @@ namespace RenderCore
             T m_Value;
 
         public:
-            promise_type()  = default;
+            promise_type() = default;
+
             ~promise_type() = default;
 
             std::suspend_never initial_suspend()
@@ -36,8 +38,7 @@ namespace RenderCore
                 return {};
             }
 
-            template<std::convertible_to<T> ValueTy>
-            std::suspend_always yield_value(ValueTy&& Value)
+            template<std::convertible_to<T> ValueTy> std::suspend_always yield_value(ValueTy&& Value)
             {
                 m_Value = std::forward<ValueTy>(Value);
                 return {};
@@ -50,7 +51,7 @@ namespace RenderCore
 
             auto get_return_object()
             {
-                return AsyncOperation {std::coroutine_handle<promise_type>::from_promise(*this)};
+                return AsyncOperation{std::coroutine_handle<promise_type>::from_promise(*this)};
             }
 
             void unhandled_exception()
@@ -86,7 +87,7 @@ namespace RenderCore
 
         awaitable operator co_await() noexcept
         {
-            return awaitable {m_CoroutineHandle.promise()};
+            return awaitable{m_CoroutineHandle.promise()};
         }
 
     private:
@@ -112,7 +113,7 @@ namespace RenderCore
         }
     };
 
-    export struct COROUTINEMODULE_H AsyncTask
+    export struct COROUTINEMODULE_API AsyncTask
     {
         struct promise_type
         {
@@ -120,7 +121,8 @@ namespace RenderCore
             std::exception_ptr m_Exception;
 
         public:
-            promise_type()  = default;
+            promise_type() = default;
+
             ~promise_type() = default;
 
             std::suspend_never initial_suspend()
@@ -139,7 +141,7 @@ namespace RenderCore
 
             auto get_return_object()
             {
-                return AsyncTask {std::coroutine_handle<promise_type>::from_promise(*this)};
+                return AsyncTask{std::coroutine_handle<promise_type>::from_promise(*this)};
             }
 
             void unhandled_exception()
@@ -174,7 +176,7 @@ namespace RenderCore
 
         awaitable operator co_await() const noexcept
         {
-            return awaitable {m_CoroutineHandle.promise()};
+            return awaitable{m_CoroutineHandle.promise()};
         }
 
     private:
