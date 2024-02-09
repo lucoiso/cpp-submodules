@@ -1,7 +1,7 @@
 # Copyright Notices: [...]
 
 from conan import ConanFile
-from conan.tools.cmake import cmake_layout
+from conan.tools.cmake import cmake_layout, CMakeToolchain
 
 
 class CppSubmodulesRecipe(ConanFile):
@@ -9,11 +9,11 @@ class CppSubmodulesRecipe(ConanFile):
     version = "0.0.1"
 
     settings = "os", "compiler", "build_type", "arch"
-    generators = "CMakeToolchain", "CMakeDeps"
+    generators = "CMakeDeps"
 
     def requirements(self):
         # https://conan.io/center/recipes/boost
-        self.requires("boost/[>=1.83]")
+        self.requires("boost/[>=1.84]")
 
         # https://conan.io/center/recipes/benchmark
         self.requires("benchmark/[>=1.8]")
@@ -26,3 +26,7 @@ class CppSubmodulesRecipe(ConanFile):
 
     def layout(self):
         cmake_layout(self)
+
+    def generate(self):
+        tc = CMakeToolchain(self, generator="Ninja")
+        tc.generate()
