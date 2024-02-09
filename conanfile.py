@@ -13,7 +13,10 @@ class CppSubmodulesRecipe(ConanFile):
 
     def requirements(self):
         # https://conan.io/center/recipes/boost
-        self.requires("boost/[>=1.84]")
+        self.requires("boost/[>=1.84]",
+                      options={
+                          "without_cobalt": True
+                      })
 
         # https://conan.io/center/recipes/benchmark
         self.requires("benchmark/[>=1.8]")
