@@ -2,6 +2,6 @@
 
 ## Dependencies
 
-1. C++20
+1. C++23
 2. Python w/ conan and ninja
 3. CMake 3.28
