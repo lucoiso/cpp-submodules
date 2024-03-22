@@ -30,7 +30,7 @@ static void TimerEmpty(benchmark::State& State)
     Timer::Manager TimerManager;
     benchmark::DoNotOptimize(TimerManager);
 
-    auto EmptyLambda = [] {
+    auto EmptyLambda = [ ] {
     };
     benchmark::DoNotOptimize(EmptyLambda);
 

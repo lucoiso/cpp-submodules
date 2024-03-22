@@ -119,7 +119,7 @@ std::uint32_t Manager::GetNumTimers() const
     std::lock_guard const Lock(m_Mutex);
 
     return std::ranges::count_if(m_Timers,
-                                 [](Object const& Timer) {
+                                 [ ](Object const& Timer) {
                                      return Timer.IsActive();
                                  });
 }
