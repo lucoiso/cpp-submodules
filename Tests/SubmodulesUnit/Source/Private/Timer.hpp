@@ -16,7 +16,7 @@ TEST_CASE("Manager Status", "[Timer]")
     REQUIRE(TimerManager.IsActive());
     REQUIRE(TimerManager.GetNumTimers() == 0U);
 
-    TimerManager.SetTimer(std::chrono::milliseconds(1U), [] {
+    TimerManager.SetTimer(std::chrono::milliseconds(1U), [ ] {
     });
     REQUIRE(TimerManager.GetNumTimers() == 1U);
     TimerManager.ClearTimers();
