@@ -45,11 +45,13 @@ jobs:
         id: conan
         uses: turtlebrowser/get-conan@main
 
-      - name: Install Packages
+      - name: Setup Conan Profile
         working-directory: ${{github.workspace}}
-        run: |
-          conan profile detect --force |
-          conan install . --build=missing --profile=${{env.CONAN_PROFILE}}
+        run: conan profile detect --force
+
+      - name: Get Packages from Conan
+        working-directory: ${{github.workspace}}
+        run: conan install . --build=missing --profile=${{env.CONAN_PROFILE}}
 
       - name: Configure and Build Project
         uses: lukka/run-cmake@v10
