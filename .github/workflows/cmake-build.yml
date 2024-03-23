@@ -80,7 +80,6 @@ jobs:
           ninjaVersion: latest
 
       - name: Get Conan
-        if: matrix.os != 'ubuntu-latest'
         uses: turtlebrowser/get-conan@main
 
       - name: (Windows) Install Dependencies
@@ -92,9 +91,8 @@ jobs:
       - name: (Ubuntu) Install Dependencies
         if: matrix.os == 'ubuntu-latest'
         run: |
-          sudo apt-get update
+          apt-get update
           sudo apt-get upgrade -y
-          sudo pip install conan
 
       - name: Detect Conan Profile
         working-directory: ${{github.workspace}}
