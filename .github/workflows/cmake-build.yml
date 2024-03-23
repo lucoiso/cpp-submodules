@@ -10,7 +10,6 @@ env:
   BUILD_TESTS: true
   GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
   CONAN_PRESET: conan-release
-  CONAN_PROFILE: Profiles/WinRel
 
 permissions:
   actions: read
@@ -91,7 +90,7 @@ jobs:
       - name: (Ubuntu) Install Dependencies
         if: matrix.os == 'ubuntu-latest'
         run: |
-          apt-get update
+          sudo apt-get update
           sudo apt-get upgrade -y
 
       - name: Detect Conan Profile
