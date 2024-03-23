@@ -86,6 +86,7 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         run: |
           sudo apt-get update
+          sudo apt-get upgrade -y
 
       - name: Detect Conan Profile
         working-directory: ${{github.workspace}}
