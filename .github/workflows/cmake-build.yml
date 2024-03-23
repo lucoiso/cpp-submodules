@@ -77,13 +77,6 @@ jobs:
         id: conan
         uses: turtlebrowser/get-conan@main
 
-      - name: Install Ubuntu Dependencies
-        if: matrix.os == 'ubuntu-latest'
-        run: |
-          sudo apt-get install libgl-dev
-          sudo apt-get install libgl1-mesa-dev
-          sudo apt-get install libx11-dev
-
       - name: Detect Conan Profile
         working-directory: ${{github.workspace}}
         run: conan profile detect --force
