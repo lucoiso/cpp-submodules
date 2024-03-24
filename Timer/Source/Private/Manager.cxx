@@ -13,11 +13,12 @@ module Timer.Manager;
 
 using namespace Timer;
 
-Object::Object(std::uint32_t const ID, std::chrono::nanoseconds const& TimeToComplete)
-    : m_ID(ID),
-      m_TimeToComplete(TimeToComplete),
-      m_ElapsedTime(0U),
-      m_Active(true)
+Object::Object(std::uint32_t const ID,
+               std::chrono::nanoseconds const& TimeToComplete)
+    : m_ID(ID)
+    , m_TimeToComplete(TimeToComplete)
+    , m_ElapsedTime(0U)
+    , m_Active(true)
 {
 }
 
@@ -69,7 +70,8 @@ std::jthread::id Manager::GetThreadID() const
     return m_TimerThread.get_id();
 }
 
-void Manager::SetTimer(std::chrono::nanoseconds const& Time, std::function<void()> const& Callback)
+void Manager::SetTimer(std::chrono::nanoseconds const& Time,
+                       std::function<void()> const& Callback)
 {
     std::lock_guard const Lock(m_Mutex);
 
@@ -119,7 +121,8 @@ std::uint32_t Manager::GetNumTimers() const
     std::lock_guard const Lock(m_Mutex);
 
     return std::ranges::count_if(m_Timers,
-                                 [ ](Object const& Timer) {
+                                 [ ](Object const& Timer)
+                                 {
                                      return Timer.IsActive();
                                  });
 }
@@ -137,18 +140,20 @@ void Manager::InitializeThreadWork()
 {
     m_LastTickTime = std::chrono::steady_clock::now();
 
-    m_TimerThread = std::jthread([this](std::stop_token const& Token) {
+    m_TimerThread = std::jthread([this](std::stop_token const& Token)
+    {
         while (Token.stop_possible() && !Token.stop_requested())
         {
             std::unique_lock const Lock(m_Mutex);
 
             auto const CurrentTime = std::chrono::steady_clock::now();
-            auto const DeltaTime   = std::chrono::duration_cast<std::chrono::nanoseconds>(CurrentTime - m_LastTickTime);
-            m_LastTickTime         = CurrentTime;
+            auto const DeltaTime = std::chrono::duration_cast<std::chrono::nanoseconds>(CurrentTime - m_LastTickTime);
+            m_LastTickTime = CurrentTime;
 
             for (std::uint32_t Iterator = 0U; Iterator < std::size(m_Timers); ++Iterator)
             {
-                if (auto& Timer = m_Timers[Iterator]; Timer.Update(DeltaTime))
+                if (auto& Timer = m_Timers[Iterator];
+                    Timer.Update(DeltaTime))
                 {
                     TimerFinished(Timer.GetID());
                     m_Timers.erase(std::begin(m_Timers) + Iterator);

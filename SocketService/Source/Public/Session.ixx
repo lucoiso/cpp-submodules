@@ -17,14 +17,17 @@ namespace SocketService
 {
     export class SOCKETSERVICEMODULE_API Session : public IInterface
     {
-        boost::function<void(const Session *)> m_DisconnectCallback {};
+        boost::function<void(const Session *)> m_DisconnectCallback{};
 
     public:
-        Session(boost::asio::io_context &, boost::asio::ip::tcp::socket, const boost::function<void(const Session *)> &);
+        Session(boost::asio::io_context&,
+                boost::asio::ip::tcp::socket,
+                const boost::function<void(const Session *)>&);
 
-        void Connect(const boost::function<void(std::string)> &) override;
+        void Connect(const boost::function<void(std::string)>&) override;
 
     protected:
-        void ReadCallback(const boost::system::error_code &, std::size_t) override;
+        void ReadCallback(const boost::system::error_code&,
+                          std::size_t) override;
     };
 } // namespace SocketService

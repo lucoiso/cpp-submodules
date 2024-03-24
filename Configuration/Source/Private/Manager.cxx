@@ -83,10 +83,10 @@ bool Configuration::LoadData(std::string_view const Path)
     FileContent << FileStream.rdbuf();
     FileStream.close();
 
-    boost::json::value const JsonContent  = boost::json::parse(FileContent);
+    boost::json::value const JsonContent = boost::json::parse(FileContent);
     boost::json::object const& JsonObject = JsonContent.get_object();
 
-    for (auto const& [Key, Value]: JsonObject)
+    for (auto const& [Key, Value] : JsonObject)
     {
         g_Data.insert_or_assign(Key, Value);
     }

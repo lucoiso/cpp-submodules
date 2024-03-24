@@ -19,8 +19,12 @@ namespace RuntimeInfo
     {
         std::vector<std::source_location> m_Callstack{};
         std::mutex m_CallstackMutex{};
-        std::uint8_t m_CallstackLimit{8U};
-        bool m_Active{true};
+        std::uint8_t m_CallstackLimit{
+            8U
+        };
+        bool m_Active{
+            true
+        };
 
         Manager() = default;
 
@@ -49,4 +53,4 @@ namespace RuntimeInfo
 
         [[nodiscard]] std::uint8_t GetCallstackLimit() const;
     };
-}// namespace RuntimeInfo
+} // namespace RuntimeInfo

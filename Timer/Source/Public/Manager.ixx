@@ -22,10 +22,11 @@ namespace Timer
         std::uint32_t m_ID{};
         std::chrono::nanoseconds m_TimeToComplete{};
         std::chrono::nanoseconds m_ElapsedTime{};
-        bool m_Active{false};
+        bool m_Active = false;
 
     public:
-        Object(std::uint32_t, std::chrono::nanoseconds const&);
+        Object(std::uint32_t,
+               std::chrono::nanoseconds const&);
 
         [[nodiscard]] std::uint32_t GetID() const;
 
@@ -44,9 +45,9 @@ namespace Timer
         std::atomic<std::uint32_t> m_TimerIDCounter{};
         std::jthread m_TimerThread{};
         mutable std::mutex m_Mutex{};
-        std::unordered_map<std::uint32_t, std::function<void()> > m_Callbacks{};
+        std::unordered_map<std::uint32_t, std::function<void()>> m_Callbacks{};
         std::chrono::steady_clock::time_point m_LastTickTime{};
-        bool m_Active{false};
+        bool m_Active = false;
 
     public:
         Manager();
@@ -55,7 +56,8 @@ namespace Timer
 
         [[nodiscard]] std::jthread::id GetThreadID() const;
 
-        void SetTimer(std::chrono::nanoseconds const&, std::function<void()> const&);
+        void SetTimer(std::chrono::nanoseconds const&,
+                      std::function<void()> const&);
 
         void SetActive(bool);
 
@@ -72,4 +74,4 @@ namespace Timer
 
         void StopThreadWork();
     };
-}// namespace Timer
+} // namespace Timer

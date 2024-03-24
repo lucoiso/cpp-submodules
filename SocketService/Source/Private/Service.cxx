@@ -13,11 +13,16 @@ module SocketService.Service;
 
 using namespace SocketService;
 
-Service::Service(boost::asio::io_context &Context, const std::string_view Host, const std::uint16_t Port) : IInterface(Context), m_Host(Host), m_Port(Port)
+Service::Service(boost::asio::io_context& Context,
+                 const std::string_view Host,
+                 const std::uint16_t Port)
+    : IInterface(Context)
+    , m_Host(Host)
+    , m_Port(Port)
 {
 }
 
-void Service::Connect(const boost::function<void(std::string)> &Callback)
+void Service::Connect(const boost::function<void(std::string)>& Callback)
 {
     IInterface::Connect(Callback);
 
@@ -29,9 +34,8 @@ void Service::Connect(const boost::function<void(std::string)> &Callback)
         const auto AsyncCallback = boost::bind(&Service::ConnectionCallback, this, boost::placeholders::_1);
         boost::asio::async_connect(m_Socket, Results, AsyncCallback);
     }
-    catch (const std::exception &Exception)
+    catch (const std::exception& Exception)
     {
-        BOOST_LOG_TRIVIAL(error) << "[" << __func__ << "]: "
-                                 << " - An error has occurred: " << Exception.what();
+        BOOST_LOG_TRIVIAL(error) << "[" << __func__ << "]: " << " - An error has occurred: " << Exception.what();
     }
 }

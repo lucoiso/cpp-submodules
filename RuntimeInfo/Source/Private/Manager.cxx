@@ -45,7 +45,8 @@ std::string ExtractFunctionName(std::string const& FunctionName)
 {
     std::regex const Regex(R"(\b([a-zA-Z_][a-zA-Z0-9_]*)\b(?=\s*\())");
 
-    if (std::smatch Match; std::regex_search(FunctionName, Match, Regex))
+    if (std::smatch Match;
+        std::regex_search(FunctionName, Match, Regex))
     {
         return Match.str();
     }

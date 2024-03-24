@@ -16,7 +16,9 @@ namespace Configuration
 
     export [[nodiscard]] boost::json::value const& GetValue(std::string_view);
 
-    export template<typename T> constexpr void SetValue(std::string_view const Key, T&& Value)
+    export template <typename T>
+    constexpr void SetValue(std::string_view const Key,
+                            T&&                    Value)
     {
         if constexpr (std::is_pointer_v<T> || std::is_null_pointer_v<T>)
         {
@@ -42,4 +44,4 @@ namespace Configuration
     export [[nodiscard]] bool SaveData(std::string_view);
 
     export [[nodiscard]] bool LoadData(std::string_view);
-}// namespace Configuration
+} // namespace Configuration
