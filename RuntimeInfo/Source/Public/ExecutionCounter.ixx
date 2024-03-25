@@ -32,8 +32,8 @@ namespace RuntimeInfo
         std::chrono::high_resolution_clock::time_point m_StartPoint;
 
     public:
-        explicit ScopedCounter(std::string_view) noexcept;
+        explicit ScopedCounter(std::string_view);
 
-        ~ScopedCounter() noexcept;
+        ~ScopedCounter();
     };
 } // namespace RuntimeInfo

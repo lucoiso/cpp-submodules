@@ -12,13 +12,13 @@ module RuntimeInfo.ExecutionCounter;
 
 using namespace RuntimeInfo;
 
-ScopedCounter::ScopedCounter(std::string_view const Identifier) noexcept
+ScopedCounter::ScopedCounter(std::string_view const Identifier)
     : m_Identifier(Identifier)
     , m_StartPoint(std::chrono::high_resolution_clock::now())
 {
 }
 
-ScopedCounter::~ScopedCounter() noexcept
+ScopedCounter::~ScopedCounter()
 {
     const auto EllapsedTime = std::chrono::high_resolution_clock::now() - m_StartPoint;
     const auto CastedDuration = std::chrono::duration_cast<std::chrono::nanoseconds>(EllapsedTime);

@@ -56,8 +56,9 @@ std::string ExtractFunctionName(std::string const& FunctionName)
 
 ScopedCounter Manager::PushCallstackWithCounter(std::source_location Location)
 {
+    std::string const FunctionName = ExtractFunctionName(Location.function_name());
     InsertCallstack(std::move(Location));
-    return ScopedCounter(ExtractFunctionName(m_Callstack.back().function_name()));
+    return ScopedCounter{ FunctionName };
 }
 
 bool Manager::IsActive() const
