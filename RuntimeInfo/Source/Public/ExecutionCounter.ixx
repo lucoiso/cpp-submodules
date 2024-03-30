@@ -14,7 +14,7 @@ export module RuntimeInfo.ExecutionCounter;
 namespace RuntimeInfo
 {
     export template <typename Function, typename... Args>
-    auto CountExecution(Function&& InFunction,
+    RUNTIMEINFOMODULE_API auto CountExecution(Function&& InFunction,
                         Args&&... InArgs)
     {
         auto const Start = std::chrono::high_resolution_clock::now();
