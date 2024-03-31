@@ -26,16 +26,9 @@ void Service::Connect(const boost::function<void(std::string)>& Callback)
 {
     IInterface::Connect(Callback);
 
-    try
-    {
-        boost::asio::ip::tcp::resolver Resolver(m_Context);
-        const boost::asio::ip::tcp::resolver::results_type Results = Resolver.resolve(m_Host, std::to_string(m_Port));
+    boost::asio::ip::tcp::resolver Resolver(m_Context);
+    const boost::asio::ip::tcp::resolver::results_type Results = Resolver.resolve(m_Host, std::to_string(m_Port));
 
-        const auto AsyncCallback = boost::bind(&Service::ConnectionCallback, this, boost::placeholders::_1);
-        boost::asio::async_connect(m_Socket, Results, AsyncCallback);
-    }
-    catch (const std::exception& Exception)
-    {
-        BOOST_LOG_TRIVIAL(error) << "[" << __func__ << "]: " << " - An error has occurred: " << Exception.what();
-    }
+    const auto AsyncCallback = boost::bind(&Service::ConnectionCallback, this, boost::placeholders::_1);
+    boost::asio::async_connect(m_Socket, Results, AsyncCallback);
 }

@@ -31,16 +31,8 @@ IInterface::IInterface(boost::asio::io_context& Context,
 void IInterface::DoRead()
 {
     BOOST_LOG_TRIVIAL(debug) << "[" << __func__ << "]: " << " - Read requested";
-
-    try
-    {
-        auto Callback = boost::bind(&IInterface::ReadCallback, this, boost::placeholders::_1, boost::placeholders::_2);
-        boost::asio::async_read_until(m_Socket, boost::asio::dynamic_buffer(m_ReadData), '\n', Callback);
-    }
-    catch (const std::exception& Exception)
-    {
-        BOOST_LOG_TRIVIAL(error) << "[" << __func__ << "]: " << " - An error has occurred: " << Exception.what();
-    }
+    auto Callback = boost::bind(&IInterface::ReadCallback, this, boost::placeholders::_1, boost::placeholders::_2);
+    boost::asio::async_read_until(m_Socket, boost::asio::dynamic_buffer(m_ReadData), '\n', Callback);
 }
 
 void IInterface::Connect(const boost::function<void(std::string)>& Callback)
@@ -56,18 +48,7 @@ void IInterface::Disconnect()
     BOOST_LOG_TRIVIAL(debug) << "[" << __func__ << "]: " << " - Disconnect requested";
 
     m_IsConnected = false;
-
-    try
-    {
-        boost::asio::post(m_Context, boost::bind(&IInterface::DoClose, this));
-    }
-    catch ([[maybe_unused]] const std::bad_weak_ptr& BadWeakPtrException)
-    {
-        // Do nothing: The socket is being closed
-    } catch (const std::exception& Exception)
-    {
-        BOOST_LOG_TRIVIAL(error) << "[" << __func__ << "]: " << " - An error has occurred: " << Exception.what();
-    }
+    boost::asio::post(m_Context, boost::bind(&IInterface::DoClose, this));
 }
 
 bool IInterface::IsConnected() const
@@ -80,15 +61,7 @@ void IInterface::Post(const std::string_view Data)
     BOOST_LOG_TRIVIAL(debug) << "[" << __func__ << "]: " << " - Post requested with data: " << Data;
 
     m_WriteData = std::format("{}\n", Data);
-
-    try
-    {
-        boost::asio::post(m_Context, boost::bind(&IInterface::PostCallback, this));
-    }
-    catch (const std::exception& Exception)
-    {
-        BOOST_LOG_TRIVIAL(error) << "[" << __func__ << "]: " << " - An error has occurred: " << Exception.what();
-    }
+    boost::asio::post(m_Context, boost::bind(&IInterface::PostCallback, this));
 }
 
 void IInterface::DoClose()
@@ -159,15 +132,8 @@ void IInterface::PostCallback()
 {
     BOOST_LOG_TRIVIAL(debug) << "[" << __func__ << "]: " << " - Post callback reached";
 
-    try
-    {
-        const auto Callback = boost::bind(&IInterface::WriteCallback, this, boost::placeholders::_1, boost::placeholders::_2);
-        boost::asio::async_write(m_Socket, boost::asio::buffer(m_WriteData.data(), m_WriteData.length()), Callback);
-    }
-    catch (const std::exception& Exception)
-    {
-        BOOST_LOG_TRIVIAL(error) << "[" << __func__ << "]: " << " - An error has occurred: " << Exception.what();
-    }
+    const auto Callback = boost::bind(&IInterface::WriteCallback, this, boost::placeholders::_1, boost::placeholders::_2);
+    boost::asio::async_write(m_Socket, boost::asio::buffer(m_WriteData.data(), m_WriteData.length()), Callback);
 }
 
 void IInterface::WriteCallback(const boost::system::error_code& Error,

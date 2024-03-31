@@ -22,15 +22,7 @@ Session::Session(boost::asio::io_context& Context,
 void Session::Connect(const boost::function<void(std::string)>& Callback)
 {
     IInterface::Connect(Callback);
-
-    try
-    {
-        DoRead();
-    }
-    catch (const std::exception& Exception)
-    {
-        BOOST_LOG_TRIVIAL(error) << "[" << __func__ << "]: " << " - An error has occurred: " << Exception.what();
-    }
+    DoRead();
 }
 
 void Session::ReadCallback(const boost::system::error_code& Error,

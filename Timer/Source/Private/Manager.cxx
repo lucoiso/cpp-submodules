@@ -56,13 +56,7 @@ Manager::Manager()
 
 Manager::~Manager()
 {
-    try
-    {
-        StopThreadWork();
-    }
-    catch (...)
-    {
-    }
+    StopThreadWork();
 }
 
 std::jthread::id Manager::GetThreadID() const
