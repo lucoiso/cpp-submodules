@@ -4,9 +4,8 @@
 
 module;
 
-#include <boost/log/trivial.hpp>
 #include <chrono>
-#include <typeinfo>
+#include <boost/log/trivial.hpp>
 
 module RuntimeInfo.ExecutionCounter;
 

@@ -4,10 +4,10 @@
 
 module;
 
-#include "RuntimeInfoModule.hpp"
 #include <mutex>
 #include <source_location>
 #include <vector>
+#include "RuntimeInfoModule.hpp"
 
 export module RuntimeInfo.Manager;
 
@@ -17,23 +17,19 @@ namespace RuntimeInfo
 {
     export class RUNTIMEINFOMODULE_API Manager
     {
-        std::vector<std::source_location> m_Callstack{};
-        std::mutex m_CallstackMutex{};
-        std::uint8_t m_CallstackLimit{
-            8U
-        };
-        bool m_Active{
-            true
-        };
+        std::vector<std::source_location> m_Callstack {};
+        std::mutex                        m_CallstackMutex {};
+        std::uint8_t                      m_CallstackLimit {8U};
+        bool                              m_Active {true};
 
         Manager() = default;
 
         ~Manager() = default;
 
-        void InsertCallstack(std::source_location&& Location);
+        void InsertCallstack(std::source_location &&Location);
 
     public:
-        [[nodiscard]] static Manager& Get();
+        [[nodiscard]] static Manager &Get();
 
         void PushCallstack(std::source_location Location = std::source_location::current());
 
@@ -49,7 +45,7 @@ namespace RuntimeInfo
 
         void SetCallstackLimit(std::uint8_t);
 
-        [[nodiscard]] std::vector<std::source_location> const& GetCallstack() const;
+        [[nodiscard]] std::vector<std::source_location> const &GetCallstack() const;
 
         [[nodiscard]] std::uint8_t GetCallstackLimit() const;
     };
