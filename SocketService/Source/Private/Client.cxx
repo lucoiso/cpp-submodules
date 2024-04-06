@@ -25,7 +25,7 @@ public:
 
     void Connect(const boost::function<void(std::string)> &Callback)
     {
-        m_Service = std::make_unique<Service>(m_Context, m_Host.c_str(), m_Port);
+        m_Service = std::make_unique<Service>(m_Context, std::data(m_Host), m_Port);
         m_Service->Connect(Callback);
     }
 
