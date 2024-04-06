@@ -15,11 +15,11 @@ namespace Configuration
 {
     boost::json::object g_Data{};
 
-    export CONFIGURATIONMODULE_API [[nodiscard]] boost::json::value const& GetValue(std::string_view);
+    export CONFIGURATIONMODULE_API [[nodiscard]] boost::json::value const &GetValue(std::string_view);
 
     export template <typename T>
     CONFIGURATIONMODULE_API constexpr void SetValue(std::string_view const Key,
-                            T&&                    Value)
+                                                    T &&                   Value)
     {
         if constexpr (std::is_pointer_v<T> || std::is_null_pointer_v<T>)
         {

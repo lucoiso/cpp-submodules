@@ -95,7 +95,7 @@ private:
 
         if (m_IsConnected)
         {
-            const auto Callback = std::bind(&Server::Impl::AcceptCallback, this, std::placeholders::_1, std::placeholders::_2);
+            const auto Callback = std::bind(&Impl::AcceptCallback, this, std::placeholders::_1, std::placeholders::_2);
             m_Acceptor->async_accept(Callback);
         }
     }
@@ -119,7 +119,7 @@ private:
             BOOST_LOG_TRIVIAL(debug) << "[" << __func__ << "]: " << " - Accepting new Session on: " << Socket.remote_endpoint().address() << ":" << Socket.
 remote_endpoint().port();
 
-            const auto DisconnectCallback = boost::bind(&Server::Impl::OnClientDisconnected, this, boost::placeholders::_1);
+            const auto DisconnectCallback = boost::bind(&Impl::OnClientDisconnected, this, boost::placeholders::_1);
             m_Connections.push_back(std::make_unique<Session>(m_Context, std::move(Socket), DisconnectCallback));
             m_Connections.back()->Connect(m_Callback);
 
