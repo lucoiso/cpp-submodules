@@ -128,7 +128,7 @@ remote_endpoint().port();
                 const std::string DequeuedMessage = m_MessagesQueue.front();
                 BOOST_LOG_TRIVIAL(debug) << "[" << __func__ << "]: " << " - Sending pending message to new connection: " << DequeuedMessage;
 
-                m_Connections.back()->Post(std::data(DequeuedMessage)));
+                m_Connections.back()->Post(std::data(DequeuedMessage));
                 m_MessagesQueue.pop();
             }
         }
