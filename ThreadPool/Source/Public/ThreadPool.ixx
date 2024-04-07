@@ -46,7 +46,7 @@ namespace ThreadPool
         Pool(Pool&& other) = delete;
         Pool& operator=(Pool&& other) = delete;
 
-        void MoveToThread(std::function<void()> const&, std::uint8_t) const;
+        void AddTask(std::function<void()> const&, std::uint8_t) const;
 
         void SetThreadCount(uint8_t);
         void Wait() const;

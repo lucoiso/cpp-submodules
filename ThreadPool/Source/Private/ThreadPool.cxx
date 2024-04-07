@@ -98,7 +98,7 @@ void Pool::SetThreadCount(uint8_t const Value)
     }
 }
 
-void Pool::MoveToThread(std::function<void()> const& Execution, std::uint8_t const Index) const
+void Pool::AddTask(std::function<void()> const& Execution, std::uint8_t const Index) const
 {
     m_Threads.at(Index)->Enqueue(std::move(Execution));
 }
