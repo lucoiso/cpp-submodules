@@ -31,6 +31,7 @@ namespace ThreadPool
         Thread();
         ~Thread();
 
+        void SetAffinity(std::uint8_t);
         void Enqueue(std::function<void()> const &);
         void Wait();
     };
@@ -43,12 +44,13 @@ namespace ThreadPool
         Pool()  = default;
         ~Pool() = default;
 
-        Pool(Pool&& other) = delete;
-        Pool& operator=(Pool&& other) = delete;
+        Pool(Pool &&other)            = delete;
+        Pool &operator=(Pool &&other) = delete;
 
-        void AddTask(std::function<void()> const&, std::uint8_t) const;
+        void AddTask(std::function<void()> const &, std::uint8_t) const;
 
         void SetThreadCount(uint8_t);
+        void SetupCPUThreads();
         void Wait() const;
     };
 } // namespace ThreadPool

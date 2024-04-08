@@ -12,6 +12,12 @@ module;
 #include <thread>
 #include <vector>
 
+#ifdef _WIN32
+#include <Windows.h>
+#else
+    #include <pthread.h>
+#endif
+
 module ThreadPool;
 
 using namespace ThreadPool;
@@ -26,7 +32,7 @@ void Thread::Loop()
             m_Signal.wait(Lock,
                           [this]
                           {
-                              return !m_Queue.empty() || m_Destroying;
+                              return !std::empty(m_Queue) || m_Destroying;
                           });
 
             if (m_Destroying)
@@ -67,6 +73,21 @@ Thread::~Thread()
     }
 }
 
+void Thread::SetAffinity(std::uint8_t const ThreadIndex)
+{
+    #ifdef _WIN32
+    HANDLE          ThreadHandle = m_Thread.native_handle();
+    DWORD_PTR const AffinityMask = 1ULL << ThreadIndex;
+    SetThreadAffinityMask(ThreadHandle, AffinityMask);
+    #else
+    pthread_t ThreadHandle = m_Thread.native_handle();
+    cpu_set_t CPUSet;
+    CPU_ZERO(&CPUSet);
+    CPU_SET(ThreadIndex, &CPUSet);
+    pthread_setaffinity_np(ThreadHandle, sizeof(cpu_set_t), &CPUSet);
+    #endif
+}
+
 void Thread::Enqueue(std::function<void()> const &Execution)
 {
     std::unique_lock Lock(m_Mutex);
@@ -78,9 +99,9 @@ void Thread::Wait()
 {
     std::unique_lock Lock(m_Mutex);
     m_Signal.wait(Lock,
-                  [this]()
+                  [this]
                   {
-                      return m_Queue.empty();
+                      return std::empty(m_Queue);
                   });
 }
 
@@ -98,7 +119,17 @@ void Pool::SetThreadCount(uint8_t const Value)
     }
 }
 
-void Pool::AddTask(std::function<void()> const& Execution, std::uint8_t const Index) const
+void Pool::SetupCPUThreads()
+{
+    SetThreadCount(std::thread::hardware_concurrency());
+
+    for (uint8_t Iterator = 0; Iterator < std::size(m_Threads); ++Iterator)
+    {
+        m_Threads.at(Iterator)->SetAffinity(Iterator);
+    }
+}
+
+void Pool::AddTask(std::function<void()> const &Execution, std::uint8_t const Index) const
 {
     m_Threads.at(Index)->Enqueue(std::move(Execution));
 }
