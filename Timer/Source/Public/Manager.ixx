@@ -40,7 +40,7 @@ namespace Timer
 
     export class TIMERMODULE_API Manager
     {
-        std::vector<Object>                                      m_Timers {};
+        std::vector<std::shared_ptr<Object>>                                      m_Timers {};
         std::atomic<std::uint32_t>                               m_TimerIDCounter {};
         std::jthread                                             m_TimerThread {};
         mutable std::mutex                                       m_Mutex {};

@@ -18,7 +18,7 @@ namespace SocketService
     export class SOCKETSERVICEMODULE_API Service : public IInterface
     {
         std::string   m_Host {};
-        std::uint16_t m_Port {0U};
+        std::uint16_t m_Port { 0U };
 
     public:
         Service(boost::asio::io_context &, std::string_view, std::uint16_t);

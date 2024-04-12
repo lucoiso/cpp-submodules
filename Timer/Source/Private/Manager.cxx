@@ -69,7 +69,7 @@ void Manager::SetTimer(std::chrono::nanoseconds const& Time,
 {
     if (std::empty(m_Timers))
     {
-        m_TimerIDCounter = 0U;
+        m_TimerIDCounter.fetch_sub(m_TimerIDCounter.load());
     }
 
     std::uint32_t const TimerID = m_TimerIDCounter.fetch_add(1U);

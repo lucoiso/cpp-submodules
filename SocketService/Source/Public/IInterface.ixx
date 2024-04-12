@@ -20,18 +20,17 @@ namespace SocketService
     protected:
         bool m_IsConnected = false;
 
-        std::string m_ReadData{};
-        std::string m_WriteData{};
+        std::string m_ReadData {};
+        std::string m_WriteData {};
 
         boost::asio::io_context &    m_Context;
         boost::asio::ip::tcp::socket m_Socket;
 
-        boost::function<void(std::string)> m_Callback{};
+        boost::function<void(std::string)> m_Callback {};
 
     public:
         explicit IInterface(boost::asio::io_context &);
-        IInterface(boost::asio::io_context &Context,
-                   boost::asio::ip::tcp::socket);
+        IInterface(boost::asio::io_context &Context, boost::asio::ip::tcp::socket);
 
         virtual void Connect(const boost::function<void(std::string)> &);
         virtual void Disconnect();
@@ -46,11 +45,9 @@ namespace SocketService
 
         virtual void ConnectionCallback(const boost::system::error_code &);
 
-        virtual void ReadCallback(const boost::system::error_code &,
-                                  std::size_t);
+        virtual void ReadCallback(const boost::system::error_code &, std::size_t);
 
         virtual void PostCallback();
-        virtual void WriteCallback(const boost::system::error_code &,
-                                   std::size_t);
+        virtual void WriteCallback(const boost::system::error_code &, std::size_t);
     };
 } // namespace SocketService

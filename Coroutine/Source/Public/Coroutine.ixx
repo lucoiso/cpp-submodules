@@ -52,7 +52,7 @@ namespace RenderCore
 
             auto get_return_object()
             {
-                return AsyncOperation {std::coroutine_handle<promise_type>::from_promise(*this)};
+                return AsyncOperation { std::coroutine_handle<promise_type>::from_promise(*this) };
             }
 
             void unhandled_exception()
@@ -88,14 +88,15 @@ namespace RenderCore
 
         awaitable operator co_await() noexcept
         {
-            return awaitable {m_CoroutineHandle.promise()};
+            return awaitable { m_CoroutineHandle.promise() };
         }
 
     private:
         std::coroutine_handle<promise_type> m_CoroutineHandle;
 
     public:
-        explicit AsyncOperation(std::coroutine_handle<promise_type> const &Handle) : m_CoroutineHandle(Handle)
+        explicit AsyncOperation(std::coroutine_handle<promise_type> const &Handle)
+            : m_CoroutineHandle(Handle)
         {
         }
 
@@ -141,7 +142,7 @@ namespace RenderCore
 
             auto get_return_object()
             {
-                return AsyncTask {std::coroutine_handle<promise_type>::from_promise(*this)};
+                return AsyncTask { std::coroutine_handle<promise_type>::from_promise(*this) };
             }
 
             void unhandled_exception()
@@ -176,14 +177,15 @@ namespace RenderCore
 
         awaitable operator co_await() const noexcept
         {
-            return awaitable {m_CoroutineHandle.promise()};
+            return awaitable { m_CoroutineHandle.promise() };
         }
 
     private:
         std::coroutine_handle<promise_type> m_CoroutineHandle;
 
     public:
-        explicit AsyncTask(std::coroutine_handle<promise_type> const &Handle) : m_CoroutineHandle(Handle)
+        explicit AsyncTask(std::coroutine_handle<promise_type> const &Handle)
+            : m_CoroutineHandle(Handle)
         {
         }
 
