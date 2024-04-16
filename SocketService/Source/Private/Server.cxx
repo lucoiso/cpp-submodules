@@ -4,10 +4,10 @@
 
 module;
 
+#include <queue>
 #include <boost/asio/ip/tcp.hpp>
 #include <boost/bind/bind.hpp>
 #include <boost/log/trivial.hpp>
-#include <queue>
 
 module SocketService.Server;
 

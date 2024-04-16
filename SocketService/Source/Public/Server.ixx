@@ -6,8 +6,8 @@ module;
 
 #include "SocketServiceModule.hpp"
 
-#include <boost/asio/io_context.hpp>
 #include <boost/function.hpp>
+#include <boost/asio/io_context.hpp>
 
 export module SocketService.Server;
 

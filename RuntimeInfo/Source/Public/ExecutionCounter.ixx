@@ -4,10 +4,10 @@
 
 module;
 
-#include "RuntimeInfoModule.hpp"
 #include <chrono>
 #include <string>
 #include <utility>
+#include "RuntimeInfoModule.hpp"
 
 export module RuntimeInfo.ExecutionCounter;
 

@@ -6,10 +6,10 @@ module;
 
 #include "SocketServiceModule.hpp"
 
+#include <string>
+#include <boost/function.hpp>
 #include <boost/asio/io_context.hpp>
 #include <boost/asio/ip/tcp.hpp>
-#include <boost/function.hpp>
-#include <string>
 
 export module SocketService.IInterface;
 

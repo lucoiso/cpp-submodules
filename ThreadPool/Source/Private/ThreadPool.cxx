@@ -79,6 +79,13 @@ void Thread::SetAffinity(std::uint8_t const ThreadIndex)
     HANDLE          ThreadHandle = m_Thread.native_handle();
     DWORD_PTR const AffinityMask = 1ULL << ThreadIndex;
     SetThreadAffinityMask(ThreadHandle, AffinityMask);
+
+    PROCESSOR_NUMBER ProcessorNumber{
+        .Group = 0U,
+        .Number = ThreadIndex,
+        .Reserved = 0U
+    };
+    SetThreadIdealProcessorEx(ThreadHandle, &ProcessorNumber, nullptr);
     #else
     pthread_t ThreadHandle = m_Thread.native_handle();
     cpu_set_t CPUSet;
