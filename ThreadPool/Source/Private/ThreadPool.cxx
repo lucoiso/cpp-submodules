@@ -69,6 +69,7 @@ Thread::~Thread()
         m_Destroying = true;
         m_Signal.notify_one();
         m_Mutex.unlock();
+        m_Thread.request_stop();
         m_Thread.join();
     }
 }
@@ -77,15 +78,9 @@ void Thread::SetAffinity(std::uint8_t const ThreadIndex)
 {
     #ifdef _WIN32
     HANDLE          ThreadHandle = m_Thread.native_handle();
-    DWORD_PTR const AffinityMask = 1ULL << ThreadIndex;
-    SetThreadAffinityMask(ThreadHandle, AffinityMask);
-
-    PROCESSOR_NUMBER ProcessorNumber{
-        .Group = 0U,
-        .Number = ThreadIndex,
-        .Reserved = 0U
-    };
+    PROCESSOR_NUMBER ProcessorNumber { .Group = 0U, .Number = ThreadIndex, .Reserved = 0U };
     SetThreadIdealProcessorEx(ThreadHandle, &ProcessorNumber, nullptr);
+    SetThreadPriority(ThreadHandle, THREAD_PRIORITY_NORMAL);
     #else
     pthread_t ThreadHandle = m_Thread.native_handle();
     cpu_set_t CPUSet;
