@@ -29,6 +29,7 @@ namespace SocketService
         boost::function<void(std::string)> m_Callback {};
 
     public:
+        virtual  ~IInterface() = default;
         explicit IInterface(boost::asio::io_context &);
         IInterface(boost::asio::io_context &Context, boost::asio::ip::tcp::socket);
 

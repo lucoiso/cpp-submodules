@@ -22,7 +22,7 @@ namespace SocketService
 
     public:
         Server(boost::asio::io_context &, std::string_view, std::uint16_t);
-        ~Server();
+        ~Server() override;
 
         void Connect(const boost::function<void(std::string)> &) override;
         void Disconnect() override;

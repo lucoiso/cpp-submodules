@@ -16,10 +16,13 @@ class Client::Impl
     std::shared_ptr<Service> m_Service {};
 
     std::string   m_Host {};
-    std::uint16_t m_Port {0U};
+    std::uint16_t m_Port { 0U };
 
 public:
-    Impl(boost::asio::io_context &Context, const std::string_view Host, const std::uint16_t Port) : m_Context(Context), m_Host(Host), m_Port(Port)
+    Impl(boost::asio::io_context &Context, const std::string_view Host, const std::uint16_t Port)
+        : m_Context(Context)
+      , m_Host(Host)
+      , m_Port(Port)
     {
     }
 
@@ -34,7 +37,7 @@ public:
         m_Service->Disconnect();
     }
 
-    void Post(const std::string_view Data)
+    void Post(const std::string_view Data) const
     {
         m_Service->Post(Data);
     }
@@ -42,7 +45,7 @@ public:
 
 Client::Client(boost::asio::io_context &Context, const std::string_view Host, const std::uint16_t Port)
     : Service(Context, Host, Port)
-    , m_Impl(std::make_unique<Impl>(Context, Host, Port))
+  , m_Impl(std::make_unique<Impl>(Context, Host, Port))
 {
 }
 

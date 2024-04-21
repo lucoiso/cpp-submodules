@@ -159,7 +159,7 @@ namespace RenderCore
         {
             promise_type &promise;
 
-            bool await_ready() const noexcept
+            [[nodiscard]] bool await_ready() const noexcept
             {
                 return promise.final_suspend().await_ready();
             }

@@ -15,16 +15,15 @@ module SocketService.IInterface;
 
 using namespace SocketService;
 
-IInterface::IInterface(boost::asio::io_context& Context)
+IInterface::IInterface(boost::asio::io_context &Context)
     : m_Context(Context)
-    , m_Socket(Context)
+  , m_Socket(Context)
 {
 }
 
-IInterface::IInterface(boost::asio::io_context& Context,
-                       boost::asio::ip::tcp::socket Socket)
+IInterface::IInterface(boost::asio::io_context &Context, boost::asio::ip::tcp::socket Socket)
     : m_Context(Context)
-    , m_Socket(std::move(Socket))
+  , m_Socket(std::move(Socket))
 {
 }
 
@@ -35,7 +34,7 @@ void IInterface::DoRead()
     boost::asio::async_read_until(m_Socket, boost::asio::dynamic_buffer(m_ReadData), '\n', Callback);
 }
 
-void IInterface::Connect(const boost::function<void(std::string)>& Callback)
+void IInterface::Connect(const boost::function<void(std::string)> &Callback)
 {
     BOOST_LOG_TRIVIAL(debug) << "[" << __func__ << "]: " << " - Connect requested";
 
@@ -73,12 +72,12 @@ void IInterface::DoClose()
     if (m_Socket.is_open())
     {
         boost::system::error_code Error;
-        [[maybe_unused]] auto Discard = m_Socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both, Error);
+        [[maybe_unused]] auto     Discard = m_Socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both, Error);
         m_Socket.close();
     }
 }
 
-void IInterface::ConnectionCallback(const boost::system::error_code& Error)
+void IInterface::ConnectionCallback(const boost::system::error_code &Error)
 {
     BOOST_LOG_TRIVIAL(debug) << "[" << __func__ << "]: " << " - Connection callback reached";
 
@@ -97,12 +96,12 @@ void IInterface::ConnectionCallback(const boost::system::error_code& Error)
     }
 }
 
-void IInterface::ReadCallback(const boost::system::error_code& Error,
-                              [[maybe_unused]] std::size_t BytesTransferred)
+void IInterface::ReadCallback(const boost::system::error_code &Error, [[maybe_unused]] std::size_t BytesTransferred)
 {
     BOOST_LOG_TRIVIAL(debug) << "[" << __func__ << "]: " << " - Read callback reached";
 
-    if (Error && Error != boost::asio::error::eof && Error != boost::asio::error::operation_aborted && Error.category() != boost::asio::error::system_category)
+    if (Error && Error != boost::asio::error::eof && Error != boost::asio::error::operation_aborted && Error.category() !=
+        boost::asio::error::system_category)
     {
         BOOST_LOG_TRIVIAL(debug) << "[" << __func__ << "]: " << " - An error has occurred: " << Error.message() << " (" << Error << ")";
     }
@@ -136,8 +135,7 @@ void IInterface::PostCallback()
     boost::asio::async_write(m_Socket, boost::asio::buffer(m_WriteData.data(), m_WriteData.length()), Callback);
 }
 
-void IInterface::WriteCallback(const boost::system::error_code& Error,
-                               std::size_t BytesTransferred)
+void IInterface::WriteCallback(const boost::system::error_code &Error, std::size_t BytesTransferred)
 {
     BOOST_LOG_TRIVIAL(debug) << "[" << __func__ << "]: " << " - Write callback reached";
 
@@ -147,8 +145,9 @@ void IInterface::WriteCallback(const boost::system::error_code& Error,
     }
     else
     {
-        m_WriteData.erase(std::remove(m_WriteData.begin(), m_WriteData.end(), '\n'), m_WriteData.cend());
-        BOOST_LOG_TRIVIAL(debug) << "[" << __func__ << "]: " << " - Data sent: '" << m_WriteData << "' Bytes transferred: '" << BytesTransferred << "'";
+        std::erase(m_WriteData, '\n');
+        BOOST_LOG_TRIVIAL(debug) << "[" << __func__ << "]: " << " - Data sent: '" << m_WriteData << "' Bytes transferred: '" << BytesTransferred <<
+ "'";
         m_WriteData.clear();
     }
 }
