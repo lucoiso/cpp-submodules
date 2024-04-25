@@ -49,7 +49,9 @@ bool Configuration::SaveData(std::string_view const Path)
     std::filesystem::path const Destination(Path);
     if (!is_directory(Destination.parent_path()))
     {
-        throw std::filesystem::filesystem_error("Directory not found", std::filesystem::path(Path), std::make_error_code(std::errc::no_such_file_or_directory));
+        throw std::filesystem::filesystem_error("Directory not found",
+                                                std::filesystem::path(Path),
+                                                std::make_error_code(std::errc::no_such_file_or_directory));
     }
 
     std::ofstream FileStream(Destination, std::ios::trunc);
@@ -70,7 +72,9 @@ bool Configuration::LoadData(std::string_view const Path)
     std::filesystem::path const Source(Path);
     if (!exists(Source))
     {
-        throw std::filesystem::filesystem_error("File not found", std::filesystem::path(Path), std::make_error_code(std::errc::no_such_file_or_directory));
+        throw std::filesystem::filesystem_error("File not found",
+                                                std::filesystem::path(Path),
+                                                std::make_error_code(std::errc::no_such_file_or_directory));
     }
 
     std::ifstream FileStream(Source);

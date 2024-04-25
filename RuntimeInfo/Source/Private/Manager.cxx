@@ -45,7 +45,8 @@ std::string ExtractFunctionName(std::string const &FunctionName)
 {
     std::regex const Regex(R"(\b([a-zA-Z_][a-zA-Z0-9_]*)\b(?=\s*\())");
 
-    if (std::smatch Match; std::regex_search(FunctionName, Match, Regex))
+    if (std::smatch Match;
+        std::regex_search(FunctionName, Match, Regex))
     {
         return Match.str();
     }
@@ -57,7 +58,7 @@ ScopedCounter Manager::PushCallstackWithCounter(std::source_location Location)
 {
     std::string const FunctionName = ExtractFunctionName(Location.function_name());
     InsertCallstack(std::move(Location));
-    return ScopedCounter {FunctionName};
+    return ScopedCounter { FunctionName };
 }
 
 bool Manager::IsActive() const
