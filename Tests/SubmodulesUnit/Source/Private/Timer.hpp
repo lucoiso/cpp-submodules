@@ -13,11 +13,12 @@ import Timer.Manager;
 TEST_CASE("Manager Status", "[Timer]")
 {
     Timer::Manager TimerManager;
-    REQUIRE(TimerManager.IsActive());
+    REQUIRE_FALSE(TimerManager.IsActive());
     REQUIRE(TimerManager.GetNumTimers() == 0U);
 
-    TimerManager.SetTimer(std::chrono::milliseconds(1U), [ ] {
-    });
+    TimerManager.SetTimer(std::chrono::milliseconds(1U), [ ] { });
+    TimerManager.SetActive(true);
+    REQUIRE(TimerManager.IsActive());
     REQUIRE(TimerManager.GetNumTimers() == 1U);
     TimerManager.ClearTimers();
     REQUIRE(TimerManager.GetNumTimers() == 0U);
@@ -29,7 +30,7 @@ TEST_CASE("Manager Status", "[Timer]")
 TEST_CASE("Timer Activation", "[Timer]")
 {
     Timer::Manager TimerManager;
-    REQUIRE(TimerManager.IsActive());
+    REQUIRE_FALSE(TimerManager.IsActive());
     REQUIRE(TimerManager.GetNumTimers() == 0U);
 
     std::latch Latch1 {1U};
@@ -40,6 +41,8 @@ TEST_CASE("Timer Activation", "[Timer]")
     };
 
     TimerManager.SetTimer(std::chrono::milliseconds(5U), TimerTester1);
+    TimerManager.SetActive(true);
+    REQUIRE(TimerManager.IsActive());
     REQUIRE(TimerManager.GetNumTimers() == 1U);
 
     std::latch Latch2 {1U};

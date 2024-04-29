@@ -14,6 +14,18 @@ module Configuration.Manager;
 
 using namespace Configuration;
 
+boost::json::object g_Data {};
+
+boost::json::object & Configuration::GetMutableData()
+{
+    return g_Data;
+}
+
+boost::json::object const & Configuration::GetData()
+{
+    return g_Data;
+}
+
 boost::json::value const &Configuration::GetValue(std::string_view const Key)
 {
     return g_Data.at(Key);

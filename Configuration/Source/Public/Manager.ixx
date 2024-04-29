@@ -4,16 +4,17 @@
 
 module;
 
+#include <string>
 #include <boost/json/object.hpp>
 #include "ConfigurationModule.hpp"
 
 export module Configuration.Manager;
 
-#include <string>
-
 namespace Configuration
 {
-    boost::json::object g_Data {};
+    export CONFIGURATIONMODULE_API [[nodiscard]] boost::json::object &GetMutableData();
+
+    export CONFIGURATIONMODULE_API [[nodiscard]] boost::json::object const &GetData();
 
     export CONFIGURATIONMODULE_API [[nodiscard]] boost::json::value const &GetValue(std::string_view);
 
@@ -28,7 +29,7 @@ namespace Configuration
             }
         }
 
-        g_Data.insert_or_assign(Key, Value);
+        GetMutableData().insert_or_assign(Key, Value);
     }
 
     export CONFIGURATIONMODULE_API void RemoveValue(std::string_view);
