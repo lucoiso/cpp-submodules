@@ -6,8 +6,8 @@ module;
 
 #include "SocketServiceModule.hpp"
 
-#include <boost/function.hpp>
 #include <boost/asio/io_context.hpp>
+#include <boost/function.hpp>
 
 export module SocketService.Client;
 
@@ -21,7 +21,7 @@ namespace SocketService
         std::unique_ptr<Impl> m_Impl;
 
     public:
-        Client(boost::asio::io_context &, std::string_view, std::uint16_t);
+         Client(boost::asio::io_context &, std::string_view, std::uint16_t);
         ~Client();
 
         void Connect(const boost::function<void(std::string)> &) override;

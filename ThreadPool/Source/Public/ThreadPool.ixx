@@ -19,7 +19,7 @@ namespace ThreadPool
 {
     export class THREADPOOLMODULE_API Thread
     {
-        bool                              m_Destroying { false };
+        bool                              m_Destroying {false};
         std::jthread                      m_Thread {};
         std::queue<std::function<void()>> m_Queue {};
         std::mutex                        m_Mutex {};
@@ -28,7 +28,7 @@ namespace ThreadPool
         void Loop();
 
     public:
-        Thread();
+         Thread();
         ~Thread();
 
         void SetAffinity(std::uint8_t);
@@ -41,10 +41,10 @@ namespace ThreadPool
         std::vector<std::unique_ptr<Thread>> m_Threads {};
 
     public:
-        Pool()  = default;
+         Pool() = default;
         ~Pool() = default;
 
-        Pool(Pool &&other)            = delete;
+              Pool(Pool &&other)      = delete;
         Pool &operator=(Pool &&other) = delete;
 
         void AddTask(std::function<void()> const &, std::uint8_t) const;

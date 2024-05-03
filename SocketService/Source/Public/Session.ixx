@@ -6,8 +6,8 @@ module;
 
 #include "SocketServiceModule.hpp"
 
-#include <boost/function.hpp>
 #include <boost/asio/ip/tcp.hpp>
+#include <boost/function.hpp>
 
 export module SocketService.Session;
 
