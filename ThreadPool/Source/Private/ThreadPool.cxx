@@ -74,13 +74,17 @@ Thread::~Thread()
     }
 }
 
-void Thread::SetAffinity(std::uint8_t const ThreadIndex)
+void Thread::SetAffinity(std::uint8_t const ThreadIndex, std::string_view const Prefix)
 {
     #ifdef _WIN32
-    HANDLE          ThreadHandle = m_Thread.native_handle();
+    HANDLE           ThreadHandle = m_Thread.native_handle();
     PROCESSOR_NUMBER ProcessorNumber { .Group = 0U, .Number = ThreadIndex, .Reserved = 0U };
     SetThreadIdealProcessorEx(ThreadHandle, &ProcessorNumber, nullptr);
     SetThreadPriority(ThreadHandle, THREAD_PRIORITY_NORMAL);
+
+    std::string const        StandardName = std::format("{} {}", Prefix, ThreadIndex);
+    std::wstring const       ThreadName { std::begin(StandardName), std::end(StandardName) };
+    [[maybe_unused]] HRESULT const _ = SetThreadDescription(ThreadHandle, std::data(ThreadName));
     #else
     pthread_t ThreadHandle = m_Thread.native_handle();
     cpu_set_t CPUSet;
@@ -121,13 +125,13 @@ void Pool::SetThreadCount(uint8_t const Value)
     }
 }
 
-void Pool::SetupCPUThreads()
+void Pool::SetupCPUThreads(std::string_view const Prefix)
 {
     SetThreadCount(std::thread::hardware_concurrency());
 
     for (uint8_t Iterator = 0; Iterator < std::size(m_Threads); ++Iterator)
     {
-        m_Threads.at(Iterator)->SetAffinity(Iterator);
+        m_Threads.at(Iterator)->SetAffinity(Iterator, Prefix);
     }
 }
 
