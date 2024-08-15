@@ -16,7 +16,7 @@ class CppSubmodulesRecipe(ConanFile):
         self.requires("boost/1.85.0")
 
         # https://conan.io/center/recipes/benchmark
-        self.requires("benchmark/1.8.3")
+        self.requires("benchmark/1.8.4")
 
         # https://conan.io/center/recipes/catch2
         self.requires("catch2/3.6.0")
