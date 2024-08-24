@@ -111,6 +111,17 @@ void Thread::Wait()
                   });
 }
 
+void Thread::Detach()
+{
+    m_Mutex.lock();
+    m_Destroying = true;
+    m_Signal.notify_one();
+    m_Mutex.unlock();
+    m_Thread.request_stop();
+
+    m_Thread.detach();
+}
+
 void Pool::SetThreadCount(uint8_t const Value)
 {
     m_Threads.clear();
@@ -145,5 +156,18 @@ void Pool::Wait() const
     for (auto &ThreadIter : m_Threads)
     {
         ThreadIter->Wait();
+    }
+}
+
+void Pool::Abort()
+{
+    m_Threads.clear();
+}
+
+void Pool::Detach() const
+{
+    for (uint8_t Iterator = 0; Iterator < std::size(m_Threads); ++Iterator)
+    {
+        m_Threads.at(Iterator)->Detach();
     }
 }

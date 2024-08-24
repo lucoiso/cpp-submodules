@@ -34,6 +34,7 @@ namespace ThreadPool
         void SetAffinity(std::uint8_t, std::string_view);
         void Enqueue(std::function<void()> const &);
         void Wait();
+        void Detach();
     };
 
     export class THREADPOOLMODULE_API Pool
@@ -52,5 +53,8 @@ namespace ThreadPool
         void SetThreadCount(uint8_t);
         void SetupCPUThreads(std::string_view);
         void Wait() const;
+
+        void Abort();
+        void Detach() const;
     };
 } // namespace ThreadPool
