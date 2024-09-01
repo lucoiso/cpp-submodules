@@ -8,6 +8,7 @@ module;
 #include <boost/asio/ip/tcp.hpp>
 #include <boost/bind/bind.hpp>
 #include <boost/log/trivial.hpp>
+#include <easy/profiler.h>
 
 module SocketService.Server;
 
@@ -39,6 +40,8 @@ public:
 
     void Connect(const boost::function<void(std::string)> &Callback)
     {
+        EASY_FUNCTION(profiler::colors::Green);
+
         m_IsConnected = true;
         m_Callback    = Callback;
 
@@ -47,6 +50,8 @@ public:
 
     void Disconnect()
     {
+        EASY_FUNCTION(profiler::colors::Green);
+
         try
         {
             m_IsConnected = false;
@@ -66,6 +71,8 @@ public:
 
     void Post(const std::string_view Data)
     {
+        EASY_FUNCTION(profiler::colors::Green);
+
         if (m_Connections.empty())
         {
             m_MessagesQueue.emplace(Data);
@@ -87,6 +94,8 @@ public:
 private:
     void AcceptConnection()
     {
+        EASY_FUNCTION(profiler::colors::Green);
+
         BOOST_LOG_TRIVIAL(debug) << "[" << __func__ << "]: " << " - Accepting connection";
 
         if (m_IsConnected)
@@ -98,6 +107,8 @@ private:
 
     void AcceptCallback(const boost::system::error_code &Error, boost::asio::ip::tcp::socket Socket)
     {
+        EASY_FUNCTION(profiler::colors::Green);
+
         BOOST_LOG_TRIVIAL(debug) << "[" << __func__ << "]: " << " - Accept callback reached";
 
         if (Error)
@@ -133,6 +144,8 @@ private:
 
     void OnClientDisconnected(const Session *const Session)
     {
+        EASY_FUNCTION(profiler::colors::Green);
+
         BOOST_LOG_TRIVIAL(debug) << "[" << __func__ << "]: " << " - A client was disconnected.";
 
         std::_Erase_remove_if(m_Connections,

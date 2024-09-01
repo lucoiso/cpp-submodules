@@ -5,6 +5,7 @@
 module;
 
 #include <boost/asio/ip/tcp.hpp>
+#include <easy/profiler.h>
 
 module SocketService.Client;
 
@@ -28,17 +29,23 @@ public:
 
     void Connect(const boost::function<void(std::string)> &Callback)
     {
+        EASY_FUNCTION(profiler::colors::Green);
+
         m_Service = std::make_unique<Service>(m_Context, std::data(m_Host), m_Port);
         m_Service->Connect(Callback);
     }
 
     void Disconnect() const
     {
+        EASY_FUNCTION(profiler::colors::Green);
+
         m_Service->Disconnect();
     }
 
     void Post(const std::string_view Data) const
     {
+        EASY_FUNCTION(profiler::colors::Green);
+
         m_Service->Post(Data);
     }
 };

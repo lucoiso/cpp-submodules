@@ -10,6 +10,7 @@ module;
 #include <boost/asio/ip/tcp.hpp>
 #include <boost/bind/bind.hpp>
 #include <boost/log/trivial.hpp>
+#include <easy/profiler.h>
 
 module SocketService.IInterface;
 
@@ -29,6 +30,8 @@ IInterface::IInterface(boost::asio::io_context &Context, boost::asio::ip::tcp::s
 
 void IInterface::DoRead()
 {
+        EASY_FUNCTION(profiler::colors::Green);
+
     BOOST_LOG_TRIVIAL(debug) << "[" << __func__ << "]: " << " - Read requested";
     auto Callback = boost::bind(&IInterface::ReadCallback, this, boost::placeholders::_1, boost::placeholders::_2);
     boost::asio::async_read_until(m_Socket, boost::asio::dynamic_buffer(m_ReadData), '\n', Callback);
@@ -36,6 +39,8 @@ void IInterface::DoRead()
 
 void IInterface::Connect(const boost::function<void(std::string)> &Callback)
 {
+        EASY_FUNCTION(profiler::colors::Green);
+
     BOOST_LOG_TRIVIAL(debug) << "[" << __func__ << "]: " << " - Connect requested";
 
     m_Callback = Callback;
@@ -44,6 +49,8 @@ void IInterface::Connect(const boost::function<void(std::string)> &Callback)
 
 void IInterface::Disconnect()
 {
+        EASY_FUNCTION(profiler::colors::Green);
+
     BOOST_LOG_TRIVIAL(debug) << "[" << __func__ << "]: " << " - Disconnect requested";
 
     m_IsConnected = false;
@@ -57,6 +64,8 @@ bool IInterface::IsConnected() const
 
 void IInterface::Post(const std::string_view Data)
 {
+        EASY_FUNCTION(profiler::colors::Green);
+
     BOOST_LOG_TRIVIAL(debug) << "[" << __func__ << "]: " << " - Post requested with data: " << Data;
 
     m_WriteData = std::format("{}\n", Data);
@@ -65,6 +74,8 @@ void IInterface::Post(const std::string_view Data)
 
 void IInterface::DoClose()
 {
+        EASY_FUNCTION(profiler::colors::Green);
+
     BOOST_LOG_TRIVIAL(debug) << "[" << __func__ << "]: " << " - Close requested";
 
     m_IsConnected = false;
@@ -79,6 +90,8 @@ void IInterface::DoClose()
 
 void IInterface::ConnectionCallback(const boost::system::error_code &Error)
 {
+        EASY_FUNCTION(profiler::colors::Green);
+
     BOOST_LOG_TRIVIAL(debug) << "[" << __func__ << "]: " << " - Connection callback reached";
 
     if (!Error)
@@ -98,6 +111,8 @@ void IInterface::ConnectionCallback(const boost::system::error_code &Error)
 
 void IInterface::ReadCallback(const boost::system::error_code &Error, [[maybe_unused]] std::size_t BytesTransferred)
 {
+        EASY_FUNCTION(profiler::colors::Green);
+
     BOOST_LOG_TRIVIAL(debug) << "[" << __func__ << "]: " << " - Read callback reached";
 
     if (Error && Error != boost::asio::error::eof && Error != boost::asio::error::operation_aborted && Error.category() !=
@@ -129,6 +144,8 @@ void IInterface::ReadCallback(const boost::system::error_code &Error, [[maybe_un
 
 void IInterface::PostCallback()
 {
+        EASY_FUNCTION(profiler::colors::Green);
+
     BOOST_LOG_TRIVIAL(debug) << "[" << __func__ << "]: " << " - Post callback reached";
 
     const auto Callback = boost::bind(&IInterface::WriteCallback, this, boost::placeholders::_1, boost::placeholders::_2);
@@ -137,6 +154,8 @@ void IInterface::PostCallback()
 
 void IInterface::WriteCallback(const boost::system::error_code &Error, std::size_t BytesTransferred)
 {
+        EASY_FUNCTION(profiler::colors::Green);
+
     BOOST_LOG_TRIVIAL(debug) << "[" << __func__ << "]: " << " - Write callback reached";
 
     if (Error && Error != boost::asio::error::eof)
