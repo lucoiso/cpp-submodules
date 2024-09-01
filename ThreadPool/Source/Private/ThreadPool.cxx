@@ -47,7 +47,7 @@ void Thread::Loop()
         {
             std::unique_lock Lock(m_Mutex);
             m_Queue.pop();
-            m_Signal.notify_one();
+            m_Signal.notify_all();
         }
     }
 }
@@ -67,7 +67,7 @@ Thread::~Thread()
         Wait();
         m_Mutex.lock();
         m_Destroying = true;
-        m_Signal.notify_one();
+        m_Signal.notify_all();
         m_Mutex.unlock();
         m_Thread.request_stop();
         m_Thread.join();
