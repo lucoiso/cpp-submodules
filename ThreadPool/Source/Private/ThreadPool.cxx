@@ -40,15 +40,18 @@ void Thread::Loop()
             {
                 break;
             }
+
             Execution = m_Queue.front();
         }
+
+        EASY_FUNCTION(profiler::colors::Cyan);
 
         Execution();
 
         {
             std::unique_lock Lock(m_Mutex);
             m_Queue.pop();
-            m_Signal.notify_all();
+            m_Signal.notify_one();
         }
     }
 }
@@ -87,8 +90,8 @@ void Thread::SetAffinity(std::uint8_t const ThreadIndex, std::string_view const 
     SetThreadIdealProcessorEx(ThreadHandle, &ProcessorNumber, nullptr);
     SetThreadPriority(ThreadHandle, THREAD_PRIORITY_NORMAL);
 
-    std::string const        StandardName = std::format("{} {}", Prefix, ThreadIndex);
-    std::wstring const       ThreadName { std::begin(StandardName), std::end(StandardName) };
+    std::string const              StandardName = std::format("{} {}", Prefix, ThreadIndex);
+    std::wstring const             ThreadName { std::begin(StandardName), std::end(StandardName) };
     [[maybe_unused]] HRESULT const _ = SetThreadDescription(ThreadHandle, std::data(ThreadName));
     #else
     pthread_t ThreadHandle = m_Thread.native_handle();

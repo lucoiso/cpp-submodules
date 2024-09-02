@@ -57,6 +57,8 @@ namespace Timer
 
         void SetTimer(std::chrono::nanoseconds const &, std::function<void()> const &);
 
+        void SetupThread(std::string_view const &);
+
         void SetActive(bool);
 
         [[nodiscard]] bool IsActive() const;
