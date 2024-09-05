@@ -166,9 +166,9 @@ void Manager::InitializeThreadWork()
 
     m_LastTickTime = std::chrono::steady_clock::now();
 
-    m_TimerThread = std::jthread([this](std::stop_token const &Token)
+    m_TimerThread = std::thread([this]
     {
-        while (Token.stop_possible() && !Token.stop_requested())
+        while (m_Active)
         {
             std::unique_lock const Lock(m_Mutex);
 
@@ -178,6 +178,11 @@ void Manager::InitializeThreadWork()
 
             for (std::uint32_t Iterator = 0U; Iterator < std::size(m_Timers); ++Iterator)
             {
+                if (!m_Active)
+                {
+                    break;
+                }
+
                 if (auto &Timer = m_Timers[Iterator];
                     Timer.Update(DeltaTime))
                 {
@@ -194,10 +199,7 @@ void Manager::StopThreadWork()
 {
     EASY_FUNCTION(profiler::colors::Blue);
 
-    if (m_TimerThread.get_stop_token().stop_possible())
-    {
-        m_TimerThread.request_stop();
-    }
+    m_Active = false;
 
     if (m_TimerThread.joinable())
     {

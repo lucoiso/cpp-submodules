@@ -20,7 +20,7 @@ namespace ThreadPool
     export class THREADPOOLMODULE_API Thread
     {
         bool                              m_Destroying { false };
-        std::jthread                      m_Thread {};
+        std::thread                       m_Thread {};
         std::queue<std::function<void()>> m_Queue {};
         std::mutex                        m_Mutex {};
         std::condition_variable           m_Signal {};

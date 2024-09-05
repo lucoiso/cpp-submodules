@@ -25,7 +25,7 @@ using namespace ThreadPool;
 
 void Thread::Loop()
 {
-    while (!m_Thread.get_stop_source().stop_requested())
+    while (!m_Destroying)
     {
         std::function<void()> Execution;
         {
@@ -75,7 +75,6 @@ Thread::~Thread()
         m_Destroying = true;
         m_Signal.notify_all();
         m_Mutex.unlock();
-        m_Thread.request_stop();
         m_Thread.join();
     }
 }
@@ -129,8 +128,6 @@ void Thread::Detach()
     m_Destroying = true;
     m_Signal.notify_one();
     m_Mutex.unlock();
-    m_Thread.request_stop();
-
     m_Thread.detach();
 }
 

@@ -42,7 +42,7 @@ namespace Timer
     {
         std::vector<Object>                                      m_Timers {};
         std::atomic<std::uint32_t>                               m_TimerIDCounter {};
-        std::jthread                                             m_TimerThread {};
+        std::thread                                              m_TimerThread {};
         mutable std::mutex                                       m_Mutex {};
         std::unordered_map<std::uint32_t, std::function<void()>> m_Callbacks {};
         std::chrono::steady_clock::time_point                    m_LastTickTime {};
