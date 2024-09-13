@@ -33,7 +33,7 @@ namespace SocketService
         explicit IInterface(boost::asio::io_context &);
         IInterface(boost::asio::io_context &Context, boost::asio::ip::tcp::socket);
 
-        virtual void Connect(const boost::function<void(std::string)> &);
+        virtual void Connect(boost::function<void(std::string)> const &);
         virtual void Disconnect();
 
         virtual bool IsConnected() const;
@@ -44,11 +44,11 @@ namespace SocketService
         virtual void DoRead();
         virtual void DoClose();
 
-        virtual void ConnectionCallback(const boost::system::error_code &);
+        virtual void ConnectionCallback(boost::system::error_code const &);
 
-        virtual void ReadCallback(const boost::system::error_code &, std::size_t);
+        virtual void ReadCallback(boost::system::error_code const &, std::size_t);
 
         virtual void PostCallback();
-        virtual void WriteCallback(const boost::system::error_code &, std::size_t);
+        virtual void WriteCallback(boost::system::error_code const &, std::size_t);
     };
 } // namespace SocketService

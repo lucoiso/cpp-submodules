@@ -23,6 +23,6 @@ namespace SocketService
     public:
         Service(boost::asio::io_context &, std::string_view, std::uint16_t);
 
-        void Connect(const boost::function<void(std::string)> &) override;
+        void Connect(boost::function<void(std::string)> const &) override;
     };
 } // namespace SocketService

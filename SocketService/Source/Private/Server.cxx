@@ -29,7 +29,7 @@ class Server::Impl
     boost::function<void(std::string)> m_Callback {};
 
 public:
-    Impl(boost::asio::io_context &Context, const std::string_view Host, const std::uint16_t Port)
+    Impl(boost::asio::io_context &Context, std::string_view const Host, std::uint16_t const Port)
         : m_Context(Context)
       , m_Acceptor(std::make_unique<boost::asio::ip::tcp::acceptor>(Context,
                                                                     boost::asio::ip::tcp::endpoint(boost::asio::ip::address_v4::from_string(std::data(Host)),
@@ -37,7 +37,7 @@ public:
     {
     }
 
-    void Connect(const boost::function<void(std::string)> &Callback)
+    void Connect(boost::function<void(std::string)> const &Callback)
     {
         m_IsConnected = true;
         m_Callback    = Callback;
@@ -58,13 +58,13 @@ public:
                 m_MessagesQueue.pop();
             }
         }
-        catch (const std::exception &Exception)
+        catch (std::exception const &Exception)
         {
             BOOST_LOG_TRIVIAL(error) << "[" << __func__ << "]: " << " - An error has occurred: " << Exception.what();
         }
     }
 
-    void Post(const std::string_view Data)
+    void Post(std::string_view const Data)
     {
         if (m_Connections.empty())
         {
@@ -72,7 +72,7 @@ public:
         }
         else
         {
-            for (const std::unique_ptr<Session> &ConnectionIterator : m_Connections)
+            for (std::unique_ptr<Session> const &ConnectionIterator : m_Connections)
             {
                 ConnectionIterator->Post(Data);
             }
@@ -91,12 +91,12 @@ private:
 
         if (m_IsConnected)
         {
-            const auto Callback = std::bind(&Impl::AcceptCallback, this, std::placeholders::_1, std::placeholders::_2);
+            auto const Callback = std::bind(&Impl::AcceptCallback, this, std::placeholders::_1, std::placeholders::_2);
             m_Acceptor->async_accept(Callback);
         }
     }
 
-    void AcceptCallback(const boost::system::error_code &Error, boost::asio::ip::tcp::socket Socket)
+    void AcceptCallback(boost::system::error_code const &Error, boost::asio::ip::tcp::socket Socket)
     {
         BOOST_LOG_TRIVIAL(debug) << "[" << __func__ << "]: " << " - Accept callback reached";
 
@@ -114,13 +114,13 @@ private:
             BOOST_LOG_TRIVIAL(debug) << "[" << __func__ << "]: " << " - Accepting new Session on: " << Socket.remote_endpoint().address() << ":" <<
  Socket.remote_endpoint().port();
 
-            const auto DisconnectCallback = boost::bind(&Impl::OnClientDisconnected, this, boost::placeholders::_1);
+            auto const DisconnectCallback = boost::bind(&Impl::OnClientDisconnected, this, boost::placeholders::_1);
             m_Connections.push_back(std::make_unique<Session>(m_Context, std::move(Socket), DisconnectCallback));
             m_Connections.back()->Connect(m_Callback);
 
             while (!m_MessagesQueue.empty())
             {
-                const std::string DequeuedMessage = m_MessagesQueue.front();
+                std::string const DequeuedMessage = m_MessagesQueue.front();
                 BOOST_LOG_TRIVIAL(debug) << "[" << __func__ << "]: " << " - Sending pending message to new connection: " << DequeuedMessage;
 
                 m_Connections.back()->Post(std::data(DequeuedMessage));
@@ -131,19 +131,19 @@ private:
         AcceptConnection();
     }
 
-    void OnClientDisconnected(const Session *const Session)
+    void OnClientDisconnected(Session const *const Session)
     {
         BOOST_LOG_TRIVIAL(debug) << "[" << __func__ << "]: " << " - A client was disconnected.";
 
         std::_Erase_remove_if(m_Connections,
-                              [Session](const std::unique_ptr<SocketService::Session> &ConnectionIterator)
+                              [Session](std::unique_ptr<SocketService::Session> const &ConnectionIterator)
                               {
                                   return ConnectionIterator.get() == Session;
                               });
     }
 };
 
-Server::Server(boost::asio::io_context &Context, const std::string_view Host, const std::uint16_t Port)
+Server::Server(boost::asio::io_context &Context, std::string_view const Host, std::uint16_t const Port)
     : Service(Context, Host, Port)
   , m_Impl(std::make_unique<Impl>(Context, Host, Port))
 {
@@ -151,7 +151,7 @@ Server::Server(boost::asio::io_context &Context, const std::string_view Host, co
 
 Server::~Server() = default;
 
-void Server::Connect(const boost::function<void(std::string)> &Callback)
+void Server::Connect(boost::function<void(std::string)> const &Callback)
 {
     m_Impl->Connect(Callback);
 }
@@ -161,7 +161,7 @@ void Server::Disconnect()
     m_Impl->Disconnect();
 }
 
-void Server::Post(const std::string_view Data)
+void Server::Post(std::string_view const Data)
 {
     m_Impl->Post(Data);
 }

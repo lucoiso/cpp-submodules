@@ -24,7 +24,7 @@ namespace SocketService
          Server(boost::asio::io_context &, std::string_view, std::uint16_t);
         ~Server() override;
 
-        void Connect(const boost::function<void(std::string)> &) override;
+        void Connect(boost::function<void(std::string)> const &) override;
         void Disconnect() override;
 
         void Post(std::string_view) override;

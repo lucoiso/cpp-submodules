@@ -19,14 +19,14 @@ class Client::Impl
     std::uint16_t m_Port { 0U };
 
 public:
-    Impl(boost::asio::io_context &Context, const std::string_view Host, const std::uint16_t Port)
+    Impl(boost::asio::io_context &Context, std::string_view const Host, std::uint16_t const Port)
         : m_Context(Context)
       , m_Host(Host)
       , m_Port(Port)
     {
     }
 
-    void Connect(const boost::function<void(std::string)> &Callback)
+    void Connect(boost::function<void(std::string)> const &Callback)
     {
         m_Service = std::make_unique<Service>(m_Context, std::data(m_Host), m_Port);
         m_Service->Connect(Callback);
@@ -37,13 +37,13 @@ public:
         m_Service->Disconnect();
     }
 
-    void Post(const std::string_view Data) const
+    void Post(std::string_view const Data) const
     {
         m_Service->Post(Data);
     }
 };
 
-Client::Client(boost::asio::io_context &Context, const std::string_view Host, const std::uint16_t Port)
+Client::Client(boost::asio::io_context &Context, std::string_view const Host, std::uint16_t const Port)
     : Service(Context, Host, Port)
   , m_Impl(std::make_unique<Impl>(Context, Host, Port))
 {
@@ -51,7 +51,7 @@ Client::Client(boost::asio::io_context &Context, const std::string_view Host, co
 
 Client::~Client() = default;
 
-void Client::Connect(const boost::function<void(std::string)> &Callback)
+void Client::Connect(boost::function<void(std::string)> const &Callback)
 {
     m_Impl->Connect(Callback);
 }
@@ -61,7 +61,7 @@ void Client::Disconnect()
     m_Impl->Disconnect();
 }
 
-void Client::Post(const std::string_view Data)
+void Client::Post(std::string_view const Data)
 {
     m_Impl->Post(Data);
 }

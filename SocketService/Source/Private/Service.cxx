@@ -13,17 +13,17 @@ module SocketService.Service;
 
 using namespace SocketService;
 
-Service::Service(boost::asio::io_context &Context, const std::string_view Host, const std::uint16_t Port) : IInterface(Context), m_Host(Host), m_Port(Port)
+Service::Service(boost::asio::io_context &Context, std::string_view const Host, std::uint16_t const Port) : IInterface(Context), m_Host(Host), m_Port(Port)
 {
 }
 
-void Service::Connect(const boost::function<void(std::string)> &Callback)
+void Service::Connect(boost::function<void(std::string)> const &Callback)
 {
     IInterface::Connect(Callback);
 
     boost::asio::ip::tcp::resolver                     Resolver(m_Context);
-    const boost::asio::ip::tcp::resolver::results_type Results = Resolver.resolve(m_Host, std::to_string(m_Port));
+    boost::asio::ip::tcp::resolver::results_type const Results = Resolver.resolve(m_Host, std::to_string(m_Port));
 
-    const auto AsyncCallback = boost::bind(&Service::ConnectionCallback, this, boost::placeholders::_1);
+    auto const AsyncCallback = boost::bind(&Service::ConnectionCallback, this, boost::placeholders::_1);
     boost::asio::async_connect(m_Socket, Results, AsyncCallback);
 }

@@ -34,7 +34,7 @@ void IInterface::DoRead()
     boost::asio::async_read_until(m_Socket, boost::asio::dynamic_buffer(m_ReadData), '\n', Callback);
 }
 
-void IInterface::Connect(const boost::function<void(std::string)> &Callback)
+void IInterface::Connect(boost::function<void(std::string)> const &Callback)
 {
     BOOST_LOG_TRIVIAL(debug) << "[" << __func__ << "]: " << " - Connect requested";
 
@@ -55,7 +55,7 @@ bool IInterface::IsConnected() const
     return m_IsConnected;
 }
 
-void IInterface::Post(const std::string_view Data)
+void IInterface::Post(std::string_view const Data)
 {
     BOOST_LOG_TRIVIAL(debug) << "[" << __func__ << "]: " << " - Post requested with data: " << Data;
 
@@ -77,7 +77,7 @@ void IInterface::DoClose()
     }
 }
 
-void IInterface::ConnectionCallback(const boost::system::error_code &Error)
+void IInterface::ConnectionCallback(boost::system::error_code const &Error)
 {
     BOOST_LOG_TRIVIAL(debug) << "[" << __func__ << "]: " << " - Connection callback reached";
 
@@ -96,7 +96,7 @@ void IInterface::ConnectionCallback(const boost::system::error_code &Error)
     }
 }
 
-void IInterface::ReadCallback(const boost::system::error_code &Error, [[maybe_unused]] std::size_t BytesTransferred)
+void IInterface::ReadCallback(boost::system::error_code const &Error, [[maybe_unused]] std::size_t BytesTransferred)
 {
     BOOST_LOG_TRIVIAL(debug) << "[" << __func__ << "]: " << " - Read callback reached";
 
@@ -131,11 +131,11 @@ void IInterface::PostCallback()
 {
     BOOST_LOG_TRIVIAL(debug) << "[" << __func__ << "]: " << " - Post callback reached";
 
-    const auto Callback = boost::bind(&IInterface::WriteCallback, this, boost::placeholders::_1, boost::placeholders::_2);
+    auto const Callback = boost::bind(&IInterface::WriteCallback, this, boost::placeholders::_1, boost::placeholders::_2);
     boost::asio::async_write(m_Socket, boost::asio::buffer(m_WriteData.data(), m_WriteData.length()), Callback);
 }
 
-void IInterface::WriteCallback(const boost::system::error_code &Error, std::size_t BytesTransferred)
+void IInterface::WriteCallback(boost::system::error_code const &Error, std::size_t BytesTransferred)
 {
     BOOST_LOG_TRIVIAL(debug) << "[" << __func__ << "]: " << " - Write callback reached";
 
