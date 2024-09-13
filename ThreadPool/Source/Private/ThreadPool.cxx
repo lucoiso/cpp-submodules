@@ -5,7 +5,6 @@
 module;
 
 #include <condition_variable>
-#include <easy/profiler.h>
 #include <functional>
 #include <memory>
 #include <mutex>
@@ -14,7 +13,7 @@ module;
 #include <vector>
 
 #ifdef _WIN32
-#include <Windows.h>
+    #include <Windows.h>
 #else
     #include <pthread.h>
 #endif
@@ -44,8 +43,6 @@ void Thread::Loop()
             Execution = m_Queue.front();
         }
 
-        EASY_FUNCTION(profiler::colors::Cyan);
-
         Execution();
 
         {
@@ -66,8 +63,6 @@ Thread::Thread()
 
 Thread::~Thread()
 {
-    EASY_FUNCTION(profiler::colors::Cyan);
-
     if (m_Thread.joinable())
     {
         Wait();
@@ -81,8 +76,6 @@ Thread::~Thread()
 
 void Thread::SetAffinity(std::uint8_t const ThreadIndex, std::string_view const Prefix)
 {
-    EASY_FUNCTION(profiler::colors::Cyan);
-
     #ifdef _WIN32
     HANDLE           ThreadHandle = m_Thread.native_handle();
     PROCESSOR_NUMBER ProcessorNumber { .Group = 0U, .Number = ThreadIndex, .Reserved = 0U };
@@ -103,8 +96,6 @@ void Thread::SetAffinity(std::uint8_t const ThreadIndex, std::string_view const 
 
 void Thread::Enqueue(std::function<void()> const &Execution)
 {
-    EASY_FUNCTION(profiler::colors::Cyan);
-
     std::unique_lock Lock(m_Mutex);
     m_Queue.push(std::move(Execution));
     m_Signal.notify_one();
@@ -122,8 +113,6 @@ void Thread::Wait()
 
 void Thread::Detach()
 {
-    EASY_FUNCTION(profiler::colors::Cyan);
-
     m_Mutex.lock();
     m_Destroying = true;
     m_Signal.notify_one();
@@ -133,8 +122,6 @@ void Thread::Detach()
 
 void Pool::SetThreadCount(uint8_t const Value)
 {
-    EASY_FUNCTION(profiler::colors::Cyan);
-
     m_Threads.clear();
 
     if (Value > 0U)
@@ -149,8 +136,6 @@ void Pool::SetThreadCount(uint8_t const Value)
 
 void Pool::SetupCPUThreads(std::string_view const Prefix)
 {
-    EASY_FUNCTION(profiler::colors::Cyan);
-
     SetThreadCount(std::thread::hardware_concurrency());
 
     for (uint8_t Iterator = 0; Iterator < std::size(m_Threads); ++Iterator)

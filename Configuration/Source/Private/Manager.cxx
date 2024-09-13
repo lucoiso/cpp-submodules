@@ -4,7 +4,6 @@
 
 module;
 
-#include <easy/profiler.h>
 #include <filesystem>
 #include <fstream>
 #include <boost/json/object.hpp>
@@ -59,8 +58,6 @@ std::string Configuration::Dump()
 
 bool Configuration::SaveData(std::string_view const Path)
 {
-    EASY_FUNCTION(profiler::colors::Orange);
-
     std::filesystem::path const Destination(Path);
     if (!is_directory(Destination.parent_path()))
     {
@@ -84,8 +81,6 @@ bool Configuration::SaveData(std::string_view const Path)
 
 bool Configuration::LoadData(std::string_view const Path)
 {
-    EASY_FUNCTION(profiler::colors::Orange);
-
     std::filesystem::path const Source(Path);
     if (!exists(Source))
     {

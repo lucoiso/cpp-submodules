@@ -8,7 +8,6 @@ module;
 #include <boost/asio/ip/tcp.hpp>
 #include <boost/bind/bind.hpp>
 #include <boost/log/trivial.hpp>
-#include <easy/profiler.h>
 
 module SocketService.Service;
 
@@ -20,8 +19,6 @@ Service::Service(boost::asio::io_context &Context, const std::string_view Host, 
 
 void Service::Connect(const boost::function<void(std::string)> &Callback)
 {
-        EASY_FUNCTION(profiler::colors::Green);
-
     IInterface::Connect(Callback);
 
     boost::asio::ip::tcp::resolver                     Resolver(m_Context);

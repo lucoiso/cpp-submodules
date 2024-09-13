@@ -6,7 +6,6 @@ module;
 
 #include <algorithm>
 #include <chrono>
-#include <easy/profiler.h>
 #include <mutex>
 #include <numeric>
 
@@ -72,8 +71,6 @@ std::jthread::id Manager::GetThreadID() const
 
 void Manager::SetTimer(std::chrono::nanoseconds const &Time, std::function<void()> const &Callback)
 {
-    EASY_FUNCTION(profiler::colors::Blue);
-
     if (std::empty(m_Timers))
     {
         m_TimerIDCounter.fetch_sub(m_TimerIDCounter.load());
@@ -105,8 +102,6 @@ void Manager::SetupThread(std::string_view const &ThreadName)
 
 void Manager::SetActive(bool const Active)
 {
-    EASY_FUNCTION(profiler::colors::Blue);
-
     if (m_Active == Active)
     {
         return;
@@ -131,8 +126,6 @@ bool Manager::IsActive() const
 
 void Manager::ClearTimers()
 {
-    EASY_FUNCTION(profiler::colors::Blue);
-
     std::lock_guard const Lock(m_Mutex);
 
     m_Timers.clear();
@@ -151,8 +144,6 @@ std::uint32_t Manager::GetNumTimers() const
 
 void Manager::TimerFinished(std::uint32_t const TimerID)
 {
-    EASY_FUNCTION(profiler::colors::Blue);
-
     if (m_Callbacks.contains(TimerID))
     {
         m_Callbacks.at(TimerID)();
@@ -162,8 +153,6 @@ void Manager::TimerFinished(std::uint32_t const TimerID)
 
 void Manager::InitializeThreadWork()
 {
-    EASY_FUNCTION(profiler::colors::Blue);
-
     m_LastTickTime = std::chrono::steady_clock::now();
 
     m_TimerThread = std::thread([this]
@@ -197,8 +186,6 @@ void Manager::InitializeThreadWork()
 
 void Manager::StopThreadWork()
 {
-    EASY_FUNCTION(profiler::colors::Blue);
-
     m_Active = false;
 
     if (m_TimerThread.joinable())
