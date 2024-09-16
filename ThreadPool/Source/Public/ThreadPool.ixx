@@ -39,6 +39,7 @@ namespace ThreadPool
 
     export class THREADPOOLMODULE_API Pool
     {
+        std::uint8_t m_NumThread { 0U };
         std::vector<std::unique_ptr<Thread>> m_Threads {};
 
     public:
@@ -50,7 +51,12 @@ namespace ThreadPool
 
         void AddTask(std::function<void()> const &, std::uint8_t) const;
 
-        void SetThreadCount(uint8_t);
+        void SetThreadCount(std::uint8_t);
+        [[nodiscard]] inline std::uint8_t GetThreadCount() const
+        {
+            return m_NumThread;
+        }
+
         void SetupCPUThreads(std::string_view);
         void Wait() const;
 

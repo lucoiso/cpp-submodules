@@ -122,6 +122,12 @@ void Thread::Detach()
 
 void Pool::SetThreadCount(uint8_t const Value)
 {
+    if (m_NumThread == Value)
+    {
+        return;
+    }
+
+    m_NumThread = Value;
     m_Threads.clear();
 
     if (Value > 0U)

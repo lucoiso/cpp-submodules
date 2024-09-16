@@ -13,13 +13,13 @@ class CppSubmodulesRecipe(ConanFile):
 
     def requirements(self):
         # https://conan.io/center/recipes/boost
-        self.requires("boost/1.85.0")
+        self.requires("boost/1.86.0")
 
         # https://conan.io/center/recipes/benchmark
-        self.requires("benchmark/1.8.4")
+        self.requires("benchmark/1.9.0")
 
         # https://conan.io/center/recipes/catch2
-        self.requires("catch2/3.6.0")
+        self.requires("catch2/3.7.0")
 
     def configure(self):
         self.options["boost/*"].shared = True
