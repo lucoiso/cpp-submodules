@@ -11,7 +11,7 @@ module;
 
 export module Coroutine.Types;
 
-namespace RenderCore
+namespace Coroutine
 {
     export template <typename T>
         requires(!std::is_void_v<T>)
@@ -202,4 +202,4 @@ namespace RenderCore
             return m_CoroutineHandle.promise().get();
         }
     };
-} // namespace RenderCore
+} // namespace Coroutine
