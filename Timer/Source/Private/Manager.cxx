@@ -131,7 +131,7 @@ void Manager::ClearTimers()
     m_Timers.clear();
 }
 
-std::uint32_t Manager::GetNumTimers() const
+std::size_t Manager::GetNumTimers() const
 {
     std::lock_guard const Lock(m_Mutex);
 

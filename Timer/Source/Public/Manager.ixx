@@ -65,7 +65,7 @@ namespace Timer
 
         void ClearTimers();
 
-        [[nodiscard]] std::uint32_t GetNumTimers() const;
+        [[nodiscard]] std::size_t GetNumTimers() const;
 
     private:
         void TimerFinished(std::uint32_t);
