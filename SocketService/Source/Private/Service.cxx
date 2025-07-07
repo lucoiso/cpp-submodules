@@ -13,7 +13,10 @@ module SocketService.Service;
 
 using namespace SocketService;
 
-Service::Service(boost::asio::io_context &Context, std::string_view const Host, std::uint16_t const Port) : IInterface(Context), m_Host(Host), m_Port(Port)
+Service::Service(boost::asio::io_context &Context, std::string_view const Host, std::uint16_t const Port)
+    : IInterface(Context)
+  , m_Host(Host)
+  , m_Port(Port)
 {
 }
 

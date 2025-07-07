@@ -21,8 +21,8 @@ namespace SocketService
         std::unique_ptr<Impl> m_Impl;
 
     public:
-         Client(boost::asio::io_context &, std::string_view, std::uint16_t);
-        ~Client();
+        Client(boost::asio::io_context &, std::string_view, std::uint16_t);
+        ~Client() override;
 
         void Connect(boost::function<void(std::string)> const &) override;
         void Disconnect() override;

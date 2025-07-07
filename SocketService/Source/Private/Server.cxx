@@ -4,10 +4,10 @@
 
 module;
 
-#include <queue>
 #include <boost/asio/ip/tcp.hpp>
 #include <boost/bind/bind.hpp>
 #include <boost/log/trivial.hpp>
+#include <queue>
 
 module SocketService.Server;
 
@@ -32,8 +32,7 @@ public:
     Impl(boost::asio::io_context &Context, std::string_view const Host, std::uint16_t const Port)
         : m_Context(Context)
       , m_Acceptor(std::make_unique<boost::asio::ip::tcp::acceptor>(Context,
-                                                                    boost::asio::ip::tcp::endpoint(boost::asio::ip::address_v4::from_string(std::data(Host)),
-                                                                                                   Port)))
+                                                                    boost::asio::ip::tcp::endpoint(boost::asio::ip::make_address_v4(std::data(Host)), Port)))
     {
     }
 
@@ -111,8 +110,7 @@ private:
         }
         else
         {
-            BOOST_LOG_TRIVIAL(debug) << "[" << __func__ << "]: " << " - Accepting new Session on: " << Socket.remote_endpoint().address() << ":" <<
- Socket.remote_endpoint().port();
+            BOOST_LOG_TRIVIAL(debug) << "[" << __func__ << "]: " << " - Accepting new Session on: " << Socket.remote_endpoint().address() << ":" << Socket.remote_endpoint().port();
 
             auto const DisconnectCallback = boost::bind(&Impl::OnClientDisconnected, this, boost::placeholders::_1);
             m_Connections.push_back(std::make_unique<Session>(m_Context, std::move(Socket), DisconnectCallback));

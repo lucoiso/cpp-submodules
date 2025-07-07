@@ -8,6 +8,6 @@
 #ifdef BUILD_DLL
 #define SOCKETSERVICEMODULE_API _declspec(dllexport)
 #else
-#define SOCKETSERVICEMODULE_API _declspec(dllimport)
+    #define SOCKETSERVICEMODULE_API _declspec(dllimport)
 #endif
 #endif

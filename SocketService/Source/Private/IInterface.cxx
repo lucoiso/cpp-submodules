@@ -5,9 +5,9 @@
 module;
 
 #include <boost/asio/connect.hpp>
+#include <boost/asio/ip/tcp.hpp>
 #include <boost/asio/read_until.hpp>
 #include <boost/asio/write.hpp>
-#include <boost/asio/ip/tcp.hpp>
 #include <boost/bind/bind.hpp>
 #include <boost/log/trivial.hpp>
 
@@ -146,8 +146,7 @@ void IInterface::WriteCallback(boost::system::error_code const &Error, std::size
     else
     {
         std::erase(m_WriteData, '\n');
-        BOOST_LOG_TRIVIAL(debug) << "[" << __func__ << "]: " << " - Data sent: '" << m_WriteData << "' Bytes transferred: '" << BytesTransferred <<
- "'";
+        BOOST_LOG_TRIVIAL(debug) << "[" << __func__ << "]: " << " - Data sent: '" << m_WriteData << "' Bytes transferred: '" << BytesTransferred <<  "'";
         m_WriteData.clear();
     }
 }
